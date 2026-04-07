@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS product_categories, products;
+
 -- CREATE TYPE user_roles AS ENUM ('QS, Procurement, Project')
 
 -- CREATE TABLE users (
@@ -25,8 +27,8 @@ CREATE TABLE products (
     cost NUMERIC(10, 2) NOT NULL,
     photo_paths TEXT[] NOT NULL DEFAULT '{"./default_missing.jng"}',
     url TEXT,
-    category_id INTEGER NOT NULL REFERENCES product_categories(ID),
-    -- supplier_id INTEGER NOT NULL REFERENCES suppliers(ID)
+    category_id INTEGER REFERENCES product_categories(ID),
+    -- supplier_id INTEGER NOT NULL REFERENCES Supplier(ID)
     initial_quantity INTEGER NOT NULL DEFAULT 0
 );
 
@@ -37,4 +39,3 @@ CREATE TABLE products (
 --     product_id SERIAL NOT NULL,
 --     quantity_changed SMALLINT NOT NULL
 -- )
-
