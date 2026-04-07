@@ -6,4 +6,7 @@ export type product = {
     url: string,
     category_id: string,
     initial_quantity: string
+export type productCategory = {
+    id: number,
+    name: string
 }
