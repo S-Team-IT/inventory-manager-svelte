@@ -30,7 +30,8 @@ CREATE TABLE suppliers(
 );
 
 CREATE TABLE products (
-    id SERIAL NOT NULL PRIMARY KEY,
+    product_id TEXT NOT NULL UNIQUE,
+    master_id SERIAL NOT NULL PRIMARY KEY,
     name TEXT NOT NULL,
     cost NUMERIC(10, 2) NOT NULL,
     photo_paths TEXT[] NOT NULL DEFAULT '{"./default_missing.jpg"}',
@@ -38,7 +39,8 @@ CREATE TABLE products (
     category_id INTEGER REFERENCES product_categories(id),
     supplier_id INTEGER NOT NULL REFERENCES suppliers(id),
     initial_quantity INTEGER NOT NULL DEFAULT 0,
-    current_quantity INTEGER NOT NULL DEFAULT NULL
+    current_quantity INTEGER NOT NULL DEFAULT NULL,
+    disabled BOOLEAN NOT NULL DEFAULT false
 );
 
 CREATE OR REPLACE FUNCTION set_current_quantity()
@@ -65,7 +67,7 @@ CREATE TABLE transactions(
     id SERIAL NOT NULL PRIMARY KEY,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     logger_id INT NOT NULL REFERENCES users(id),
-    product_id INT NOT NULL REFERENCES products(id),
+    product_id INT NOT NULL REFERENCES products(master_id),
     quantity_changed INT NOT NULL,
     delivery_id TEXT REFERENCES delivery_orders(id),
     CONSTRAINT valid_transaction CHECK (
