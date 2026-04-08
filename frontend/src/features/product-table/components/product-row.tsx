@@ -64,20 +64,26 @@ function ProductRow({ product }: { product: product }) {
                             name="previousQuantity"
                             value={product.quantity}
                         />
-                        <input
-                            type="number"
-                            name="changeInValue"
-                            max="10"
-                            min={`-${product.quantity}`}
-                            placeholder="0"
-                            required
-                            className="input mb-1"
-                        />
-                        <input
-                            type="submit"
-                            value="Update"
-                            className="button is-white"
-                        />
+                        <div className="field has-addons">
+                            <div className="control">
+                                <input
+                                    type="number"
+                                    name="changeInValue"
+                                    max="10"
+                                    min={`-${product.quantity}`}
+                                    placeholder="0"
+                                    required
+                                    className="input"
+                                />
+                            </div>
+                            <div className="control">
+                                <input
+                                    type="submit"
+                                    value="Update"
+                                    className="button is-white"
+                                />
+                            </div>
+                        </div>
                     </form>
                 )}
             </th>
