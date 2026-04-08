@@ -1,34 +1,27 @@
 import type { product } from "types/supabase";
 import { supabase } from "lib/supabase";
 
-type QuantityUpdateData = {
-    id: number;
-    previousQuantity: number;
-    changeInValue: number;
-};
-
 function ProductRow({ product }: { product: product }) {
     function handleFormSubmission(formData: FormData) {
-        const data: QuantityUpdateData = {
-            id: Number(formData.get("id")),
-            previousQuantity: Number(formData.get("previousQuantity")),
-            changeInValue: Number(formData.get("changeInValue")),
-        };
-        handleQuantityUpdate(data);
-    }
+        const masterID = formData.get("id") as string;
+        const previousQuantity = Number(formData.get("previousQuantity"));
+        const changeInValue = Number(formData.get("changeInValue"));
 
-    async function handleQuantityUpdate({
-        id,
-        previousQuantity,
-        changeInValue,
-    }: QuantityUpdateData) {
-        if (changeInValue == 0) return;
-        const newQuantity: number = previousQuantity + changeInValue;
+        if (changeInValue == 0) {
+            alert("Cannot be 0.");
+            return;
+        }
+
+        const newQuantity = previousQuantity + changeInValue;
         if (newQuantity < 0) {
             alert("Quantity will go negative.");
             return;
         }
 
+        handleQuantityUpdate(masterID, newQuantity);
+    }
+
+    async function handleQuantityUpdate(masterID: string, newQuantity: number) {
         const { error } = await supabase
             .from("products")
             .update({ initial_quantity: newQuantity })
