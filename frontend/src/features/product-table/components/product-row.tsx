@@ -41,7 +41,7 @@ function ProductRow({ product }: { product: product }) {
     }
 
     return (
-        <tr>
+        <tr className={product.isDisabled ? "strike-through" : ""}>
             <th scope="row">{product.masterID}</th>
             <th>{product.name}</th>
             <th>
@@ -52,28 +52,34 @@ function ProductRow({ product }: { product: product }) {
             <th>{product.category?.name}</th>
             <th>{product.quantity}</th>
             <th>
-                <form action={handleFormSubmission}>
-                    <input type="hidden" name="id" value={product.masterID} />
-                    <input
-                        type="hidden"
-                        name="previousQuantity"
-                        value={product.quantity}
-                    />
-                    <input
-                        type="number"
-                        name="changeInValue"
-                        max="10"
-                        min={`-${product.quantity}`}
-                        placeholder="0"
-                        required
-                        className="input mb-1"
-                    />
-                    <input
-                        type="submit"
-                        value="Update"
-                        className="button is-white"
-                    />
-                </form>
+                {!product.isDisabled && (
+                    <form action={handleFormSubmission}>
+                        <input
+                            type="hidden"
+                            name="id"
+                            value={product.masterID}
+                        />
+                        <input
+                            type="hidden"
+                            name="previousQuantity"
+                            value={product.quantity}
+                        />
+                        <input
+                            type="number"
+                            name="changeInValue"
+                            max="10"
+                            min={`-${product.quantity}`}
+                            placeholder="0"
+                            required
+                            className="input mb-1"
+                        />
+                        <input
+                            type="submit"
+                            value="Update"
+                            className="button is-white"
+                        />
+                    </form>
+                )}
             </th>
         </tr>
     );

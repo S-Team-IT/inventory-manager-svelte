@@ -11,8 +11,9 @@ function ProductTable() {
             const { error, data } = await supabase
                 .from("products")
                 .select(
-                    `masterID:master_id, name, photoPaths:photo_paths, quantity:current_quantity, category:product_categories(name)`,
+                    `masterID:master_id, name, photoPaths:photo_paths, quantity:current_quantity, category:product_categories(name), isDisabled:disabled`,
                 )
+                .order("disabled")
                 .order("master_id", { ascending: true })
                 .returns<product[]>();
             if (error) {

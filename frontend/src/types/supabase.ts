@@ -6,4 +6,5 @@ export type product = {
     category: {
         name: string;
     };
+    isDisabled: boolean;
 };
