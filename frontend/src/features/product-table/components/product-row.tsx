@@ -32,7 +32,7 @@ function ProductRow({ product }: { product: product }) {
         const { error } = await supabase
             .from("products")
             .update({ initial_quantity: newQuantity })
-            .eq("id", id);
+            .eq("master_id", masterID);
         if (error) {
             console.error("Error updating product quantity: ", error);
             return;
