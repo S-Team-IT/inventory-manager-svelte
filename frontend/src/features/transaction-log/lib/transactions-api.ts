@@ -17,6 +17,5 @@ export async function getAllTransactions(): Promise<transaction[]> {
         console.error("Error retrieving products: ", error);
         return [];
     }
-    console.log(data);
     return data;
 }
