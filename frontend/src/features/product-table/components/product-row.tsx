@@ -18,13 +18,8 @@ function ProductRow({ product }: { product: product }) {
             return;
         }
 
-        const success = await updateProductQuantity(masterID, newQuantity);
-        if (success) {
-            alert("Updated!");
-            window.location.reload();
-        } else {
-            alert("Failed to update. Please try again.");
-        }
+        await updateProductQuantity(masterID, newQuantity);
+        window.location.reload();
     }
 
     return (
