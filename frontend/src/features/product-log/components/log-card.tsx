@@ -1,6 +1,12 @@
 import type { transaction } from "types/supabase";
+import { formatRelative } from "date-fns";
 
 function LogCard({ transaction }: { transaction: transaction }) {
+    const formattedDateString = formatRelative(
+        transaction.creationTimestamp,
+        new Date(),
+    ).toString();
+
     return (
         <article className="columns">
             <div className="column is-three-quarters">
@@ -8,9 +14,7 @@ function LogCard({ transaction }: { transaction: transaction }) {
                 {transaction.quantityChanged > 0 && "+"}
                 {transaction.quantityChanged} {transaction.product.name}
             </div>
-            <div className="column">
-                {transaction.creationTimestamp.toString()}
-            </div>
+            <div className="column">{formattedDateString}</div>
         </article>
     );
 }
