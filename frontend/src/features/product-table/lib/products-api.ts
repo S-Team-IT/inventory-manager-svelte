@@ -21,3 +21,22 @@ export async function getAllProducts(): Promise<product[]> {
     }
     return data;
 }
+
+export async function updateProductQuantity(
+    masterID: string,
+    newQuantity: number,
+): Promise<boolean> {
+    const { error } = await supabase
+        .from("products")
+        .update({ current_quantity: newQuantity })
+        .eq("master_id", masterID);
+    if (error) {
+        console.error("Error updating product quantity", error);
+        return false;
+    }
+    return true;
+}
+
+// export async function insertNewTransaction() {
+//     const { error };
+// }
