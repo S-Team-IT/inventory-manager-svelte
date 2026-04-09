@@ -7,7 +7,7 @@ import type { returnType } from "./lib/sortProducts";
 
 function ProductTable() {
     const [enabledProducts, setEnabledProducts] = useState<product[]>([]);
-    const [disabledProducts, setdisabledProducts] = useState<product[]>([]);
+    const [disabledProducts, setDisabledProducts] = useState<product[]>([]);
 
     useEffect(() => {
         async function getProducts() {
@@ -27,7 +27,7 @@ function ProductTable() {
             const sortedProducts: returnType =
                 sortProductsIntoEnabledDisabled(data);
             setEnabledProducts(sortedProducts.enabledProducts);
-            setdisabledProducts(sortedProducts.disabledProducts);
+            setDisabledProducts(sortedProducts.disabledProducts);
         }
         getProducts();
     }, []);
