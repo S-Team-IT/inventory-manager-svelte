@@ -21,23 +21,10 @@ function ProductRow({ product }: { product: product }) {
             return;
         }
 
-        let userID = "3";
+        let loggerID = "3";
 
         await updateProductQuantity(masterID, newQuantity);
-        await insertNewTransaction(userID, masterID, changeInValue);
-
-        // if (changeInValue > 0) {
-        //     await insertNewTransaction(
-        //         "3",
-        //         masterID,
-        //         changeInValue,
-        //         deliveryID,
-        //         deliveryDate,
-        //     );
-        // } else {
-        //     await insertNewTransaction("3", masterID, changeInValue);
-        // }
-
+        await insertNewTransaction(loggerID, masterID, changeInValue);
         window.location.reload();
     }
 
@@ -70,7 +57,6 @@ function ProductRow({ product }: { product: product }) {
                                 <input
                                     type="number"
                                     name="changeInValue"
-                                    max="10"
                                     min={`-${product.quantity}`}
                                     placeholder="0"
                                     required
@@ -79,11 +65,9 @@ function ProductRow({ product }: { product: product }) {
                                 />
                             </div>
                             <div className="control">
-                                <input
-                                    type="submit"
-                                    value="Update"
-                                    className="button is-primary"
-                                />
+                                <button className="button is-primary">
+                                    Update
+                                </button>
                             </div>
                         </div>
                     </form>

@@ -3,7 +3,6 @@ import type { product } from "types/supabase";
 import ProductRow from "./components/product-row";
 import { sortProductsIntoEnabledDisabled } from "./lib/sortProducts";
 import { getAllProducts } from "./lib/products-api";
-import { getAllTransactions } from "features/transaction-log/lib/transactions-api";
 
 function ProductTable() {
     const [enabledProducts, setEnabledProducts] = useState<product[]>([]);
@@ -18,7 +17,6 @@ function ProductTable() {
             setDisabledProducts(sortedProductArray[1]);
         }
         fetchProducts();
-        getAllTransactions();
     }, []);
 
     return (
