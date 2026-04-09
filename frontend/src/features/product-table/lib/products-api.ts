@@ -36,6 +36,18 @@ export async function updateProductQuantity(
     }
 }
 
-// export async function insertNewTransaction() {
-//     const { error };
-// }
+export async function insertNewTransaction(
+    loggerID: string,
+    productID: string,
+    quantityChanged: number,
+) {
+    const { error } = await supabase.from("transactions").insert({
+        logger_id: loggerID,
+        product_id: productID,
+        quantity_changed: quantityChanged,
+    });
+    if (error) {
+        console.error("Error inserting transaction: ", error);
+        return;
+    }
+}

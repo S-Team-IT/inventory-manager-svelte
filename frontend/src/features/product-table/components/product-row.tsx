@@ -1,5 +1,8 @@
 import type { product } from "types/supabase";
-import { updateProductQuantity } from "../lib/products-api";
+import {
+    insertNewTransaction,
+    updateProductQuantity,
+} from "../lib/products-api";
 
 function ProductRow({ product }: { product: product }) {
     async function handleFormSubmission(formData: FormData) {
@@ -19,6 +22,7 @@ function ProductRow({ product }: { product: product }) {
         }
 
         await updateProductQuantity(masterID, newQuantity);
+        await insertNewTransaction("3", masterID, changeInValue);
         window.location.reload();
     }
 
