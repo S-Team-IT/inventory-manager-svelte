@@ -40,14 +40,61 @@ export async function insertNewTransaction(
     loggerID: string,
     productID: string,
     quantityChanged: number,
+): Promise<boolean>;
+
+export async function insertNewTransaction(
+    loggerID: string,
+    productID: string,
+    quantityChanged: number,
+    deliveryID: string,
+    deliveryDate: Date,
+): Promise<boolean>;
+
+export async function insertNewTransaction(
+    loggerID: string,
+    productID: string,
+    quantityChanged: number,
+    deliveryID?: string,
+    deliveryDate?: Date,
+): Promise<boolean> {
+    if (deliveryID && deliveryDate) {
+        const { error } = await supabase.from("transactions").insert({
+            logger_id: loggerID,
+            product_id: productID,
+            quantity_changed: quantityChanged,
+        });
+        if (error) {
+            console.error("Error inserting transaction: ", error);
+            return false;
+        }
+        return true;
+    } else {
+        const { error } = await supabase.from("transactions").insert({
+            logger_id: loggerID,
+            product_id: productID,
+            quantity_changed: quantityChanged,
+        });
+        if (error) {
+            console.error("Error inserting transaction: ", error);
+            return false;
+        }
+        return true;
+    }
+}
+
+export async function insertDeliveryOrder(
+    supplierID: string,
+    deliveryID: string,
+    deliveryDate: Date,
 ) {
-    const { error } = await supabase.from("transactions").insert({
-        logger_id: loggerID,
-        product_id: productID,
-        quantity_changed: quantityChanged,
+    const { error } = await supabase.from("delivery_orders").insert({
+        supplier_id: supplierID,
+        id: deliveryID,
+        date: deliveryDate,
     });
     if (error) {
-        console.error("Error inserting transaction: ", error);
-        return;
+        console.error("Error inserting delivery order: ", error);
+        return false;
     }
+    return true;
 }

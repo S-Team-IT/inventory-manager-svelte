@@ -21,8 +21,23 @@ function ProductRow({ product }: { product: product }) {
             return;
         }
 
+        let userID = "3";
+
         await updateProductQuantity(masterID, newQuantity);
-        await insertNewTransaction("3", masterID, changeInValue);
+        await insertNewTransaction(userID, masterID, changeInValue);
+
+        // if (changeInValue > 0) {
+        //     await insertNewTransaction(
+        //         "3",
+        //         masterID,
+        //         changeInValue,
+        //         deliveryID,
+        //         deliveryDate,
+        //     );
+        // } else {
+        //     await insertNewTransaction("3", masterID, changeInValue);
+        // }
+
         window.location.reload();
     }
 
