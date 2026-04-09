@@ -1,45 +1,58 @@
 import type { product } from "types/supabase";
-import {
-    insertNewTransaction,
-    updateProductQuantity,
-} from "../lib/products-api";
+// import {
+//     insertNewTransaction,
+//     updateProductQuantity,
+// } from "../lib/products-api";
 
-function ProductRow({ product }: { product: product }) {
-    async function handleFormSubmission(formData: FormData) {
-        const masterID = formData.get("id") as string;
-        const previousQuantity = Number(formData.get("previousQuantity"));
-        const changeInValue = Number(formData.get("changeInValue"));
+interface ProductRowProps {
+    product: product;
+    handleQuantityChange: (productID: string) => void;
+}
 
-        if (changeInValue == 0) {
-            alert("Cannot be 0.");
-            return;
-        }
+function ProductRow({ product, handleQuantityChange }: ProductRowProps) {
+    // async function handleFormSubmission(formData: FormData) {
+    //     const masterID = formData.get("id") as string;
+    //     const previousQuantity = Number(formData.get("previousQuantity"));
+    //     const changeInValue = Number(formData.get("changeInValue"));
 
-        const newQuantity = previousQuantity + changeInValue;
-        if (newQuantity < 0) {
-            alert("Quantity will go negative.");
-            return;
-        }
+    //     if (changeInValue == 0) {
+    //         alert("Cannot be 0.");
+    //         return;
+    //     }
 
-        let loggerID = "3";
+    //     const newQuantity = previousQuantity + changeInValue;
+    //     if (newQuantity < 0) {
+    //         alert("Quantity will go negative.");
+    //         return;
+    //     }
 
-        await updateProductQuantity(masterID, newQuantity);
-        await insertNewTransaction(loggerID, masterID, changeInValue);
-        window.location.reload();
-    }
+    //     let loggerID = "3";
+
+    //     await updateProductQuantity(masterID, newQuantity);
+    //     await insertNewTransaction(loggerID, masterID, changeInValue);
+    //     window.location.reload();
+    // }
 
     return (
         <tr className={product.isDisabled ? "strike-through" : ""}>
             <th scope="row">{product.masterID}</th>
             <th>{product.name}</th>
             <th>
-                {product.photoPaths.map((path, key) => (
+                {/* {product.photoPaths.map((path, key) => (
                     <img src={path} alt="MISSING IMAGE" key={key} />
-                ))}
+                ))} */}
             </th>
             <th>{product.category?.name}</th>
             <th>{product.quantity}</th>
             <th>
+                <button
+                    className="button is-primary"
+                    onClick={() => handleQuantityChange(product.masterID)}
+                >
+                    Modify
+                </button>
+            </th>
+            {/* <th>
                 {!product.isDisabled && (
                     <form action={handleFormSubmission}>
                         <input
@@ -72,7 +85,7 @@ function ProductRow({ product }: { product: product }) {
                         </div>
                     </form>
                 )}
-            </th>
+            </th> */}
         </tr>
     );
 }
