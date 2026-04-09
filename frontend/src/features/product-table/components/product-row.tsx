@@ -61,6 +61,7 @@ function ProductRow({ product }: { product: product }) {
                                     placeholder="0"
                                     required
                                     className="input"
+                                    step="1"
                                 />
                             </div>
                             <div className="control">
