@@ -33,7 +33,7 @@ CREATE TABLE products (
     product_id TEXT NOT NULL UNIQUE,
     master_id TEXT NOT NULL PRIMARY KEY,
     name TEXT NOT NULL,
-    photo_paths TEXT[],
+    photo_paths TEXT[] NOT NULL DEFAULT '{""}',
     category_id INTEGER REFERENCES product_categories(id),
     supplier_id INTEGER NOT NULL REFERENCES suppliers(id),
     initial_quantity INTEGER NOT NULL DEFAULT 0,
