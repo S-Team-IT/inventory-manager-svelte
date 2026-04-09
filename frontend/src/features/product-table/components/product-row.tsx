@@ -24,7 +24,7 @@ function ProductRow({ product }: { product: product }) {
     async function handleQuantityUpdate(masterID: string, newQuantity: number) {
         const { error } = await supabase
             .from("products")
-            .update({ initial_quantity: newQuantity })
+            .update({ current_quantity: newQuantity })
             .eq("master_id", masterID);
         if (error) {
             console.error("Error updating product quantity: ", error);
