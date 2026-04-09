@@ -8,3 +8,15 @@ if (!supabaseUrl || !supabaseAnonKey) {
 }
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+export async function getAllSuppliers() {
+    const { error, data } = await supabase
+        .from("suppliers")
+        .select("*")
+        .order("id", { ascending: true });
+    if (error) {
+        console.error("Error retrieving all suppliers: ", error);
+        return;
+    }
+    return data;
+}
