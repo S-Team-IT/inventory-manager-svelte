@@ -1,33 +1,22 @@
 import { useState, useEffect } from "react";
-import { supabase } from "lib/supabase";
 import type { product } from "types/supabase";
 import ProductRow from "./components/product-row";
 import { sortProductsIntoEnabledDisabled } from "./lib/sortProducts";
+import { getAllProducts } from "./lib/supabase-calls";
 
 function ProductTable() {
     const [enabledProducts, setEnabledProducts] = useState<product[]>([]);
     const [disabledProducts, setDisabledProducts] = useState<product[]>([]);
 
     useEffect(() => {
-        async function getProducts() {
-            const { error, data } = await supabase
-                .from("products")
-                .select(
-                    `masterID:master_id, name, photoPaths:photo_paths, quantity:current_quantity, category:product_categories(name), isDisabled:disabled`,
-                )
-                .order("disabled")
-                .order("master_id", { ascending: true })
-                .returns<product[]>();
-            if (error) {
-                console.error("Error retrieving products: ", error);
-                return;
-            }
-
-            const productArrayArray = sortProductsIntoEnabledDisabled(data);
-            setEnabledProducts(productArrayArray[0]);
-            setDisabledProducts(productArrayArray[1]);
+        async function fetchProducts() {
+            const productArray = await getAllProducts();
+            const sortedProductArray =
+                sortProductsIntoEnabledDisabled(productArray);
+            setEnabledProducts(sortedProductArray[0]);
+            setDisabledProducts(sortedProductArray[1]);
         }
-        getProducts();
+        fetchProducts();
     }, []);
 
     return (
