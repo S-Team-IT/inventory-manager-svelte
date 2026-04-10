@@ -9,31 +9,31 @@ function DeliveryOrderFieldset({ suppliers }: props) {
         <>
             {" "}
             <div className="field">
-                <label className="label" htmlFor="deliveryID">
+                <label className="label" htmlFor="orderID">
                     Delivery Order Number:{" "}
                 </label>
                 <div className="control">
                     <input
                         type="text"
                         className="input"
-                        name="deliveryID"
+                        name="orderID"
                         placeholder="DO Number"
                         required
-                        id="deliveryID"
+                        id="orderID"
                     />
                 </div>
             </div>
             <div className="field">
-                <label className="label" htmlFor="deliveryDate">
+                <label className="label" htmlFor="orderDate">
                     Delivery Date:
                 </label>
                 <div className="control">
                     <input
                         type="date"
                         className="input"
-                        name="deliveryDate"
+                        name="orderDate"
                         required
-                        id="deliveryDate"
+                        id="orderDate"
                     />
                 </div>
             </div>

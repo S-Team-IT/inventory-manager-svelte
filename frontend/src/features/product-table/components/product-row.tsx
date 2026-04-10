@@ -6,10 +6,10 @@ import type { product } from "types/supabase";
 
 interface props {
     product: product;
-    handleQuantityChange: (productID: string) => void;
+    handleProductSelection: (productID: string) => void;
 }
 
-function ProductRow({ product, handleQuantityChange }: props) {
+function ProductRow({ product, handleProductSelection }: props) {
     // async function handleFormSubmission(formData: FormData) {
     //     const masterID = formData.get("id") as string;
     //     const previousQuantity = Number(formData.get("previousQuantity"));
@@ -47,7 +47,7 @@ function ProductRow({ product, handleQuantityChange }: props) {
             <th>
                 <button
                     className="button is-primary"
-                    onClick={() => handleQuantityChange(product.masterID)}
+                    onClick={() => handleProductSelection(product.masterID)}
                 >
                     Modify
                 </button>

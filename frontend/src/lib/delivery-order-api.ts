@@ -1,18 +1,26 @@
 import { supabase } from "lib/supabase";
 
-export async function insertDeliveryOrder(
+type returnValue = {
+    deliveryOrderID: string;
+};
+
+export async function insertNewDeliveryOrder(
     supplierID: string,
-    deliveryID: string,
-    deliveryDate: Date,
-) {
-    const { error } = await supabase.from("delivery_orders").insert({
-        supplier_id: supplierID,
-        id: deliveryID,
-        date: deliveryDate,
-    });
+    orderID: string,
+    orderDate: Date,
+): Promise<string> {
+    const { error, data } = await supabase
+        .from("delivery_orders")
+        .insert({
+            supplier_id: supplierID,
+            order_id: orderID,
+            order_date: orderDate,
+        })
+        .select("deliveryOrderID:id")
+        .single();
     if (error) {
         console.error("Error inserting delivery order: ", error);
-        return false;
+        return "";
     }
-    return true;
+    return (data as returnValue).deliveryOrderID;
 }

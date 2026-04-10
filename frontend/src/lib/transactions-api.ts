@@ -31,7 +31,6 @@ export async function insertNewTransaction(
     productID: string,
     quantityChanged: number,
     deliveryID: string,
-    deliveryDate: Date,
 ): Promise<boolean>;
 
 export async function insertNewTransaction(
@@ -39,13 +38,13 @@ export async function insertNewTransaction(
     productID: string,
     quantityChanged: number,
     deliveryID?: string,
-    deliveryDate?: Date,
 ): Promise<boolean> {
-    if (deliveryID && deliveryDate) {
+    if (deliveryID) {
         const { error } = await supabase.from("transactions").insert({
             logger_id: loggerID,
             product_id: productID,
             quantity_changed: quantityChanged,
+            delivery_id: deliveryID,
         });
         if (error) {
             console.error("Error inserting transaction: ", error);

@@ -3,6 +3,9 @@ import Modal from "react-modal";
 import { getAllSuppliers } from "lib/suppliers-api";
 import type { supplier } from "types/supabase";
 import DeliveryOrderFieldset from "./components/delivery-order-fieldset";
+import { updateProductQuantity } from "lib/products-api";
+import { insertNewTransaction } from "lib/transactions-api";
+import { insertNewDeliveryOrder } from "lib/delivery-order-api";
 
 const modalStyles = {
     overlay: { backgroundColor: "rgb(255, 255, 255, 0.8)" },
@@ -19,11 +22,16 @@ const modalStyles = {
 Modal.setAppElement("#root");
 
 interface props {
+    selectedProductID: string;
     modalIsOpen: boolean;
     handleCloseModal: () => void;
 }
 
-function QuantityModal({ modalIsOpen, handleCloseModal }: props) {
+function QuantityModal({
+    selectedProductID,
+    modalIsOpen,
+    handleCloseModal,
+}: props) {
     const [suppliers, setSuppliers] = useState<supplier[]>([]);
     const [isIncomingOrder, setIsIncomingOrder] = useState(true);
 
@@ -35,8 +43,43 @@ function QuantityModal({ modalIsOpen, handleCloseModal }: props) {
         fetchSuppliers();
     }, []);
 
-    function handleFormSubmission(formData: FormData) {
-        console.log(formData);
+    async function handleFormSubmission(formData: FormData) {
+        const operation = formData.get("operation") as string;
+        const quantityChange = Number(formData.get("quantityChange"));
+        const orderID = formData.get("orderID") as string;
+        const orderDate = new Date(
+            Date.parse(formData.get("orderDate") as string),
+        );
+        const loggerID = "4";
+        const supplierID = formData.get("supplierID") as string;
+
+        if (operation == "+") {
+            const deliveryID = await insertNewDeliveryOrder(
+                supplierID,
+                orderID,
+                orderDate,
+            );
+
+            insertNewTransaction(
+                loggerID,
+                selectedProductID,
+                quantityChange,
+                deliveryID,
+            );
+
+            updateProductQuantity(selectedProductID, quantityChange);
+        } else if (operation == "-") {
+            insertNewTransaction(
+                loggerID,
+                selectedProductID,
+                quantityChange * -1,
+            );
+            updateProductQuantity(selectedProductID, quantityChange);
+        } else {
+            console.error(
+                "How did you get here? No valid operation option submitted",
+            );
+        }
     }
 
     function handleOperationChange(e: React.ChangeEvent<HTMLSelectElement>) {
@@ -51,9 +94,14 @@ function QuantityModal({ modalIsOpen, handleCloseModal }: props) {
             style={modalStyles}
         >
             <form action={handleFormSubmission}>
+                <input
+                    type="hidden"
+                    name="masterID"
+                    value={selectedProductID}
+                />
                 <fieldset>
                     <div className="field">
-                        <label className="label" htmlFor="quantity">
+                        <label className="label" htmlFor="quantityChange">
                             Quantity:
                         </label>
                         <div className="field has-addons">
@@ -73,12 +121,12 @@ function QuantityModal({ modalIsOpen, handleCloseModal }: props) {
                                 <input
                                     type="number"
                                     className="input"
-                                    name="quantity"
+                                    name="quantityChange"
                                     placeholder="0"
                                     required
                                     step="1"
                                     min="1"
-                                    id="quantity"
+                                    id="quantityChange"
                                 />
                             </div>
                         </div>

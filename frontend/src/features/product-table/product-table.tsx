@@ -10,10 +10,9 @@ function ProductTable() {
     const [disabledProducts, setDisabledProducts] = useState<product[]>([]);
 
     const [modalIsOpen, setIsOpen] = useState(false);
-    // const [selectedProductData, setSelectedProductData] = useState();
+    const [selectedProductID, setSelectedProductID] = useState("");
 
-    function openModal(productID: string) {
-        console.log("productID: ", productID);
+    function openModal() {
         setIsOpen(true);
     }
 
@@ -21,9 +20,11 @@ function ProductTable() {
         setIsOpen(false);
     }
 
-    // function handleSelectProduct(data: any) {
-    //     setSelectedProductData(data);
-    // }
+    function onSelectProduct(productID: string) {
+        console.log("productID: ", productID);
+        setSelectedProductID(productID);
+        openModal();
+    }
 
     useEffect(() => {
         async function fetchProducts() {
@@ -54,19 +55,20 @@ function ProductTable() {
                         <ProductRow
                             product={product}
                             key={product.masterID}
-                            handleQuantityChange={openModal}
+                            handleProductSelection={onSelectProduct}
                         />
                     ))}
                     {disabledProducts.map((product) => (
                         <ProductRow
                             product={product}
                             key={product.masterID}
-                            handleQuantityChange={openModal}
+                            handleProductSelection={onSelectProduct}
                         />
                     ))}
                 </tbody>
             </table>
             <QuantityModal
+                selectedProductID={selectedProductID}
                 modalIsOpen={modalIsOpen}
                 handleCloseModal={closeModal}
             />
