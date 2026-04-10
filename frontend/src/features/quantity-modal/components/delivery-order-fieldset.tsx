@@ -37,7 +37,7 @@ function DeliveryOrderFieldset({ suppliers }: props) {
                     />
                 </div>
             </div>
-            <div className="field">
+            <div className="field mb-3">
                 <label className="label" htmlFor="supplierID">
                     Supplier
                 </label>

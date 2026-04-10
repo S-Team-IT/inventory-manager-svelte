@@ -94,7 +94,7 @@ function QuantityModal({ modalIsOpen, handleCloseModal }: props) {
                         <DeliveryOrderFieldset suppliers={suppliers} />
                     </fieldset>
                 )}
-                <div className="field is-grouped mt-3">
+                <div className="field is-grouped">
                     <div className="control">
                         <button type="submit" className="button is-primary">
                             Submit
