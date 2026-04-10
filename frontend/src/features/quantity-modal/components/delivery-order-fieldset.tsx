@@ -7,10 +7,9 @@ type props = {
 function DeliveryOrderFieldset({ suppliers }: props) {
     return (
         <>
-            {" "}
             <div className="field">
                 <label className="label" htmlFor="orderID">
-                    Delivery Order Number:{" "}
+                    Delivery Order Number:
                 </label>
                 <div className="control">
                     <input
