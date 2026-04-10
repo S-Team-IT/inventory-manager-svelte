@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import LogCard from "./components/transaction-card";
+import LogCard from "./components/transaction-message";
 import type { transaction } from "types/supabase";
 import { getAllTransactions } from "lib/database/transactions-api";
 
