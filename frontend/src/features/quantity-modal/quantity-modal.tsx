@@ -156,12 +156,8 @@ function QuantityModal({
                     </div>
                 </fieldset>
                 <hr />
-                {isIncomingOrder ? (
+                {isIncomingOrder && (
                     <fieldset>
-                        <DeliveryOrderFieldset suppliers={suppliers} />
-                    </fieldset>
-                ) : (
-                    <fieldset disabled>
                         <DeliveryOrderFieldset suppliers={suppliers} />
                     </fieldset>
                 )}
