@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import Modal from "react-modal";
-import { getAllSuppliers } from "lib/suppliers-api";
+import { getAllSuppliers } from "lib/database/suppliers-api";
 import type { supplier } from "types/supabase";
 import DeliveryOrderFieldset from "./components/delivery-order-fieldset";
-import { updateProductQuantity } from "lib/products-api";
-import { insertNewTransaction } from "lib/transactions-api";
-import { insertNewDeliveryOrder } from "lib/delivery-order-api";
+import { updateProductQuantity } from "lib/database/products-api";
+import { insertNewTransaction } from "lib/database/transactions-api";
+import { insertNewDeliveryOrder } from "lib/database/delivery-order-api";
 
 const modalStyles = {
     overlay: { backgroundColor: "rgb(255, 255, 255, 0.8)" },

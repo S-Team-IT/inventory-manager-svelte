@@ -1,4 +1,4 @@
-import { supabase } from "lib/supabase";
+import { supabase } from "lib/database/supabase";
 import type { transaction } from "types/supabase";
 
 export async function getAllTransactions(): Promise<transaction[]> {

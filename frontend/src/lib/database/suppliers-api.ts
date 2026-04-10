@@ -1,4 +1,4 @@
-import { supabase } from "lib/supabase";
+import { supabase } from "lib/database/supabase";
 import type { supplier } from "types/supabase";
 
 export async function getAllSuppliers(): Promise<supplier[]> {

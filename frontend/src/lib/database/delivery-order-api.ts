@@ -1,4 +1,4 @@
-import { supabase } from "lib/supabase";
+import { supabase } from "lib/database/supabase";
 
 type returnValue = {
     deliveryOrderID: string;
