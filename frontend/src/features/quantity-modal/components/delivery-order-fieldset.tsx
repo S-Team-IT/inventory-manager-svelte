@@ -38,15 +38,15 @@ function DeliveryOrderFieldset({ suppliers }: props) {
                 </div>
             </div>
             <div className="field">
-                <label className="label" htmlFor="supplier">
+                <label className="label" htmlFor="supplierID">
                     Supplier
                 </label>
                 <div className="control">
                     <div className="select">
-                        <select name="supplier" id="supplier">
+                        <select name="supplierID" id="supplierID">
                             <option>Select dropdown</option>
                             {suppliers.map((supplier) => (
-                                <option key={supplier.id}>
+                                <option key={supplier.id} value={supplier.id}>
                                     {supplier.name}
                                 </option>
                             ))}
