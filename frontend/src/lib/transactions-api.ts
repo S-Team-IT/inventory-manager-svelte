@@ -1,39 +1,23 @@
 import { supabase } from "lib/supabase";
-import type { product } from "types/supabase";
+import type { transaction } from "types/supabase";
 
-export async function getAllProducts(): Promise<product[]> {
+export async function getAllTransactions(): Promise<transaction[]> {
     const { error, data } = await supabase
-        .from("products")
+        .from("transactions")
         .select(
-            `masterID:master_id, 
-            name, 
-            photoPaths:photo_paths, 
-            quantity:current_quantity, 
-            category:product_categories(name), 
-            isDisabled:disabled`,
+            `id, 
+            creationTimestamp:created_at, 
+            logger:users(firstName:first_name),
+            product:products(name),
+            quantityChanged:quantity_changed`,
         )
-        .order("disabled")
-        .order("master_id", { ascending: true })
-        .returns<product[]>();
+        .order("created_at", { ascending: false })
+        .returns<transaction[]>();
     if (error) {
         console.error("Error retrieving products: ", error);
         return [];
     }
     return data;
-}
-
-export async function updateProductQuantity(
-    masterID: string,
-    newQuantity: number,
-) {
-    const { error } = await supabase
-        .from("products")
-        .update({ current_quantity: newQuantity })
-        .eq("master_id", masterID);
-    if (error) {
-        console.error("Error updating product quantity", error);
-        return;
-    }
 }
 
 export async function insertNewTransaction(
@@ -80,21 +64,4 @@ export async function insertNewTransaction(
         }
         return true;
     }
-}
-
-export async function insertDeliveryOrder(
-    supplierID: string,
-    deliveryID: string,
-    deliveryDate: Date,
-) {
-    const { error } = await supabase.from("delivery_orders").insert({
-        supplier_id: supplierID,
-        id: deliveryID,
-        date: deliveryDate,
-    });
-    if (error) {
-        console.error("Error inserting delivery order: ", error);
-        return false;
-    }
-    return true;
 }

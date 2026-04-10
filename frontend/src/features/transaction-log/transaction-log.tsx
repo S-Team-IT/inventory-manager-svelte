@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import LogCard from "./components/transaction-card";
 import type { transaction } from "types/supabase";
-import { getAllTransactions } from "./lib/transactions-api";
+import { getAllTransactions } from "lib/transactions-api";
 
 function TransactionLog() {
     const [transactions, setTransactions] = useState<transaction[]>([]);

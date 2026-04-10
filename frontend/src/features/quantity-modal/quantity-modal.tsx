@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Modal from "react-modal";
-import { getAllSuppliers } from "lib/supabase";
+import { getAllSuppliers } from "lib/suppliers-api";
 import type { supplier } from "types/supabase";
 import DeliveryOrderFieldset from "./components/delivery-order-fieldset";
 
