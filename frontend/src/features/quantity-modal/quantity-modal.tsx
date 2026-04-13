@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Modal from "react-modal";
 import { getAllSuppliers } from "lib/database/suppliers-api";
 import type { supplier } from "types/supabase";
@@ -6,6 +6,7 @@ import DeliveryOrderFieldset from "./components/delivery-order-fieldset";
 import { updateProductQuantity } from "lib/database/products-api";
 import { insertNewTransaction } from "lib/database/transactions-api";
 import { insertNewDeliveryOrder } from "lib/database/delivery-order-api";
+import { SessionContext } from "lib/context/session-context";
 
 const modalStyles = {
     overlay: { backgroundColor: "rgb(255, 255, 255, 0.8)" },
@@ -36,6 +37,7 @@ function QuantityModal({
 }: props) {
     const [suppliers, setSuppliers] = useState<supplier[]>([]);
     const [isIncomingOrder, setIsIncomingOrder] = useState(true);
+    const [session, _setSession] = useContext(SessionContext);
 
     useEffect(() => {
         async function fetchSuppliers(): Promise<void> {
@@ -52,7 +54,6 @@ function QuantityModal({
         const orderDate = new Date(
             Date.parse(formData.get("orderDate") as string),
         );
-        const loggerID = "4";
         const supplierID = formData.get("supplierID") as string;
         const quantity = Number(formData.get("quantity"));
 
@@ -64,7 +65,7 @@ function QuantityModal({
             );
 
             insertNewTransaction(
-                loggerID,
+                session.user.id,
                 selectedProductID,
                 quantityChange,
                 deliveryID,
@@ -75,7 +76,7 @@ function QuantityModal({
             window.location.reload();
         } else if (operation == "-") {
             insertNewTransaction(
-                loggerID,
+                session.user.id,
                 selectedProductID,
                 quantityChange * -1,
             );
