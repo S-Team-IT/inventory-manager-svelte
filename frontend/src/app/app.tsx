@@ -17,11 +17,11 @@ function App() {
             if (error) {
                 console.error("Error fetching session: ", error);
                 //Theoretically shouldn't need to return null here
-                // since data.session would be automatically null
+                //since data would automatically be null
             }
 
-            console.log("Fetched session: ", data.session);
-            return data.session;
+            console.log("Fetched session: ", data);
+            return data;
         }
         fetchSession();
 
@@ -37,17 +37,18 @@ function App() {
 
     return (
         <>
-            <CssBaseline>
-                <SessionContext.Provider value={session}>
-                    <Navbar session={session} />
-                </SessionContext.Provider>
-                <Toolbar />
-                {/* Toolbar is here so the Navbar is sticky & doesn't cover the texts */}
-            </CssBaseline>
-            <main className="columns m-5">
-                <ProductTable />
-                <ProductLog />
-            </main>
+            <SessionContext value={[session, setSession]}>
+                <CssBaseline>
+                    <Navbar />
+
+                    <Toolbar />
+                    {/* Toolbar is here so the Navbar is sticky & doesn't cover the texts */}
+                </CssBaseline>
+                <main className="columns m-5">
+                    <ProductTable />
+                    <ProductLog />
+                </main>
+            </SessionContext>
         </>
     );
 }

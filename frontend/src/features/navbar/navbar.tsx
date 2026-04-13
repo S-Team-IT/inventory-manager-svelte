@@ -1,13 +1,12 @@
+import { useContext } from "react";
 import { AppBar, Typography, Toolbar } from "@mui/material";
 import EnterAccount from "./components/enter-account";
 import ExitAccount from "./components/exit-account";
-import type { Session } from "@supabase/supabase-js";
+import { SessionContext } from "lib/context/session-context";
 
-interface props {
-    session: Session;
-}
+function Navbar() {
+    const [session, _setSession] = useContext(SessionContext);
 
-function Navbar({ session }: props) {
     return (
         <AppBar sx={{ bgcolor: "common.white", padding: 1 }}>
             <Toolbar>
