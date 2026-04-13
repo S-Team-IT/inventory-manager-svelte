@@ -10,8 +10,8 @@ function App() {
         <>
             <CssBaseline>
                 <Navbar />
-                <Toolbar />{" "}
-                {/* Is here so the Navbar is sticky & doesn't cover the texts */}
+                <Toolbar />
+                {/* Toolbar is here so the Navbar is sticky & doesn't cover the texts */}
             </CssBaseline>
             <main className="columns m-5">
                 <ProductTable />
