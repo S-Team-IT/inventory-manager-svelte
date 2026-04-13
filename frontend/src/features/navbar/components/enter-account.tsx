@@ -34,7 +34,7 @@ function EnterAccount() {
             if (signInError) {
                 console.error("Error signing in", signInError);
             }
-            setSession(data);
+            setSession(data.session);
         } else {
             const { error: signUpError, data } = await supabase.auth.signUp({
                 email,
@@ -43,7 +43,7 @@ function EnterAccount() {
             if (signUpError) {
                 console.error("Error signing in", signUpError);
             }
-            setSession(data);
+            setSession(data.session);
         }
     }
 
