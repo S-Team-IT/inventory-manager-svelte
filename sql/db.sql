@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS 
-    users, 
+    profiles, 
     product_categories, 
     suppliers, 
     products, 
@@ -10,13 +10,12 @@ DROP TYPE IF EXISTS user_roles;
 
 CREATE TYPE user_roles AS ENUM ('QS', 'Procurement', 'Project');
 
-CREATE TABLE users (
-    id SERIAL NOT NULL PRIMARY KEY,
-    first_name TEXT NOT NULL,
-    last_name TEXT NOT NULL,
-    username VARCHAR(10) NOT NULL,
-    password TEXT NOT NULL,
-    role user_roles NOT NULL
+CREATE TABLE profiles (
+    id UUID NOT NULL REFERENCES auth.users,
+    first_name TEXT,
+    last_name TEXT,
+    role user_roles NOT NULL,
+    PRIMARY KEY(id)
 );
 
 CREATE TABLE product_categories(
@@ -67,7 +66,7 @@ CREATE TABLE delivery_orders(
 CREATE TABLE transactions(
     id SERIAL NOT NULL PRIMARY KEY,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    logger_id INTEGER NOT NULL REFERENCES users(id),
+    logger_id UUID NOT NULL REFERENCES profiles(id),
     product_id TEXT NOT NULL REFERENCES products(master_id),
     quantity_changed INTEGER NOT NULL,
     delivery_id INTEGER REFERENCES delivery_orders(id),

@@ -18,16 +18,9 @@ insert into suppliers (name) values ('Oba');
 insert into suppliers (name) values ('Centidel');
 insert into suppliers (name) values ('Quinu');
 
-insert into users (first_name, last_name, username, password, role) values ('Valeda', 'Heazel', 'vheazel0', 'rB7#!3}<6?t', 'Procurement');
-insert into users (first_name, last_name, username, password, role) values ('Dannie', 'Rigg', 'drigg1', 'sD4)7wb<%G)j#3', 'Project');
-insert into users (first_name, last_name, username, password, role) values ('Jase', 'Morrish', 'jmorrish2', 'dT8(vjU3fT', 'QS');
-insert into users (first_name, last_name, username, password, role) values ('Catherina', 'Greenhow', 'cgreenhow3', 'hD5`&Qo5`', 'Procurement');
-insert into users (first_name, last_name, username, password, role) values ('Sarette', 'Wackett', 'swackett4', 'eR1@T=/RM=iiIQy4', 'Procurement');
-insert into users (first_name, last_name, username, password, role) values ('Kissiah', 'Guilliland', 'kguillil', 'mP0@j+d?L,@', 'QS');
-insert into users (first_name, last_name, username, password, role) values ('Tildi', 'Farra', 'tfarra6', 'nX6!/DAa5s', 'Procurement');
-insert into users (first_name, last_name, username, password, role) values ('Marcello', 'Vernalls', 'mvernalls7', 'gN6.XN!KO', 'Procurement');
-insert into users (first_name, last_name, username, password, role) values ('Mollee', 'Josephsen', 'mjosephsen', 'jF6!HpKehR7tCrg', 'Project');
-insert into users (first_name, last_name, username, password, role) values ('Celeste', 'Trevett', 'ctrevett9', 'gX9.3t|~J', 'QS');
+insert into profiles (id, first_name,last_name,role) VALUES('af7c5041-1d50-4b2f-a300-9c5e3ee5e4db','Project', 'Smithy', 'Project');
+insert into profiles (id, first_name,last_name,role) VALUES('df92e1bf-738b-4858-800c-d7640c99538b','QS', 'Banana', 'QS');
+insert into profiles (id, first_name,last_name,role) VALUES('ec50c701-704f-4b6b-b2fb-4e62471728a2','Procurement', 'Johnny', 'Procurement');
 
 insert into products (product_id, master_id, name, category_id, supplier_id, initial_quantity, disabled) values ('01KNRKEXYEXV0T9TX516WAZ9C3', 1, 'Folding Backpack Chair', 2, 3, 4, true);
 insert into products (product_id, master_id, name, category_id, supplier_id, initial_quantity, disabled) values ('01KNRKEXYS3NCEP0RGAJZD3CRQ', 2, 'Puffer Winter Coat', 6, 2, 20, false);
@@ -137,9 +130,9 @@ insert into delivery_orders (order_id, supplier_id, order_date) values ('SK9879'
 insert into delivery_orders (order_id, supplier_id, order_date) values ('NH7905', 6, '2024-01-04');
 insert into delivery_orders (order_id, supplier_id, order_date) values ('NZ6489', 7, '2024-04-19');
 
-insert into transactions(logger_id, product_id, quantity_changed, delivery_id) VALUES(3, 5, 5, 1);
-insert into transactions(logger_id, product_id, quantity_changed, delivery_id) VALUES(3, 4, 5, 1);
-insert into transactions(logger_id, product_id, quantity_changed, delivery_id) VALUES(3, 3, 5, 1);
-insert into transactions(logger_id, product_id, quantity_changed) VALUES(3, 3, -5);
-insert into transactions(logger_id, product_id, quantity_changed) VALUES(3, 3, -5);
-insert into transactions(logger_id, product_id, quantity_changed) VALUES(3, 3, -5);
+insert into transactions(logger_id, product_id, quantity_changed, delivery_id) VALUES('af7c5041-1d50-4b2f-a300-9c5e3ee5e4db', 5, 5, 1);
+insert into transactions(logger_id, product_id, quantity_changed, delivery_id) VALUES('af7c5041-1d50-4b2f-a300-9c5e3ee5e4db', 4, 5, 1);
+insert into transactions(logger_id, product_id, quantity_changed, delivery_id) VALUES('af7c5041-1d50-4b2f-a300-9c5e3ee5e4db', 3, 5, 1);
+insert into transactions(logger_id, product_id, quantity_changed) VALUES('ec50c701-704f-4b6b-b2fb-4e62471728a2', 3, -5);
+insert into transactions(logger_id, product_id, quantity_changed) VALUES('ec50c701-704f-4b6b-b2fb-4e62471728a2', 3, -5);
+insert into transactions(logger_id, product_id, quantity_changed) VALUES('ec50c701-704f-4b6b-b2fb-4e62471728a2', 3, -5);
