@@ -9,7 +9,7 @@ interface props {
 
 function Navbar({ session }: props) {
     return (
-        <AppBar sx={{ bgcolor: "common.white" }}>
+        <AppBar sx={{ bgcolor: "common.white", padding: 1 }}>
             <Toolbar>
                 <Typography
                     variant="h6"
