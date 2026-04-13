@@ -7,9 +7,10 @@ import ProductLog from "features/transaction-log/transaction-log";
 import { Toolbar } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { SessionContext } from "lib/context/session-context";
+import type { Session } from "@supabase/supabase-js";
 
 function App() {
-    const [session, setSession] = useState<any>();
+    const [session, setSession] = useState<Session | null>();
 
     useEffect(() => {
         async function fetchSession() {
