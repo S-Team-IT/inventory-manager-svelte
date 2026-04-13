@@ -1,5 +1,6 @@
 import { AppBar, Typography, Toolbar } from "@mui/material";
 import EnterAccount from "./components/enter-account";
+import ExitAccount from "./components/exit-account";
 
 function Navbar() {
     return (
@@ -11,7 +12,7 @@ function Navbar() {
                 >
                     Inventory Manager
                 </Typography>
-                <EnterAccount />
+                {session ? <ExitAccount /> : <EnterAccount />}
             </Toolbar>
         </AppBar>
     );
