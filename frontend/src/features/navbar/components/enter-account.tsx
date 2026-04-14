@@ -11,17 +11,17 @@ function EnterAccount() {
         setIsSignIn(!isSignIn);
     }
 
-    function handleChangeEmail(e: any) {
+    function handleChangeEmail(e: React.ChangeEvent<HTMLInputElement>) {
         //Once you write one of these event handlers
         //You will never want to stop beating react to death with hammers
-        setEmail((e.target as HTMLInputElement).value);
+        setEmail(e.target.value);
     }
 
-    function handleChangePassword(e: any) {
-        setPassword((e.target as HTMLInputElement).value);
+    function handleChangePassword(e: React.ChangeEvent<HTMLInputElement>) {
+        setPassword(e.target.value);
     }
 
-    async function handleSubmission(e: any) {
+    async function handleSubmission(e: React.SubmitEvent<HTMLFormElement>) {
         e.preventDefault();
         if (isSignIn) {
             const { error: signInError } =
