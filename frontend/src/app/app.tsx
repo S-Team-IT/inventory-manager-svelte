@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
-import { supabase } from "lib/database/supabase";
+import { Box, Grid, Toolbar } from "@mui/material";
+import CssBaseline from "@mui/material/CssBaseline";
+import type { Session } from "@supabase/supabase-js";
 import Navbar from "features/navbar/navbar";
 import ProductTable from "features/product-table/product-table";
 import ProductLog from "features/transaction-log/transaction-log";
-import { Toolbar, Grid, Box } from "@mui/material";
-import CssBaseline from "@mui/material/CssBaseline";
-import { SessionContext, RoleContext } from "lib/context/context";
-import type { Session } from "@supabase/supabase-js";
+import { RoleContext, SessionContext } from "lib/context/context";
+import { supabase } from "lib/database/supabase";
+import { useEffect, useState } from "react";
 
 function App() {
     const [session, setSession] = useState<Session | null>(null);

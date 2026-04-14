@@ -1,8 +1,8 @@
+import { AppBar, Toolbar, Typography } from "@mui/material";
+import { RoleContext, SessionContext } from "lib/context/context";
 import { useContext } from "react";
-import { AppBar, Typography, Toolbar } from "@mui/material";
 import EnterAccount from "./components/enter-account";
 import ExitAccount from "./components/exit-account";
-import { RoleContext, SessionContext } from "lib/context/context";
 
 function Navbar() {
     const session = useContext(SessionContext);

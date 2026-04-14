@@ -1,5 +1,4 @@
 import { createClient } from "@supabase/supabase-js";
-import type { supplier } from "types/supabase";
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY;

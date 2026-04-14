@@ -1,6 +1,6 @@
-import type { transaction } from "types/supabase";
+import { Divider, List, ListItemText, Stack, Typography } from "@mui/material";
 import { convertToSGTime, formatRelativeToToday } from "lib/format-dates";
-import { List, ListItemText, Typography, Stack, Divider } from "@mui/material";
+import type { transaction } from "types/supabase";
 
 interface props {
     transaction: transaction;

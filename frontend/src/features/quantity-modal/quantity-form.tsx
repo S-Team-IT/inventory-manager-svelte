@@ -1,24 +1,23 @@
-import { useState, useEffect } from "react";
+import {
+    FormControl,
+    InputAdornment,
+    InputLabel,
+    MenuItem,
+    Select,
+    Stack,
+    TextField,
+    Typography,
+} from "@mui/material";
 import { RoleContext, SessionContext } from "lib/context/context";
-import { useContext } from "react";
 import {
     getDeliveryOrderIDByOrderIDAndDate,
     insertNewDeliveryOrder,
 } from "lib/database/delivery-order-api";
-import { insertNewTransaction } from "lib/database/transactions-api";
 import { updateProductQuantity } from "lib/database/products-api";
-import type { supplier } from "types/supabase";
 import { getAllSuppliers } from "lib/database/suppliers-api";
-import {
-    TextField,
-    InputAdornment,
-    Stack,
-    Typography,
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
-} from "@mui/material";
+import { insertNewTransaction } from "lib/database/transactions-api";
+import { useContext, useEffect, useState } from "react";
+import type { supplier } from "types/supabase";
 
 interface props {
     selectedProductID: string;

@@ -1,18 +1,18 @@
-import { useState, useEffect, useContext } from "react";
-import type { product } from "types/supabase";
-import ProductRow from "./components/product-row";
-import { sortProductsIntoEnabledDisabled } from "./lib/sortProducts";
-import { getAllProducts } from "lib/database/products-api";
-import QuantityModal from "../quantity-modal/quantity-modal";
-import { RoleContext } from "lib/context/context";
 import {
-    TableContainer,
     Table,
+    TableBody,
+    TableCell,
+    TableContainer,
     TableHead,
     TableRow,
-    TableCell,
-    TableBody,
 } from "@mui/material";
+import { RoleContext } from "lib/context/context";
+import { getAllProducts } from "lib/database/products-api";
+import { useContext, useEffect, useState } from "react";
+import type { product } from "types/supabase";
+import QuantityModal from "../quantity-modal/quantity-modal";
+import ProductRow from "./components/product-row";
+import { sortProductsIntoEnabledDisabled } from "./lib/sortProducts";
 
 function ProductTable() {
     const role = useContext(RoleContext);

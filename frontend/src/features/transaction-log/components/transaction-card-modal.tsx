@@ -1,8 +1,7 @@
-import type { transaction } from "types/supabase";
-import Modal from "react-modal";
-import { convertToSGTime } from "lib/format-dates";
 import { format } from "date-fns";
-import type { deliveryOrder } from "types/supabase";
+import { convertToSGTime } from "lib/format-dates";
+import Modal from "react-modal";
+import type { deliveryOrder, transaction } from "types/supabase";
 
 const modalStyles = {
     overlay: { backgroundColor: "rgb(255, 255, 255, 0.8)" },
