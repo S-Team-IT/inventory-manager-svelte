@@ -6,11 +6,12 @@ import ProductTable from "features/product-table/product-table";
 import ProductLog from "features/transaction-log/transaction-log";
 import { Toolbar } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
-import { SessionContext } from "lib/context/context";
+import { SessionContext, RoleContext } from "lib/context/context";
 import type { Session } from "@supabase/supabase-js";
 
 function App() {
     const [session, setSession] = useState<Session | null>(null);
+    const [role, setRole] = useState("");
 
     useEffect(() => {
         async function fetchSession() {
@@ -20,21 +21,39 @@ function App() {
                 //Theoretically shouldn't need to return null here
                 //since data would automatically be null
             }
-            console.log("Fetched session: ", data.session);
-            setSession(session);
+            setSession(data.session);
         }
         fetchSession();
 
         const { data: authListener } = supabase.auth.onAuthStateChange(
             (_event, session) => {
                 setSession(session);
+                setRole("");
             },
         );
         return () => {
             authListener.subscription.unsubscribe();
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+        async function fetchUserRole(id: string) {
+            const { error, data } = await supabase
+                .from("profiles")
+                .select("role")
+                .eq("id", id)
+                .single()
+                .returns<{ role: string }>();
+            if (error) {
+                console.error("Error fetching profiles: ", error);
+                return;
+            }
+            setRole(data.role);
+        }
+
+        if (!session?.user.id) return;
+        fetchUserRole(session.user.id);
+    }, [session]);
 
     return (
         <>
@@ -45,10 +64,12 @@ function App() {
                     <Toolbar />
                     {/* Toolbar is here so the Navbar is sticky & doesn't cover the texts */}
                 </CssBaseline>
-                <main className="columns m-5">
-                    <ProductTable />
-                    <ProductLog />
-                </main>
+                <RoleContext value={role}>
+                    <main className="columns m-5">
+                        <ProductTable />
+                        <ProductLog />
+                    </main>
+                </RoleContext>
             </SessionContext>
         </>
     );
