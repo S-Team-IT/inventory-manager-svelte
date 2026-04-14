@@ -1,6 +1,4 @@
-import { useState } from "react";
 import type { transaction } from "types/supabase";
-import { formatRelative } from "date-fns";
 import { convertToSGTime, formatRelativeToToday } from "lib/format-dates";
 
 interface props {
