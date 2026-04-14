@@ -5,6 +5,14 @@ import { sortProductsIntoEnabledDisabled } from "./lib/sortProducts";
 import { getAllProducts } from "lib/database/products-api";
 import QuantityModal from "../quantity-modal/quantity-modal";
 import { RoleContext } from "lib/context/context";
+import {
+    TableContainer,
+    Table,
+    TableHead,
+    TableRow,
+    TableCell,
+    TableBody,
+} from "@mui/material";
 
 function ProductTable() {
     const role = useContext(RoleContext);
@@ -43,38 +51,39 @@ function ProductTable() {
 
     return (
         <section>
-            <table className="table is-bordered is-narrow is-hoverable is-full-width column">
-                <thead className="thead-dark">
-                    <tr>
-                        <th scope="col">Master</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Photos</th>
-                        <th scope="col">Category</th>
-                        <th scope="col">Quant</th>
-                        {(role == "Procurement" || role == "Project") && (
-                            <th scope="col"></th>
-                        )}
-                    </tr>
-                </thead>
-                <tbody>
-                    {enabledProducts.map((product) => (
-                        <ProductRow
-                            product={product}
-                            key={product.masterID}
-                            handleProductSelection={onSelectProduct}
-                            isDisabled={false}
-                        />
-                    ))}
-                    {disabledProducts.map((product) => (
-                        <ProductRow
-                            product={product}
-                            key={product.masterID}
-                            handleProductSelection={onSelectProduct}
-                            isDisabled={true}
-                        />
-                    ))}
-                </tbody>
-            </table>
+            <TableContainer>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Master Number</TableCell>
+                            <TableCell>Name</TableCell>
+                            <TableCell>Photos</TableCell>
+                            <TableCell>Category</TableCell>
+                            <TableCell>Quantity</TableCell>
+                            {role == "Procurement" ||
+                                (role == "Project" && (
+                                    <TableCell>Modify</TableCell>
+                                ))}
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {enabledProducts.map((product) => (
+                            <ProductRow
+                                product={product}
+                                key={product.masterID}
+                                handleProductSelection={onSelectProduct}
+                            />
+                        ))}
+                        {disabledProducts.map((product) => (
+                            <ProductRow
+                                product={product}
+                                key={product.masterID}
+                                handleProductSelection={onSelectProduct}
+                            />
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
             <QuantityModal
                 selectedProductID={selectedProductID}
                 selectedProductQuantity={selectedProductQuantity}

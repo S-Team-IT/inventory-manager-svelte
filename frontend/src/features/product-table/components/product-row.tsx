@@ -2,6 +2,13 @@ import { RoleContext } from "lib/context/context";
 import { useContext } from "react";
 import type { product } from "types/supabase";
 import { truncateStringEllipsis } from "lib/miscellaneous";
+import {
+    TableRow,
+    TableCell,
+    Button,
+    ImageList,
+    ImageListItem,
+} from "@mui/material";
 
 interface props {
     product: product;
@@ -9,28 +16,37 @@ interface props {
         productID: string,
         productQuantity: number,
     ) => void;
-    isDisabled: boolean;
 }
 
-function ProductRow({ product, handleProductSelection, isDisabled }: props) {
+function ProductRow({ product, handleProductSelection }: props) {
     const role = useContext(RoleContext);
 
     return (
-        <tr className={product.isDisabled ? "strike-through" : ""}>
-            <th scope="row">{product.masterID}</th>
-            <th>{truncateStringEllipsis(product.name, 20)}</th>
-            <th>
-                {/* {product.photoPaths.map((path, key) => (
-                    <img src={path} alt="MISSING IMAGE" key={key} />
-                ))} */}
-            </th>
-            <th>{truncateStringEllipsis(product.category.name, 10)}</th>
-            <th>{product.quantity}</th>
-            {(role =="Procurement" || role == "Project") && (
-                <th>
-                    {!isDisabled && (
-                        <button
-                            className="button is-primary"
+        <TableRow className={product.isDisabled ? "disabled-row" : ""}>
+            <TableCell>{product.masterID}</TableCell>
+            <TableCell>{product.name}</TableCell>
+            <TableCell>
+                <ImageList cols={3} sx={{ width: "300px" }}>
+                    <ImageListItem>
+                        <img src="product_photos/mock/test1.jpg" alt="" />
+                    </ImageListItem>
+                    <ImageListItem>
+                        <img src="product_photos/mock/test2.jpg" alt="" />
+                    </ImageListItem>
+                    <ImageListItem>
+                        <img src="product_photos/mock/test3.jpg" alt="" />
+                    </ImageListItem>
+                </ImageList>
+            </TableCell>
+            <TableCell>
+                {truncateStringEllipsis(product.category.name, 20)}
+            </TableCell>
+            <TableCell align="right">{product.quantity}</TableCell>
+            <TableCell>
+                {(role == "Procurement" || role == "Project") &&
+                    !product.isDisabled && (
+                        <Button
+                            variant="outlined"
                             onClick={() =>
                                 handleProductSelection(
                                     product.masterID,
@@ -39,11 +55,10 @@ function ProductRow({ product, handleProductSelection, isDisabled }: props) {
                             }
                         >
                             Modify
-                        </button>
+                        </Button>
                     )}
-                </th>
-            )}
-        </tr>
+            </TableCell>
+        </TableRow>
     );
 }
 

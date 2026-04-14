@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import { supabase } from "lib/database/supabase";
-import "bulma/css/bulma.min.css";
 import Navbar from "features/navbar/navbar";
 import ProductTable from "features/product-table/product-table";
 import ProductLog from "features/transaction-log/transaction-log";
-import { Toolbar } from "@mui/material";
+import { Toolbar, Grid } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { SessionContext, RoleContext } from "lib/context/context";
 import type { Session } from "@supabase/supabase-js";
@@ -57,18 +56,23 @@ function App() {
 
     return (
         <>
+            <CssBaseline />
             <RoleContext value={role}>
                 <SessionContext value={session}>
-                    <CssBaseline>
+                    <section>
                         <Navbar />
-
                         <Toolbar />
-                        {/* Toolbar is here so the Navbar is sticky & doesn't cover the texts */}
-                    </CssBaseline>
-
-                    <main className="columns m-5">
-                        <ProductTable />
-                        <ProductLog />
+                    </section>
+                    {/* Toolbar is here so the Navbar is sticky & doesn't cover the texts */}
+                    <main>
+                        <Grid container spacing={2}>
+                            <Grid size={8}>
+                                <ProductTable />
+                            </Grid>
+                            <Grid size={4}>
+                                <ProductLog />
+                            </Grid>
+                        </Grid>
                     </main>
                 </SessionContext>
             </RoleContext>
