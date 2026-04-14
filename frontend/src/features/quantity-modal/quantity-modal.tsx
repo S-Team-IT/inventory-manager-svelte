@@ -170,7 +170,11 @@ function QuantityModal({
                                 />
                                 <FormControl>
                                     <InputLabel>Supplier</InputLabel>
-                                    <Select label="Supplier" name="supplierID">
+                                    <Select
+                                        label="Supplier"
+                                        name="supplierID"
+                                        defaultValue=""
+                                    >
                                         {suppliers.map(({ id, name }) => (
                                             <MenuItem value={id} key={id}>
                                                 {name}
