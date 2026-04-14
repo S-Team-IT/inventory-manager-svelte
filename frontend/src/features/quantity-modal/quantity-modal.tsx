@@ -35,10 +35,11 @@ function QuantityModal({
     modalIsOpen,
     handleCloseModal,
 }: props) {
+    const session = useContext(SessionContext);
     const role = useContext(RoleContext);
+
     const [suppliers, setSuppliers] = useState<supplier[]>([]);
     const [isIncomingOrder, setIsIncomingOrder] = useState(true);
-    const session = useContext(SessionContext);
 
     useEffect(() => {
         async function fetchSuppliers(): Promise<void> {
@@ -49,6 +50,7 @@ function QuantityModal({
     }, []);
 
     async function handleFormSubmission(formData: FormData) {
+        if (!session) return;
         const operation = formData.get("operation") as string;
         const quantityChange = Number(formData.get("quantityChange"));
         const orderID = formData.get("orderID") as string;
