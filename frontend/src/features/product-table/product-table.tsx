@@ -1,11 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import type { product } from "types/supabase";
 import ProductRow from "./components/product-row";
 import { sortProductsIntoEnabledDisabled } from "./lib/sortProducts";
 import { getAllProducts } from "lib/database/products-api";
 import QuantityModal from "../quantity-modal/quantity-modal";
+import { SessionContext } from "lib/context/context";
 
 function ProductTable() {
+    const session = useContext(SessionContext);
+
     const [enabledProducts, setEnabledProducts] = useState<product[]>([]);
     const [disabledProducts, setDisabledProducts] = useState<product[]>([]);
 
@@ -48,7 +51,7 @@ function ProductTable() {
                         <th scope="col">Photos</th>
                         <th scope="col">Category</th>
                         <th scope="col">Quant</th>
-                        <th scope="col"></th>
+                        {session && <th scope="col"></th>}
                     </tr>
                 </thead>
                 <tbody>

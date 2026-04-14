@@ -1,3 +1,5 @@
+import { RoleContext } from "lib/context/context";
+import { useContext } from "react";
 import type { product } from "types/supabase";
 
 interface props {
@@ -10,6 +12,8 @@ interface props {
 }
 
 function ProductRow({ product, handleProductSelection, isDisabled }: props) {
+    const session = useContext(RoleContext);
+
     return (
         <tr className={product.isDisabled ? "strike-through" : ""}>
             <th scope="row">{product.masterID}</th>
@@ -21,21 +25,23 @@ function ProductRow({ product, handleProductSelection, isDisabled }: props) {
             </th>
             <th>{product.category?.name}</th>
             <th>{product.quantity}</th>
-            <th>
-                {!isDisabled && (
-                    <button
-                        className="button is-primary"
-                        onClick={() =>
-                            handleProductSelection(
-                                product.masterID,
-                                product.quantity,
-                            )
-                        }
-                    >
-                        Modify
-                    </button>
-                )}
-            </th>
+            {session && (
+                <th>
+                    {!isDisabled && (
+                        <button
+                            className="button is-primary"
+                            onClick={() =>
+                                handleProductSelection(
+                                    product.masterID,
+                                    product.quantity,
+                                )
+                            }
+                        >
+                            Modify
+                        </button>
+                    )}
+                </th>
+            )}
         </tr>
     );
 }
