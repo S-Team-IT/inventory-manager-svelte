@@ -13,7 +13,7 @@ interface props {
 }
 
 function ProductRow({ product, handleProductSelection, isDisabled }: props) {
-    const session = useContext(RoleContext);
+    const role = useContext(RoleContext);
 
     return (
         <tr className={product.isDisabled ? "strike-through" : ""}>
@@ -26,7 +26,7 @@ function ProductRow({ product, handleProductSelection, isDisabled }: props) {
             </th>
             <th>{truncateStringEllipsis(product.category.name, 10)}</th>
             <th>{product.quantity}</th>
-            {session && (
+            {(role =="Procurement" || role == "Project") && (
                 <th>
                     {!isDisabled && (
                         <button

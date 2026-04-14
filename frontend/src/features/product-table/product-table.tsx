@@ -4,10 +4,10 @@ import ProductRow from "./components/product-row";
 import { sortProductsIntoEnabledDisabled } from "./lib/sortProducts";
 import { getAllProducts } from "lib/database/products-api";
 import QuantityModal from "../quantity-modal/quantity-modal";
-import { SessionContext } from "lib/context/context";
+import { RoleContext } from "lib/context/context";
 
 function ProductTable() {
-    const session = useContext(SessionContext);
+    const role = useContext(RoleContext);
 
     const [enabledProducts, setEnabledProducts] = useState<product[]>([]);
     const [disabledProducts, setDisabledProducts] = useState<product[]>([]);
@@ -51,7 +51,9 @@ function ProductTable() {
                         <th scope="col">Photos</th>
                         <th scope="col">Category</th>
                         <th scope="col">Quant</th>
-                        {session && <th scope="col"></th>}
+                        {(role == "Procurement" || role == "Project") && (
+                            <th scope="col"></th>
+                        )}
                     </tr>
                 </thead>
                 <tbody>
