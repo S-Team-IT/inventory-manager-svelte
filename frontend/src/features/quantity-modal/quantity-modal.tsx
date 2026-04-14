@@ -6,7 +6,7 @@ import DeliveryOrderFieldset from "./components/delivery-order-fieldset";
 import { updateProductQuantity } from "lib/database/products-api";
 import { insertNewTransaction } from "lib/database/transactions-api";
 import { insertNewDeliveryOrder } from "lib/database/delivery-order-api";
-import { SessionContext } from "lib/context/session-context";
+import { SessionContext } from "lib/context/context";
 
 const modalStyles = {
     overlay: { backgroundColor: "rgb(255, 255, 255, 0.8)" },

@@ -6,7 +6,7 @@ import ProductTable from "features/product-table/product-table";
 import ProductLog from "features/transaction-log/transaction-log";
 import { Toolbar } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
-import { SessionContext } from "lib/context/session-context";
+import { SessionContext } from "lib/context/context";
 import type { Session } from "@supabase/supabase-js";
 
 function App() {
