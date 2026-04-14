@@ -1,3 +1,7 @@
 .disabled-row {
     opacity: 0.5;
 }
+
+#quantity-form {
+    margin-top: 4%;
+}
