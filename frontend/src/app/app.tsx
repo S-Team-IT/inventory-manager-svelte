@@ -10,7 +10,7 @@ import { SessionContext } from "lib/context/context";
 import type { Session } from "@supabase/supabase-js";
 
 function App() {
-    const [session, setSession] = useState<Session | null>();
+    const [session, setSession] = useState<Session | null>(null);
 
     useEffect(() => {
         async function fetchSession() {
