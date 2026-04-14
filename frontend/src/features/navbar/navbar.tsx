@@ -9,7 +9,7 @@ function Navbar() {
     const role = useContext(RoleContext);
 
     return (
-        <AppBar sx={{ bgcolor: "common.white", padding: 1 }}>
+        <AppBar sx={{ bgcolor: "common.white", paddingTop: 1 }}>
             <Toolbar>
                 <Typography
                     variant="h6"
