@@ -12,6 +12,7 @@ import QuantityForm from "./components/quantity-form";
 
 interface props {
   selectedProductID: string;
+  selectedProductName: string;
   selectedProductQuantity: number;
   modalIsOpen: boolean;
   handleCloseModal: () => void;
@@ -19,6 +20,7 @@ interface props {
 
 function QuantityModal({
   selectedProductID,
+  selectedProductName,
   selectedProductQuantity,
   modalIsOpen,
   handleCloseModal,
@@ -32,7 +34,7 @@ function QuantityModal({
           {role == "Procurement" && "Add Quantity"}
           {role == "Project" && "Remove Quantity"}
         </Typography>
-        <Typography variant="subtitle2">You are modifying: {selectedProductID}</Typography>
+        <Typography variant="subtitle2">You are modifying: {selectedProductName}</Typography>
       </DialogTitle>
       <DialogContent>
         <QuantityForm

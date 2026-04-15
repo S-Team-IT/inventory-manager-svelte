@@ -6,7 +6,7 @@ import type { product } from "types/supabase";
 
 interface props {
   product: product;
-  handleProductSelection: (productID: string, productQuantity: number) => void;
+  handleProductSelection: (productID: string, productName: string, productQuantity: number) => void;
 }
 
 function ProductRow({ product, handleProductSelection }: props) {
@@ -29,7 +29,7 @@ function ProductRow({ product, handleProductSelection }: props) {
         {(role == "Procurement" || role == "Project") && !product.isDisabled && (
           <Button
             variant="outlined"
-            onClick={() => handleProductSelection(product.masterID, product.quantity)}
+            onClick={() => handleProductSelection(product.masterID, product.name, product.quantity)}
           >
             Modify
           </Button>
