@@ -1,7 +1,14 @@
-import { Button, Stack, TextField } from "@mui/material";
+import { Button, Stack, TextField, Typography } from "@mui/material";
+import imageCompression from "browser-image-compression";
 import { uploadImage } from "lib/database/storage-api";
 import { MuiFileInput } from "mui-file-input";
 import { useState } from "react";
+
+const options = {
+  maxSizeMB: 0.08,
+  maxWidthOrHeight: 300,
+  useWebWorker: true,
+};
 
 function AddProductForm() {
   const [files, setFiles] = useState<File[]>([]);
@@ -18,7 +25,8 @@ function AddProductForm() {
     e.preventDefault();
     if (files) {
       files.forEach(async (file) => {
-        const url = await uploadImage(file);
+        const compressedFile = await imageCompression(file, options);
+        const url = await uploadImage(compressedFile);
         if (!url) return;
         setImageUrls((prev) => [...prev, url]);
       });
@@ -28,10 +36,11 @@ function AddProductForm() {
   return (
     <>
       {imageUrls.map((url) => (
-        <img src={url} />
+        <img src={url} key={url} />
       ))}
       <form onSubmit={handleFormSubmit}>
         <Stack spacing={2}>
+          <Typography variant="h6">Add a new Product</Typography>
           <TextField label="Name" required name="name" />
           <TextField label="Category" required name="category" />
           <TextField
