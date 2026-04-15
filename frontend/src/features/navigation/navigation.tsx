@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, Toolbar } from "@mui/material";
 import { useState } from "react";
 import { Outlet } from "react-router";
 import Navbar from "./components/navbar/navbar";
@@ -15,6 +15,7 @@ function Navigation() {
     <>
       <Button onClick={toggleDrawer}>adf</Button>
       <Navbar toggleDrawer={toggleDrawer} />
+      <Toolbar /> {/*Toolbar is needed to push components out from under the Navbar*/}
       <SideDrawer isOpen={isDrawerOpen} toggleDrawer={toggleDrawer} />
       <Outlet />
     </>
