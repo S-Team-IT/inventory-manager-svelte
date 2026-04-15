@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { Button, Stack, TextField } from "@mui/material";
+import { AuthError } from "@supabase/supabase-js";
 import { supabase } from "lib/database/supabase";
-import { Stack, TextField, Button } from "@mui/material";
+import { useState } from "react";
 
 function EnterAccount() {
   const [isSignIn, setIsSignIn] = useState(true);
@@ -23,22 +24,14 @@ function EnterAccount() {
 
   async function handleSubmission(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
+    let error:AuthError|null;
     if (isSignIn) {
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      if (signInError) {
-        console.error("Error signing in", signInError);
-      }
+      ({error} = await supabase.auth.signInWithPassword({ email, password }));
     } else {
-      const { error: signUpError } = await supabase.auth.signUp({
-        email,
-        password,
-      });
-      if (signUpError) {
-        console.error("Error signing in", signUpError);
-      }
+      ({error} = await supabase.auth.signUp({ email, password }));
+    }
+    if (error) {
+      console.error("Error entering account: ", error);
     }
   }
 
