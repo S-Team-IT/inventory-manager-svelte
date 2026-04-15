@@ -1,16 +1,16 @@
 .productPhoto {
-    width: 200px;
-    height: auto;
+  width: 200px;
+  height: auto;
 }
 
 .smallerTh {
-    width:50px;
+  width: 50px;
 }
 
 th {
-    width: 100px;
+  width: 100px;
 }
 
 table {
-    max-width: 50vw;
+  max-width: 50vw;
 }
