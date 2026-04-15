@@ -1,5 +1,5 @@
 import { Button, Stack, TextField } from "@mui/material";
-import { supabase } from "lib/database/supabase";
+import { uploadImage } from "lib/database/storage-api";
 import { MuiFileInput } from "mui-file-input";
 import { useState } from "react";
 
@@ -12,19 +12,6 @@ function AddProductForm() {
     if (file) {
       setFile(file);
     }
-  }
-
-  async function uploadImage(file: File): Promise<string | null> {
-    const filePath = `${file.name}-${Date.now()}`;
-    const { error } = await supabase.storage.from("product-images").upload(filePath, file);
-    if (error) {
-      console.error("Error uploading image: ", error);
-      return null;
-    }
-
-    const { data } = await supabase.storage.from("product-images").getPublicUrl(filePath);
-
-    return data.publicUrl;
   }
 
   async function handleFormSubmit(e: React.SubmitEvent<HTMLFormElement>) {
