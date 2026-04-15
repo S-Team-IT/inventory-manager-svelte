@@ -34,7 +34,7 @@ function QuantityModal({
           {role == "Procurement" && "Add Quantity"}
           {role == "Project" && "Remove Quantity"}
         </Typography>
-        <Typography variant="subtitle2">You are modifying: {selectedProductName}</Typography>
+        <Typography variant="subtitle2">{selectedProductName}</Typography>
       </DialogTitle>
       <DialogContent>
         <QuantityForm
