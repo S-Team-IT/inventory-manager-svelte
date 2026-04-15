@@ -24,11 +24,11 @@ function EnterAccount() {
 
   async function handleSubmission(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
-    let error:AuthError|null;
+    let error: AuthError | null;
     if (isSignIn) {
-      ({error} = await supabase.auth.signInWithPassword({ email, password }));
+      ({ error } = await supabase.auth.signInWithPassword({ email, password }));
     } else {
-      ({error} = await supabase.auth.signUp({ email, password }));
+      ({ error } = await supabase.auth.signUp({ email, password }));
     }
     if (error) {
       console.error("Error entering account: ", error);
