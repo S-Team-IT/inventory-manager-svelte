@@ -10,6 +10,7 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
+import { Link as RouterLink } from "react-router"; //MUI has Link as well
 
 interface props {
   isOpen: boolean;
@@ -20,21 +21,25 @@ const drawerList = (
   <Box sx={{ width: 250 }} role="presentation">
     <List>
       <ListItem>
-        <ListItemButton>
-          <ListItemIcon>
-            <HomeFilledIcon />
-          </ListItemIcon>
-          <ListItemText primary="Dashboard" />
-        </ListItemButton>
+        <RouterLink to="/">
+          <ListItemButton>
+            <ListItemIcon>
+              <HomeFilledIcon />
+            </ListItemIcon>
+            <ListItemText primary="Dashboard" />
+          </ListItemButton>
+        </RouterLink>
       </ListItem>
       <Divider />
       <ListItem>
-        <ListItemButton>
-          <ListItemIcon>
-            <AddIcon />
-          </ListItemIcon>
-          <ListItemText primary="Add new product" />
-        </ListItemButton>
+        <RouterLink to="/add">
+          <ListItemButton>
+            <ListItemIcon>
+              <AddIcon />
+            </ListItemIcon>
+            <ListItemText primary="Add new product" />
+          </ListItemButton>
+        </RouterLink>
       </ListItem>
     </List>
   </Box>
