@@ -1,4 +1,12 @@
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
 import { RoleContext } from "lib/context/context";
 import { getAllProducts } from "lib/database/products-api";
 import { useContext, useEffect, useState } from "react";
@@ -43,15 +51,15 @@ function ProductTable() {
 
   return (
     <>
-      <TableContainer>
-        <Table>
+      <TableContainer component={Paper}>
+        <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell>Master Number</TableCell>
+              <TableCell>Master</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Photos</TableCell>
               <TableCell>Category</TableCell>
-              <TableCell>Quantity</TableCell>
+              <TableCell>Quant</TableCell>
               {(role == "Procurement" || role == "Project") && <TableCell>Modify</TableCell>}
             </TableRow>
           </TableHead>

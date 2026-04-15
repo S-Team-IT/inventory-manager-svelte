@@ -15,21 +15,15 @@ function ProductRow({ product, handleProductSelection }: props) {
   return (
     <TableRow className={product.isDisabled ? "disabled-row" : ""}>
       <TableCell>{product.masterID}</TableCell>
-      <TableCell>{product.name}</TableCell>
+      <TableCell>{truncateStringEllipsis(product.name, 20)}</TableCell>
       <TableCell>
-        <ImageList cols={3} sx={{ width: "300px" }}>
+        <ImageList cols={1} sx={{ width: "150px" }}>
           <ImageListItem>
             <img src="product_photos/mock/test1.jpg" alt="" />
           </ImageListItem>
-          <ImageListItem>
-            <img src="product_photos/mock/test2.jpg" alt="" />
-          </ImageListItem>
-          <ImageListItem>
-            <img src="product_photos/mock/test3.jpg" alt="" />
-          </ImageListItem>
         </ImageList>
       </TableCell>
-      <TableCell>{truncateStringEllipsis(product.category.name, 20)}</TableCell>
+      <TableCell>{truncateStringEllipsis(product.category.name, 10)}</TableCell>
       <TableCell align="right">{product.quantity}</TableCell>
       <TableCell>
         {(role == "Procurement" || role == "Project") && !product.isDisabled && (
