@@ -39,14 +39,13 @@ function QuantityForm({ selectedProductID, selectedProductQuantity }: props) {
 
   async function handleFormSubmission(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
-    const loggerID = session?.user.id;
-    if (!loggerID) {
+    if (!session) {
       console.error("Session is missing");
       return;
     }
     const data = new FormData(e.target);
 
-    const quantityChange = Number(data.get("quantityChange"));
+    let quantityChange = Number(data.get("quantityChange"));
     const orderID = data.get("doNumber") as string;
     const orderDate = new Date(Date.parse(data.get("doDate") as string));
     const supplierID = data.get("supplierID") as string;
@@ -60,18 +59,14 @@ function QuantityForm({ selectedProductID, selectedProductQuantity }: props) {
         deliveryID = await insertNewDeliveryOrder(supplierID, orderID, orderDate);
       }
 
-      insertNewTransaction(loggerID, selectedProductID, quantityChange, deliveryID);
-      const newQuantity = validateQuantityInput(selectedProductQuantity, quantityChange);
-      updateProductQuantity(selectedProductID, newQuantity);
-      window.location.reload();
-    } else if (role == "Project") {
-      insertNewTransaction(session.user.id, selectedProductID, quantityChange * -1);
-      const newQuantity = validateQuantityInput(selectedProductQuantity, quantityChange * -1);
-      updateProductQuantity(selectedProductID, newQuantity);
-      window.location.reload();
+      insertNewTransaction(session.user.id, selectedProductID, quantityChange, deliveryID);
     } else {
-      console.error("How did you get here");
+      quantityChange *= -1;
+      insertNewTransaction(session.user.id, selectedProductID, quantityChange);
     }
+    const newQuantity = validateQuantityInput(selectedProductQuantity, quantityChange);
+    updateProductQuantity(selectedProductID, newQuantity);
+    window.location.reload();
   }
 
   function validateQuantityInput(currentQuantity: number, quantityChange: number): number {
