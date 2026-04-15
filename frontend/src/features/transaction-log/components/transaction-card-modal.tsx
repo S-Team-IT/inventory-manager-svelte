@@ -1,9 +1,11 @@
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  Divider,
   Typography,
 } from "@mui/material";
 import { format } from "date-fns";
@@ -42,11 +44,14 @@ function TransactionCardModal({
         </Typography>
         <Typography>{formattedDateTimeString}</Typography>
         {deliveryOrderData && (
-          <Typography>
-            {deliveryOrderData.orderID}
-            {deliveryOrderData.orderDate.toString()}
-            {deliveryOrderData.supplier.name}
-          </Typography>
+          <>
+            <Divider />
+            <Box>
+              <Typography>{deliveryOrderData.orderID}</Typography>{" "}
+              <Typography>{deliveryOrderData.orderDate.toString()}</Typography>
+              <Typography>{deliveryOrderData.supplier.name}</Typography>
+            </Box>
+          </>
         )}
       </DialogContent>
       <DialogActions>
