@@ -1,6 +1,7 @@
 import { Box, Container, Grid, Toolbar } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import type { Session } from "@supabase/supabase-js";
+import AddProductForm from "features/add-product/add-product-form";
 import Navbar from "features/navbar/navbar";
 import ProductTable from "features/product-table/product-table";
 import ProductLog from "features/transaction-log/transaction-log";
@@ -62,7 +63,10 @@ function App() {
             <Toolbar />
           </Box>
           {/* Toolbar is here so the Navbar is sticky & doesn't cover the texts */}
-          <Grid container spacing={2} sx={{ paddingTop: 1 }} component={Container} maxWidth="xl">
+          <Grid container spacing={2} sx={{ paddingTop: 4 }} component={Container} maxWidth="xl">
+            <Grid size={12}>
+              <AddProductForm />
+            </Grid>
             <Grid size={{ sm: 12, lg: 8 }} component="section">
               <ProductTable />
             </Grid>

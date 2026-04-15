@@ -22,6 +22,7 @@
     "@supabase/supabase-js": "^2.101.1",
     "bulma": "^1.0.4",
     "date-fns": "^4.1.0",
+    "mui-file-input": "^8.0.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-modal": "^3.16.3"
