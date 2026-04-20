@@ -13,7 +13,10 @@ import { useContext, useEffect, useState } from "react";
 import type { product } from "types/supabase";
 import QuantityModal from "../quantity-modal/quantity-modal";
 import ProductRow from "./components/product-row";
-import { sortProductsIntoEnabledDisabled } from "./lib/sortProducts";
+import {
+  sortProductMasterAlphanumberically,
+  sortProductsIntoEnabledDisabled,
+} from "./lib/sortProducts";
 
 function ProductTable() {
   const role = useContext(RoleContext);
@@ -44,7 +47,8 @@ function ProductTable() {
   useEffect(() => {
     async function fetchProducts() {
       const productArray = await getAllProducts();
-      const sortedProductArray = sortProductsIntoEnabledDisabled(productArray);
+      const alphanumericallySortedProducts = sortProductMasterAlphanumberically(productArray);
+      const sortedProductArray = sortProductsIntoEnabledDisabled(alphanumericallySortedProducts);
       setEnabledProducts(sortedProductArray[0]);
       setDisabledProducts(sortedProductArray[1]);
     }

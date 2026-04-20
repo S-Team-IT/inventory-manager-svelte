@@ -11,3 +11,9 @@ export function sortProductsIntoEnabledDisabled(products: product[]) {
 
   return [enabledProducts, disabledProducts];
 }
+
+export function sortProductMasterAlphanumberically(products: product[]) {
+  return products.sort((a, b) =>
+    a.masterID.localeCompare(b.masterID, undefined, { numeric: true, sensitivity: "base" }),
+  );
+}
