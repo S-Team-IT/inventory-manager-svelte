@@ -64,8 +64,8 @@ export type balance = {
 };
 
 export type balanceTransaction = {
-  projectID: string;
-  balanceChange: number;
-  createdAt: Date;
-  loggerID: string;
+  project_id: string;
+  balance_changed: number;
+  created_at: Date;
+  logger_id: string;
 };
