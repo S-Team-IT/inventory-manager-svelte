@@ -99,10 +99,11 @@ function AddProductForm() {
           variant="contained"
           color="secondary"
           tabIndex={-1}
+          size="large"
         >
           <input type="file" multiple name="img" accept="image/*" />
         </Button>
-        <Button type="submit" variant="contained">
+        <Button type="submit" variant="contained" size="large">
           Submit
         </Button>
       </Stack>
