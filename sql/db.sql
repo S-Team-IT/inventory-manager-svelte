@@ -1,10 +1,14 @@
 DROP TABLE IF EXISTS 
+    balance, 
+    users,
     profiles, 
     product_categories, 
     suppliers, 
     products, 
     delivery_orders, 
-    transactions;
+    transactions,
+    projects,
+    balance_transactions;
 
 DROP TYPE IF EXISTS user_roles;
 
@@ -40,6 +44,22 @@ CREATE TABLE products (
     disabled BOOLEAN NOT NULL DEFAULT false
 );
 
+CREATE OR REPLACE FUNCTION set_current_quantity()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.current_quantity IS NULL THEN
+        NEW.current_quantity := NEW.initial_quantity;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_set_current_quantity
+    BEFORE INSERT ON products
+    FOR EACH ROW
+    EXECUTE FUNCTION set_current_quantity();
+
+
 CREATE TABLE delivery_orders(
     id SERIAL NOT NULL PRIMARY KEY,
     order_id TEXT NOT NULL,
@@ -61,4 +81,35 @@ CREATE TABLE transactions(
       OR
       (quantity_changed < 0 AND delivery_id IS NULL)
       )
+);
+
+CREATE TABLE projects(
+    id SERIAL NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    initial_balance NUMERIC NOT NULL DEFAULT 0,
+    current_balance NUMERIC NOT NULL DEFAULT 0
+);
+
+CREATE OR REPLACE FUNCTION set_current_balance()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.current_balance IS NULL THEN
+        NEW.current_balance := NEW.initial_balance;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_set_current_balance
+    BEFORE INSERT ON projects
+    FOR EACH ROW
+    EXECUTE FUNCTION set_current_balance();
+
+
+CREATE TABLE balance_transactions(
+    projectID INTEGER NOT NULL REFERENCES projects(id),
+    id SERIAL NOT NULL PRIMARY KEY,
+    balance_changed NUMERIC NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    logger_id UUID NOT NULL REFERENCES profiles(id)
 );

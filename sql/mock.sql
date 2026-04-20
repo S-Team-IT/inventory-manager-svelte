@@ -136,3 +136,9 @@ insert into transactions(logger_id, product_id, quantity_changed, delivery_id) V
 insert into transactions(logger_id, product_id, quantity_changed) VALUES('ec50c701-704f-4b6b-b2fb-4e62471728a2', 3, -5);
 insert into transactions(logger_id, product_id, quantity_changed) VALUES('ec50c701-704f-4b6b-b2fb-4e62471728a2', 3, -5);
 insert into transactions(logger_id, product_id, quantity_changed) VALUES('ec50c701-704f-4b6b-b2fb-4e62471728a2', 3, -5);
+
+INSERT INTO projects(name, initial_balance, current_balance) VALUES('MBS Grand', 10750, 10844.3);
+INSERT INTO projects(name, initial_balance) VALUES('Vitz', 0);
+
+INSERT INTO balance_transactions(projectID, balance_changed, logger_id) VALUES(1, -105.70, 'df92e1bf-738b-4858-800c-d7640c99538b');
+INSERT INTO balance_transactions(projectID, balance_changed, logger_id) VALUES(1, 200, 'df92e1bf-738b-4858-800c-d7640c99538b');
