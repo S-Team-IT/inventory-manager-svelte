@@ -7,13 +7,14 @@ import {
   TableCell,
 } from "@mui/material";
 import { useState } from "react";
+import type { photoObj } from "types/supabase";
 
 interface props {
   name: string;
-  photoPaths: string[];
+  photoUrls: photoObj[]
 }
 
-export default function ProductImage({ name, photoPaths }: props) {
+export default function ProductImage({ name, photoUrls }: props) {
   const [isOpen, setIsOpen] = useState(false);
 
   function toggleModal(e: React.MouseEvent<HTMLAnchorElement>) {
@@ -22,11 +23,11 @@ export default function ProductImage({ name, photoPaths }: props) {
   }
 
   return (
-    <TableCell>
+    <>
       <ImageList cols={1} sx={{ width: "300px" }}>
         <ImageListItem>
           <a onClick={toggleModal}>
-            <img src={photoPaths[0]} alt="" width="300px" />
+            <img src={photoUrls[0].item} alt="" width="300px" />
           </a>
         </ImageListItem>
       </ImageList>
@@ -34,14 +35,14 @@ export default function ProductImage({ name, photoPaths }: props) {
         <DialogTitle sx={{ paddingBottom: 0 }}>{name}</DialogTitle>
         <DialogContent>
           <ImageList cols={3} gap={30}>
-            {photoPaths.map((url) => (
-              <ImageListItem>
+            {photoUrls.map(({item: url}) => (
+              <ImageListItem key={url}>
                 <img src={url} />
               </ImageListItem>
             ))}
           </ImageList>
         </DialogContent>
       </Dialog>
-    </TableCell>
+    </>
   );
 }

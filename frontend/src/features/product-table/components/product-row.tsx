@@ -27,7 +27,9 @@ function ProductRow({ product, handleProductSelection }: props) {
           {truncateStringEllipsis(product.name, 20)}
         </a>
       </TableCell>
-      <ProductImage name={product.name} photoPaths={product.photoPaths} />
+      <TableCell>
+      {product.photoUrls[0] && <ProductImage name={product.name} photoUrls={product.photoUrls} />}
+      </TableCell>
       <TableCell>{truncateStringEllipsis(product.category.name, 10)}</TableCell>
       <TableCell align="right">{product.quantity}</TableCell>
       <TableCell>

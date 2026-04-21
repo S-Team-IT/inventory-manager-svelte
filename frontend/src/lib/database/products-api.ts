@@ -7,7 +7,7 @@ export async function getAllProducts(): Promise<product[]> {
     .select(
       `masterID:master_id, 
             name, 
-            photoPaths:photo_paths, 
+            photoUrls:photo_paths, 
             quantity:current_quantity, 
             category:product_categories(name), 
             isDisabled:disabled`,
