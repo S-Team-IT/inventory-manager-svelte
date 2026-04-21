@@ -86,7 +86,7 @@ function AddProductForm() {
           label="Category"
           optionsArray={productCategories}
           databaseInsert={insertNewCategory}
-          updateCategoryID={handleCategoryIDChange}
+          returnIDAsValue={handleCategoryIDChange}
         />
         <TextField
           label="Quantity"

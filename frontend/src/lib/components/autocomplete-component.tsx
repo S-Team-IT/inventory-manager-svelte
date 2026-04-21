@@ -13,7 +13,7 @@ interface Props<T> {
   label: string;
   optionsArray: T[];
   databaseInsert: (newValue: string) => Promise<T | null>;
-  updateCategoryID: (id: string) => void;
+  returnIDAsValue: (id: string) => void;
 }
 
 const filter = createFilterOptions<OptionWithInput>();
@@ -22,7 +22,7 @@ export default function AutocompleteComponent<T extends { id: string; name: stri
   label,
   optionsArray,
   databaseInsert,
-  updateCategoryID,
+  returnIDAsValue,
 }: Props<T>) {
   const [options, setOptions] = useState<OptionWithInput[]>(optionsArray);
   const [value, setValue] = useState<OptionWithInput | null>(null);
@@ -33,7 +33,7 @@ export default function AutocompleteComponent<T extends { id: string; name: stri
   }, [optionsArray]);
 
   useEffect(() => {
-    if (value) updateCategoryID(value.id);
+    if (value) returnIDAsValue(value.id);
   }, [value]);
 
   async function handleNewOption(inputString: string) {
