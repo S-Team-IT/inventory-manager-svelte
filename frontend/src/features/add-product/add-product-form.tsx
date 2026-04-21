@@ -35,6 +35,8 @@ function AddProductForm() {
   async function handleFormSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.target);
+
+    const masterID = formData.get("masterID") as string;
     const productName = formData.get("name") as string;
     const categoryID = Number(formData.get("categoryID"));
 
@@ -58,7 +60,7 @@ function AddProductForm() {
 
     const newProduct: productInsert = {
       product_id: Math.floor(Math.random() * 10000 + 1).toString(),
-      master_id: Math.floor(Math.random() * 10000 + 1).toString(),
+      master_id: masterID,
       name: productName,
       photo_paths: imageUrls,
       category_id: categoryID,
@@ -75,6 +77,7 @@ function AddProductForm() {
     <form onSubmit={handleFormSubmit}>
       <Stack spacing={2}>
         <Typography variant="h6">Add a new Product</Typography>
+        <TextField label="Master No. " required name="masterID" />
         <TextField label="Name" required name="name" />
         <FormControl>
           <InputLabel>Category</InputLabel>
