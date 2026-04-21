@@ -3,7 +3,7 @@ import { Container, Grid } from "@mui/system";
 import ProductTable from "features/product-table/product-table";
 import TransactionLog from "features/transaction-log/transaction-log";
 import { FilterContext } from "lib/context/context";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { FILTER } from "types/misc";
 
 export default function ProductDashboard() {

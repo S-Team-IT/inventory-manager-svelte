@@ -5,6 +5,7 @@ import { RoleContext, SessionContext } from "lib/context/context";
 import { supabase } from "lib/database/supabase";
 import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router";
+import MissingPage from "./missing-page/missing-page";
 import ProductAdmin from "./product/product-admin";
 import ProductGeneral from "./product/product-general";
 
@@ -63,6 +64,7 @@ function App() {
                 <Route index element={<ProductGeneral />} />
                 <Route path="add" element={<ProductAdmin />} />
               </Route>
+              <Route path="/*" element={<MissingPage />} />
             </Routes>
           </BrowserRouter>
         </SessionContext>
