@@ -16,6 +16,7 @@ export type transaction = {
     firstName: string;
   };
   product: {
+    masterID: string;
     name: string;
   };
   quantityChanged: number;

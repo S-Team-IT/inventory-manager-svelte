@@ -7,11 +7,11 @@ export async function getAllTransactions(): Promise<transaction[]> {
     .from("transactions")
     .select(
       `id, 
-            creationTimestamp:created_at, 
-            logger:profiles(firstName:first_name),
-            product:products(name),
-            quantityChanged:quantity_changed,
-            deliveryID:delivery_id`,
+      creationTimestamp:created_at, 
+      logger:profiles(firstName:first_name),
+      product:products(masterID:master_id,name),
+      quantityChanged:quantity_changed,
+      deliveryID:delivery_id`,
     )
     .order("created_at", { ascending: false })
     .returns<transaction[]>();
