@@ -52,8 +52,8 @@ export type productInsert = {
   master_id: string;
   name: string;
   photo_paths: string[];
-  category_id: number;
-  supplier_id: number;
+  category_id: string;
+  supplier_id: string;
   initial_quantity: number;
   current_quantity: number;
   disabled: boolean;
