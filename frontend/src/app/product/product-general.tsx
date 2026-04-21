@@ -1,3 +1,4 @@
+import { Typography } from "@mui/material";
 import { Container, Grid } from "@mui/system";
 import ProductTable from "features/product-table/product-table";
 import TransactionLog from "features/transaction-log/transaction-log";
@@ -18,6 +19,7 @@ export default function ProductDashboard() {
     <FilterContext value={{ filter, setFilter, filterArg, setFilterArg }}>
       <Container maxWidth={false} sx={{ marginX: 2 }}>
         <Grid container spacing={2}>
+          {filter!="none" && <Grid size={12}><Typography variant="h6" component="h1">Filtering for: {filter} {filterArg}</Typography></Grid>}        
           <Grid size={{ sm: 12, lg: 8 }} component="section">
             <ProductTable />
           </Grid>
