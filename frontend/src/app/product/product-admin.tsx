@@ -10,7 +10,7 @@ export default function ProductAdmin() {
 
   useEffect(() => {
     if (role != "QS") {
-      navigate("/*")
+      navigate("/*");
     }
   }, [role]);
 

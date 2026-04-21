@@ -1,9 +1,9 @@
-export type photoObj = {item:string}
+export type photoObj = { item: string };
 
 export type product = {
   masterID: string;
   name: string;
-  photoUrls: photoObj[]
+  photoUrls: photoObj[];
   quantity: number;
   category: {
     name: string;

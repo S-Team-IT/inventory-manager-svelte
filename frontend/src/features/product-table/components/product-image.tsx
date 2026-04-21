@@ -1,17 +1,10 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  ImageList,
-  ImageListItem,
-  TableCell,
-} from "@mui/material";
+import { Dialog, DialogContent, DialogTitle, ImageList, ImageListItem } from "@mui/material";
 import { useState } from "react";
 import type { photoObj } from "types/supabase";
 
 interface props {
   name: string;
-  photoUrls: photoObj[]
+  photoUrls: photoObj[];
 }
 
 export default function ProductImage({ name, photoUrls }: props) {
@@ -35,7 +28,7 @@ export default function ProductImage({ name, photoUrls }: props) {
         <DialogTitle sx={{ paddingBottom: 0 }}>{name}</DialogTitle>
         <DialogContent>
           <ImageList cols={3} gap={30}>
-            {photoUrls.map(({item: url}) => (
+            {photoUrls.map(({ item: url }) => (
               <ImageListItem key={url}>
                 <img src={url} />
               </ImageListItem>
