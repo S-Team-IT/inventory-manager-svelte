@@ -1,5 +1,5 @@
 import { Button, TableCell, TableRow } from "@mui/material";
-import { RoleContext } from "lib/context/context";
+import { FilterContext, RoleContext } from "lib/context/context";
 import { truncateStringEllipsis } from "lib/miscellaneous";
 import { useContext } from "react";
 import type { product } from "types/supabase";
@@ -12,11 +12,20 @@ interface props {
 
 function ProductRow({ product, handleProductSelection }: props) {
   const role = useContext(RoleContext);
+  const { setFilter, setFilterArg } = useContext(FilterContext);
+
+  function handleFilterByMasterID() {
+    console.log("hi");
+    setFilter("productid");
+    setFilterArg(product.masterID);
+  }
 
   return (
     <TableRow className={product.isDisabled ? "disabled-row" : ""}>
       <TableCell>{product.masterID}</TableCell>
-      <TableCell>{truncateStringEllipsis(product.name, 20)}</TableCell>
+      <TableCell>
+        <a onClick={handleFilterByMasterID} style={{cursor: "pointer"}}>{truncateStringEllipsis(product.name, 20)}</a>
+      </TableCell>
       <ProductImage name={product.name} photoPaths={product.photoPaths} />
       <TableCell>{truncateStringEllipsis(product.category.name, 10)}</TableCell>
       <TableCell align="right">{product.quantity}</TableCell>

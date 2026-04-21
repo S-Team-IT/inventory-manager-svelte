@@ -1,11 +1,13 @@
 import { List, Stack } from "@mui/material";
+import { FilterContext } from "lib/context/context";
 import { getDeliveryOrderByID } from "lib/database/delivery-orders-api";
 import { supabase } from "lib/database/supabase";
 import { getAllTransactions } from "lib/database/transactions-api";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import type { deliveryOrder, transaction } from "types/supabase";
 import TransactionCardModal from "./components/transaction-card-modal";
 import TransactionMessage from "./components/transaction-message";
+import { filterTransactionsByProductID } from "./lib/sortTransactions";
 
 function TransactionLog() {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -22,6 +24,8 @@ function TransactionLog() {
     }
   }
 
+  const { filter, filterArg } = useContext(FilterContext);
+
   function openModal() {
     setModalOpen(true);
   }
@@ -31,6 +35,21 @@ function TransactionLog() {
   }
 
   const [transactions, setTransactions] = useState<transaction[]>([]);
+  const [filteredTransactions, setFilteredTransactions] = useState<transaction[]>([]);
+
+  useEffect(() => {
+    switch (filter) {
+      case "none":
+        setFilteredTransactions(transactions);
+        break;
+      case "productid":
+        setFilteredTransactions(filterTransactionsByProductID(filterArg, transactions));
+        break;
+      default:
+        console.error("Filter broke: ", filter);
+        break;
+    }
+  }, [filter, filterArg, transactions]);
 
   async function fetchTransactions() {
     const transactions = await getAllTransactions();
@@ -48,6 +67,7 @@ function TransactionLog() {
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "transactions" },
         (_payload) => {
+          console.log("hit");
           window.location.reload();
           //I don't know why payload.new's date is being read as an invalid date but it is so yeah,
           // just gonna force a fetch again yay!
@@ -69,14 +89,16 @@ function TransactionLog() {
     <>
       <List>
         <Stack>
-          {transactions.map((transaction) => (
-            <TransactionMessage
-              transaction={transaction}
-              key={transaction.id}
-              handleOpenModal={openModal}
-              selectTransaction={handleSelectTransaction}
-            />
-          ))}
+          {filteredTransactions.length == 0 && <p>Nothing matches filters</p>}
+          {filteredTransactions.length > 0 &&
+            filteredTransactions.map((transaction) => (
+              <TransactionMessage
+                transaction={transaction}
+                key={transaction.id}
+                handleOpenModal={openModal}
+                selectTransaction={handleSelectTransaction}
+              />
+            ))}
         </Stack>
       </List>
 
