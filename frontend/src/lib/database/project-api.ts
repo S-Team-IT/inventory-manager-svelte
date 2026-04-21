@@ -8,7 +8,6 @@ export async function getProjectBalance(projectID: string = "1"): Promise<balanc
     .eq("id", projectID)
     .single();
   if (error) {
-    console.log(data);
     console.error("Error retrieving balance: ", error);
     return { balance: 0 };
   }
