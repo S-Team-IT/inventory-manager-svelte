@@ -56,7 +56,6 @@ export type productInsert = {
   category_id: string;
   supplier_id: string;
   initial_quantity: number;
-  current_quantity: number;
   disabled: boolean;
 };
 

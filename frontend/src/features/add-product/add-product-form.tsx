@@ -64,7 +64,6 @@ function AddProductForm() {
       category_id: categoryID,
       supplier_id: "1",
       initial_quantity: initialQuantity,
-      current_quantity: initialQuantity,
       disabled: false,
     };
 

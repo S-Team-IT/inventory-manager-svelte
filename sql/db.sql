@@ -40,7 +40,7 @@ CREATE TABLE products (
     category_id INTEGER REFERENCES product_categories(id),
     supplier_id INTEGER NOT NULL REFERENCES suppliers(id),
     initial_quantity INTEGER NOT NULL DEFAULT 0,
-    current_quantity INTEGER NOT NULL DEFAULT 0,
+    current_quantity INTEGER NOT NULL,
     disabled BOOLEAN NOT NULL DEFAULT false
 );
 
