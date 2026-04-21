@@ -64,7 +64,7 @@ function AddProductForm() {
       name: productName,
       photo_paths: imageUrls,
       category_id: categoryID,
-      supplier_id: 1,
+      supplier_id: "1",
       initial_quantity: initialQuantity,
       current_quantity: initialQuantity,
       disabled: false,
