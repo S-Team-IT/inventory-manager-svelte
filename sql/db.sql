@@ -83,33 +83,33 @@ CREATE TABLE transactions(
       )
 );
 
-CREATE TABLE projects(
-    id SERIAL NOT NULL PRIMARY KEY,
-    name TEXT NOT NULL,
-    initial_balance NUMERIC NOT NULL DEFAULT 0,
-    current_balance NUMERIC NOT NULL DEFAULT 0
-);
+-- CREATE TABLE projects(
+--     id SERIAL NOT NULL PRIMARY KEY,
+--     name TEXT NOT NULL,
+--     initial_balance NUMERIC NOT NULL DEFAULT 0,
+--     current_balance NUMERIC NOT NULL DEFAULT 0
+-- );
 
-CREATE OR REPLACE FUNCTION set_current_balance()
-RETURNS TRIGGER AS $$
-BEGIN
-    IF NEW.current_balance IS NULL THEN
-        NEW.current_balance := NEW.initial_balance;
-    END IF;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
+-- CREATE OR REPLACE FUNCTION set_current_balance()
+-- RETURNS TRIGGER AS $$
+-- BEGIN
+--     IF NEW.current_balance IS NULL THEN
+--         NEW.current_balance := NEW.initial_balance;
+--     END IF;
+--     RETURN NEW;
+-- END;
+-- $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trg_set_current_balance
-    BEFORE INSERT ON projects
-    FOR EACH ROW
-    EXECUTE FUNCTION set_current_balance();
+-- CREATE TRIGGER trg_set_current_balance
+--     BEFORE INSERT ON projects
+--     FOR EACH ROW
+--     EXECUTE FUNCTION set_current_balance();
 
 
-CREATE TABLE balance_transactions(
-    project_id INTEGER NOT NULL REFERENCES projects(id),
-    id SERIAL NOT NULL PRIMARY KEY,
-    balance_changed NUMERIC NOT NULL,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    logger_id UUID NOT NULL REFERENCES profiles(id)
-);
+-- CREATE TABLE balance_transactions(
+--     project_id INTEGER NOT NULL REFERENCES projects(id),
+--     id SERIAL NOT NULL PRIMARY KEY,
+--     balance_changed NUMERIC NOT NULL,
+--     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+--     logger_id UUID NOT NULL REFERENCES profiles(id)
+-- );
