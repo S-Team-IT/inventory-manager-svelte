@@ -1,5 +1,4 @@
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
-import CircularProgress from "@mui/material/CircularProgress";
 import TextField from "@mui/material/TextField";
 import { useEffect, useState } from "react";
 
@@ -96,23 +95,7 @@ export default function AutocompleteComponent<
           {option.name}
         </li>
       )}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label={label}
-          InputProps={{
-            ...params.InputProps,
-            endAdornment: (
-              <>
-                {loading ? (
-                  <CircularProgress color="inherit" size={20} />
-                ) : null}
-                {params.InputProps.endAdornment}
-              </>
-            ),
-          }}
-        />
-      )}
+      renderInput={(params) => <TextField required {...params} label={label} />}
     />
   );
 }
