@@ -1,4 +1,10 @@
-import { Dialog, DialogContent, DialogTitle, ImageList, ImageListItem } from "@mui/material";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  ImageList,
+  ImageListItem,
+} from "@mui/material";
 import { useState } from "react";
 import type { photoObj } from "types/supabase";
 
@@ -24,7 +30,12 @@ export default function ProductImage({ name, photoUrls }: props) {
           </a>
         </ImageListItem>
       </ImageList>
-      <Dialog open={isOpen} onClose={toggleModal} fullWidth={true} maxWidth="lg">
+      <Dialog
+        open={isOpen}
+        onClose={toggleModal}
+        fullWidth={true}
+        maxWidth="lg"
+      >
         <DialogTitle sx={{ paddingBottom: 0 }}>{name}</DialogTitle>
         <DialogContent>
           <ImageList cols={3} gap={30}>

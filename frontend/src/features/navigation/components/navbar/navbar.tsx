@@ -25,7 +25,11 @@ function Navbar({ toggleDrawer }: props) {
         >
           <MenuIcon />
         </IconButton>
-        <Typography variant="h6" sx={{ flexGrow: 1, color: "common.black" }} component="p">
+        <Typography
+          variant="h6"
+          sx={{ flexGrow: 1, color: "common.black" }}
+          component="p"
+        >
           Inventory Management {role ? ": " + role : ""}
         </Typography>
         {session ? <ExitAccount /> : <EnterAccount />}

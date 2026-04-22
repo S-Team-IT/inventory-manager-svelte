@@ -1,5 +1,5 @@
 import { Button, Stack, TextField } from "@mui/material";
-import { AuthError } from "@supabase/supabase-js";
+import type { AuthError } from "@supabase/supabase-js";
 import { supabase } from "lib/database/supabase";
 import { useState } from "react";
 

@@ -7,7 +7,11 @@ import ProductImage from "./product-image";
 
 interface props {
   product: product;
-  handleProductSelection: (productID: string, productName: string, productQuantity: number) => void;
+  handleProductSelection: (
+    productID: string,
+    productName: string,
+    productQuantity: number,
+  ) => void;
 }
 
 function ProductRow({ product, handleProductSelection }: props) {
@@ -28,19 +32,28 @@ function ProductRow({ product, handleProductSelection }: props) {
         </a>
       </TableCell>
       <TableCell>
-        {product.photoUrls[0] && <ProductImage name={product.name} photoUrls={product.photoUrls} />}
+        {product.photoUrls[0] && (
+          <ProductImage name={product.name} photoUrls={product.photoUrls} />
+        )}
       </TableCell>
       <TableCell>{truncateStringEllipsis(product.category.name, 10)}</TableCell>
       <TableCell align="right">{product.quantity}</TableCell>
       <TableCell>
-        {(role == "Procurement" || role == "Project") && !product.isDisabled && (
-          <Button
-            variant="outlined"
-            onClick={() => handleProductSelection(product.masterID, product.name, product.quantity)}
-          >
-            Modify
-          </Button>
-        )}
+        {(role == "Procurement" || role == "Project") &&
+          !product.isDisabled && (
+            <Button
+              variant="outlined"
+              onClick={() =>
+                handleProductSelection(
+                  product.masterID,
+                  product.name,
+                  product.quantity,
+                )
+              }
+            >
+              Modify
+            </Button>
+          )}
       </TableCell>
     </TableRow>
   );

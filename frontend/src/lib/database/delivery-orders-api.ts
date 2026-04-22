@@ -26,7 +26,9 @@ export async function insertNewDeliveryOrder(
   return (data as returnValue).deliveryOrderID;
 }
 
-export async function getDeliveryOrderByID(id: string): Promise<deliveryOrder[]> {
+export async function getDeliveryOrderByID(
+  id: string,
+): Promise<deliveryOrder[]> {
   const { error, data } = await supabase
     .from("delivery_orders")
     .select("orderID:order_id, orderDate:order_date, supplier:suppliers(name)")
@@ -40,7 +42,10 @@ export async function getDeliveryOrderByID(id: string): Promise<deliveryOrder[]>
   return data;
 }
 
-export async function getDeliveryOrderIDByOrderIDAndDate(orderID: string, orderDate: Date) {
+export async function getDeliveryOrderIDByOrderIDAndDate(
+  orderID: string,
+  orderDate: Date,
+) {
   const { error, data } = await supabase
     .from("delivery_orders")
     .select("id")

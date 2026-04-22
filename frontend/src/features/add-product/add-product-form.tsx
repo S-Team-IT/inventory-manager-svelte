@@ -1,7 +1,17 @@
-import { Button, Checkbox, FormControlLabel, Stack, TextField, Typography } from "@mui/material";
+import {
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import imageCompression from "browser-image-compression";
 import AutocompleteComponent from "lib/components/autocomplete-component";
-import { getAllProductCategories, insertNewCategory } from "lib/database/categories-api";
+import {
+  getAllProductCategories,
+  insertNewCategory,
+} from "lib/database/categories-api";
 import { insertNewProduct } from "lib/database/products-api";
 import { uploadImage } from "lib/database/storage-api";
 import { useEffect, useState } from "react";

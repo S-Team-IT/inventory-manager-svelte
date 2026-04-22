@@ -25,7 +25,11 @@ interface props {
   closeModal: () => void;
 }
 
-function QuantityForm({ selectedProductID, selectedProductQuantity, closeModal }: props) {
+function QuantityForm({
+  selectedProductID,
+  selectedProductQuantity,
+  closeModal,
+}: props) {
   const session = useContext(SessionContext);
   const role = useContext(RoleContext);
 
@@ -54,24 +58,42 @@ function QuantityForm({ selectedProductID, selectedProductQuantity, closeModal }
 
     if (role == "Procurement") {
       //Check if there is already a delivery order
-      let deliveryID = await getDeliveryOrderIDByOrderIDAndDate(orderID, orderDate);
+      let deliveryID = await getDeliveryOrderIDByOrderIDAndDate(
+        orderID,
+        orderDate,
+      );
 
       //If not, insert a new one
       if (deliveryID == null || deliveryID === "") {
-        deliveryID = await insertNewDeliveryOrder(supplierID, orderID, orderDate);
+        deliveryID = await insertNewDeliveryOrder(
+          supplierID,
+          orderID,
+          orderDate,
+        );
       }
 
-      insertNewTransaction(session.user.id, selectedProductID, quantityChange, deliveryID);
+      insertNewTransaction(
+        session.user.id,
+        selectedProductID,
+        quantityChange,
+        deliveryID,
+      );
     } else {
       quantityChange *= -1;
       insertNewTransaction(session.user.id, selectedProductID, quantityChange);
     }
-    const newQuantity = validateQuantityInput(selectedProductQuantity, quantityChange);
+    const newQuantity = validateQuantityInput(
+      selectedProductQuantity,
+      quantityChange,
+    );
     updateProductQuantity(selectedProductID, newQuantity);
     // window.location.reload();
   }
 
-  function validateQuantityInput(currentQuantity: number, quantityChange: number): number {
+  function validateQuantityInput(
+    currentQuantity: number,
+    quantityChange: number,
+  ): number {
     const newQuantity = currentQuantity + quantityChange;
     return newQuantity;
   }
@@ -100,7 +122,12 @@ function QuantityForm({ selectedProductID, selectedProductQuantity, closeModal }
         {role == "Procurement" && (
           <>
             <Typography variant="h6">Delivery Order</Typography>
-            <TextField required label="DO Number" placeholder="e.g. 2604013" name="doNumber" />
+            <TextField
+              required
+              label="DO Number"
+              placeholder="e.g. 2604013"
+              name="doNumber"
+            />
             <TextField
               required
               type="date"

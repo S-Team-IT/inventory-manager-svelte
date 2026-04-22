@@ -18,12 +18,9 @@ interface Props<T> {
 
 const filter = createFilterOptions<OptionWithInput>();
 
-export default function AutocompleteComponent<T extends { id: string; name: string }>({
-  label,
-  optionsArray,
-  databaseInsert,
-  returnIDAsValue,
-}: Props<T>) {
+export default function AutocompleteComponent<
+  T extends { id: string; name: string },
+>({ label, optionsArray, databaseInsert, returnIDAsValue }: Props<T>) {
   const [options, setOptions] = useState<OptionWithInput[]>(optionsArray);
   const [value, setValue] = useState<OptionWithInput | null>(null);
   const [loading, setLoading] = useState(false);
@@ -107,7 +104,9 @@ export default function AutocompleteComponent<T extends { id: string; name: stri
             ...params.InputProps,
             endAdornment: (
               <>
-                {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                {loading ? (
+                  <CircularProgress color="inherit" size={20} />
+                ) : null}
                 {params.InputProps.endAdornment}
               </>
             ),

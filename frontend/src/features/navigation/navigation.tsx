@@ -15,7 +15,8 @@ function Navigation() {
     <>
       <Button onClick={toggleDrawer}>adf</Button>
       <Navbar toggleDrawer={toggleDrawer} />
-      <Toolbar /> {/*Toolbar is needed to push components out from under the Navbar*/}
+      <Toolbar />{" "}
+      {/*Toolbar is needed to push components out from under the Navbar*/}
       <SideDrawer isOpen={isDrawerOpen} toggleDrawer={toggleDrawer} />
       <Outlet />
     </>

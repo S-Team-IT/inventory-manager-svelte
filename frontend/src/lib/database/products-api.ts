@@ -22,7 +22,10 @@ export async function getAllProducts(): Promise<product[]> {
   return data;
 }
 
-export async function updateProductQuantity(masterID: string, newQuantity: number) {
+export async function updateProductQuantity(
+  masterID: string,
+  newQuantity: number,
+) {
   const { error } = await supabase
     .from("products")
     .update({ current_quantity: newQuantity })
@@ -33,7 +36,9 @@ export async function updateProductQuantity(masterID: string, newQuantity: numbe
   }
 }
 
-export async function insertNewProduct(newProduct: productInsert): Promise<boolean> {
+export async function insertNewProduct(
+  newProduct: productInsert,
+): Promise<boolean> {
   const { error } = await supabase.from("products").insert(newProduct);
   if (error) {
     console.error("Error inserting new product: ", error);

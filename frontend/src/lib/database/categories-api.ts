@@ -10,7 +10,9 @@ export async function getAllProductCategories(): Promise<category[]> {
   return data;
 }
 
-export async function insertNewCategory(categoryName: string): Promise<category | null> {
+export async function insertNewCategory(
+  categoryName: string,
+): Promise<category | null> {
   const { error, data } = await supabase
     .from("product_categories")
     .insert({ name: categoryName })

@@ -37,7 +37,11 @@ function ProductTable() {
     setIsOpen(false);
   }
 
-  function onSelectProduct(productID: string, productName: string, productQuantity: number) {
+  function onSelectProduct(
+    productID: string,
+    productName: string,
+    productQuantity: number,
+  ) {
     setSelectedProductID(productID);
     setSelectedProductName(productName);
     setSelectedProductQuantity(productQuantity);
@@ -47,8 +51,11 @@ function ProductTable() {
   useEffect(() => {
     async function fetchProducts() {
       const productArray = await getAllProducts();
-      const alphanumericallySortedProducts = sortProductMasterAlphanumberically(productArray);
-      const sortedProductArray = sortProductsIntoEnabledDisabled(alphanumericallySortedProducts);
+      const alphanumericallySortedProducts =
+        sortProductMasterAlphanumberically(productArray);
+      const sortedProductArray = sortProductsIntoEnabledDisabled(
+        alphanumericallySortedProducts,
+      );
       setEnabledProducts(sortedProductArray[0]);
       setDisabledProducts(sortedProductArray[1]);
     }
@@ -66,7 +73,9 @@ function ProductTable() {
               <TableCell>Photos</TableCell>
               <TableCell>Category</TableCell>
               <TableCell>Quant</TableCell>
-              {(role == "Procurement" || role == "Project") && <TableCell>Modify</TableCell>}
+              {(role == "Procurement" || role == "Project") && (
+                <TableCell>Modify</TableCell>
+              )}
             </TableRow>
           </TableHead>
           <TableBody>

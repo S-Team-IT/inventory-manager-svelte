@@ -1,4 +1,7 @@
-export function truncateStringEllipsis(stringToTruncate: string, substringEnd: number): string {
+export function truncateStringEllipsis(
+  stringToTruncate: string,
+  substringEnd: number,
+): string {
   if (stringToTruncate.length > substringEnd) {
     //This handles the niche case where the truncated string
     //ends in a comma by removing it to make the result look better.

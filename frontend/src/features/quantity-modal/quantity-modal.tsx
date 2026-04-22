@@ -45,7 +45,12 @@ function QuantityModal({
       </DialogContent>
       <DialogActions>
         <Button onClick={handleCloseModal}>Cancel</Button>
-        <Button type="submit" form="quantity-form" variant="contained" color="primary">
+        <Button
+          type="submit"
+          form="quantity-form"
+          variant="contained"
+          color="primary"
+        >
           Confirm
         </Button>
       </DialogActions>

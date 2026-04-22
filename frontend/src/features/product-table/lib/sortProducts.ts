@@ -14,6 +14,9 @@ export function sortProductsIntoEnabledDisabled(products: product[]) {
 
 export function sortProductMasterAlphanumberically(products: product[]) {
   return products.sort((a, b) =>
-    a.masterID.localeCompare(b.masterID, undefined, { numeric: true, sensitivity: "base" }),
+    a.masterID.localeCompare(b.masterID, undefined, {
+      numeric: true,
+      sensitivity: "base",
+    }),
   );
 }

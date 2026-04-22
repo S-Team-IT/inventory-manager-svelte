@@ -12,14 +12,18 @@ import { filterTransactionsByProductID } from "./lib/sortTransactions";
 function TransactionLog() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedTransaction, setSelectedTransaction] = useState<transaction>();
-  const [selectedTransactionDeliveryOrder, setSelectedTransactionDeliveryOrder] =
-    useState<deliveryOrder>();
+  const [
+    selectedTransactionDeliveryOrder,
+    setSelectedTransactionDeliveryOrder,
+  ] = useState<deliveryOrder>();
 
   async function handleSelectTransaction(transaction: transaction) {
     setSelectedTransaction(transaction);
     setSelectedTransactionDeliveryOrder(undefined);
     if (transaction.deliveryID) {
-      const selectedDeliverOrder = await getDeliveryOrderByID(transaction.deliveryID);
+      const selectedDeliverOrder = await getDeliveryOrderByID(
+        transaction.deliveryID,
+      );
       setSelectedTransactionDeliveryOrder(selectedDeliverOrder[0]);
     }
   }
@@ -35,7 +39,9 @@ function TransactionLog() {
   }
 
   const [transactions, setTransactions] = useState<transaction[]>([]);
-  const [filteredTransactions, setFilteredTransactions] = useState<transaction[]>([]);
+  const [filteredTransactions, setFilteredTransactions] = useState<
+    transaction[]
+  >([]);
 
   useEffect(() => {
     switch (filter) {
@@ -43,7 +49,9 @@ function TransactionLog() {
         setFilteredTransactions(transactions);
         break;
       case "productid":
-        setFilteredTransactions(filterTransactionsByProductID(filterArg, transactions));
+        setFilteredTransactions(
+          filterTransactionsByProductID(filterArg, transactions),
+        );
         break;
       default:
         console.error("Filter broke: ", filter);

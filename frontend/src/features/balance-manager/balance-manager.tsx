@@ -2,7 +2,10 @@
 import { Button, InputAdornment, Stack, TextField } from "@mui/material";
 import { SessionContext } from "lib/context/context";
 import { insertBulkBalanceTransactions } from "lib/database/balance-transactions-api";
-import { getProjectBalance, updateProjectBalance } from "lib/database/project-api";
+import {
+  getProjectBalance,
+  updateProjectBalance,
+} from "lib/database/project-api";
 // @ts-expect-error
 import Mexp from "math-expression-evaluator";
 import { useContext, useEffect, useState } from "react";
@@ -12,7 +15,9 @@ export default function BalanceManager() {
   const [balanceExpression, setBalanceExpression] = useState("");
   const [initialBalance, setInitialBalance] = useState(0); //For resets and so the final value can be easily calculated with balanceChanges(cause react hooks are async and time travel)
   const [previousBalance, setPreviousBalance] = useState(0); //To calculate the difference from balanceExpression and add to balanceChanges
-  const [balanceChanges, setBalanceChanges] = useState<balanceTransaction[]>([]);
+  const [balanceChanges, setBalanceChanges] = useState<balanceTransaction[]>(
+    [],
+  );
   const session = useContext(SessionContext);
 
   useEffect(() => {
@@ -74,7 +79,10 @@ export default function BalanceManager() {
     finalChanges.forEach(({ balance_changed }) => {
       finalDifference += balance_changed;
     });
-    await updateProjectBalance(finalChanges[0].project_id, initialBalance + finalDifference);
+    await updateProjectBalance(
+      finalChanges[0].project_id,
+      initialBalance + finalDifference,
+    );
   }
 
   return (
@@ -89,7 +97,9 @@ export default function BalanceManager() {
           helperText="Math expressions can be calculated with Enter."
           slotProps={{
             input: {
-              startAdornment: <InputAdornment position="start">$</InputAdornment>,
+              startAdornment: (
+                <InputAdornment position="start">$</InputAdornment>
+              ),
             },
           }}
         />

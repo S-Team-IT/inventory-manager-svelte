@@ -25,10 +25,12 @@ function App() {
     }
     fetchSession();
 
-    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      setRole("");
-    });
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setSession(session);
+        setRole("");
+      },
+    );
     return () => {
       authListener.subscription.unsubscribe();
     };

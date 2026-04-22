@@ -34,7 +34,9 @@ function TransactionCardModal({
         <Typography variant="h6">
           {transactionData.quantityChanged > 0 ? "Incoming" : "Outgoing"}
         </Typography>
-        <Typography variant="subtitle2">{transactionData.product.name}</Typography>
+        <Typography variant="subtitle2">
+          {transactionData.product.name}
+        </Typography>
       </DialogTitle>
       <DialogContent>
         <Typography>

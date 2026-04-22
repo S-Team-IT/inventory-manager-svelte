@@ -8,7 +8,11 @@ interface props {
   selectTransaction: (transaction: transaction) => void;
 }
 
-function TransactionMessage({ transaction, handleOpenModal, selectTransaction }: props) {
+function TransactionMessage({
+  transaction,
+  handleOpenModal,
+  selectTransaction,
+}: props) {
   const sgDateTime = convertToSGTime(transaction.creationTimestamp);
   const relativeDateString = formatRelativeToToday(sgDateTime);
 
@@ -23,9 +27,7 @@ function TransactionMessage({ transaction, handleOpenModal, selectTransaction }:
       <a onClick={() => handleSelectTransaction(transaction)}>
         <ListItem>
           <ListItemText
-            primary={`${
-              transaction.quantityChanged > 0 ? "Incoming" : "Outgoing"
-            } from ${transaction.logger.firstName}`}
+            primary={`${transaction.quantityChanged > 0 ? "Incoming" : "Outgoing"} from ${transaction.logger.firstName}`}
             secondary={`${transaction.quantityChanged} ${transaction.product.name}`}
           ></ListItemText>
           <Typography align="right">{relativeDateString}</Typography>

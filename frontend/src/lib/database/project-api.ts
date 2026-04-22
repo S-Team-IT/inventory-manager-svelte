@@ -1,7 +1,9 @@
 import type { balance } from "types/supabase";
 import { supabase } from "./supabase";
 
-export async function getProjectBalance(projectID: string = "1"): Promise<balance> {
+export async function getProjectBalance(
+  projectID: string = "1",
+): Promise<balance> {
   const { error, data } = await supabase
     .from("projects")
     .select("balance:current_balance")
@@ -14,7 +16,10 @@ export async function getProjectBalance(projectID: string = "1"): Promise<balanc
   return data;
 }
 
-export async function updateProjectBalance(projectID: string, newBalance: number) {
+export async function updateProjectBalance(
+  projectID: string,
+  newBalance: number,
+) {
   const { error } = await supabase
     .from("projects")
     .update({ current_balance: newBalance })
