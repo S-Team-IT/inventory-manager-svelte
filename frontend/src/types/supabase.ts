@@ -53,7 +53,7 @@ export type category = {
 export type productInsert = {
   master_id: string;
   name: string;
-  photo_paths: string[];
+  photo_paths: photoObj[];
   category_id: string;
   initial_quantity: number;
   disabled: boolean;

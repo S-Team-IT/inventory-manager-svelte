@@ -15,7 +15,7 @@ import {
 import { insertNewProduct } from "lib/database/products-api";
 import { uploadImage } from "lib/database/storage-api";
 import { useEffect, useState } from "react";
-import type { category, productInsert } from "types/supabase";
+import type { category, photoObj, productInsert } from "types/supabase";
 
 const options = {
   maxSizeMB: 0.1,
@@ -52,7 +52,7 @@ function AddProductForm() {
     const productPhotos = formData.getAll("img") as File[];
     const isDisabled = formData.get("disabled") === "on";
 
-    const imageUrls: string[] = [];
+    const imageUrls: photoObj[] = [];
 
     if (productPhotos.length > 0) {
       // forEach cannot be asynchronous... ts cost me an hour of my life
@@ -61,7 +61,7 @@ function AddProductForm() {
         const compressedFile = await imageCompression(file, options);
         // console.log("Compressed size: ", (compressedFile.size / 1024 / 1024).toFixed(2) + "MB");
         const url = await uploadImage(compressedFile);
-        if (url) imageUrls.push(url);
+        if (url) imageUrls.push({ item: url });
       });
 
       await Promise.all(uploadPromises);
