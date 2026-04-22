@@ -91,10 +91,8 @@ function AddProductForm() {
     }
     if (success) {
       alert("Item has been added to the inventory.");
-      console.log("adfg");
     } else {
       alert("Item has not been added.");
-      console.log("gfda");
     }
   }
 
@@ -102,7 +100,7 @@ function AddProductForm() {
     setSelectedCategoryID(id);
   }
 
-  if (isLoading) return <Loading />
+  if (isLoading) return <Loading />;
 
   return (
     <form onSubmit={handleFormSubmit} autoComplete="off">

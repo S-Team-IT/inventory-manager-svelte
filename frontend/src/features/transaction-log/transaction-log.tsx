@@ -75,7 +75,6 @@ function TransactionLog() {
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "transactions" },
         (_payload) => {
-          console.log("hit");
           window.location.reload();
           //I don't know why payload.new's date is being read as an invalid date but it is so yeah,
           // just gonna force a fetch again yay!
@@ -88,7 +87,6 @@ function TransactionLog() {
       .subscribe();
 
     return () => {
-      console.log("Cleaning up channel");
       channel.unsubscribe();
     };
   }, []);
