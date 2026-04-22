@@ -1,4 +1,4 @@
-import { Button, Stack, TextField, Typography } from "@mui/material";
+import { Button, Checkbox, FormControlLabel, Stack, TextField, Typography } from "@mui/material";
 import imageCompression from "browser-image-compression";
 import AutocompleteComponent from "lib/components/autocomplete-component";
 import { getAllProductCategories, insertNewCategory } from "lib/database/categories-api";
@@ -94,6 +94,7 @@ function AddProductForm() {
           name="quantity"
           slotProps={{ htmlInput: { min: 0, step: 1 } }}
         />
+        <FormControlLabel control={<Checkbox defaultChecked />} label="Label" />
         <Button
           component="label"
           role={undefined}
