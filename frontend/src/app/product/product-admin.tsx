@@ -9,7 +9,7 @@ export default function ProductAdmin() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (role !== "QS") {
+    if (role && role !== "QS") {
       navigate("/*");
     }
   }, [role, navigate]);
