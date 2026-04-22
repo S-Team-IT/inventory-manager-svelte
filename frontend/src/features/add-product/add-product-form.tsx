@@ -16,6 +16,7 @@ import { insertNewProduct } from "lib/database/products-api";
 import { uploadImage } from "lib/database/storage-api";
 import { useEffect, useState } from "react";
 import type { category, photoObj, productInsert } from "types/supabase";
+import Loading from "../../app/misc/loading";
 
 const options = {
   maxSizeMB: 0.1,
@@ -26,6 +27,7 @@ const options = {
 function AddProductForm() {
   const [productCategories, setProductCategories] = useState<category[]>([]);
   const [selectedCategoryID, setSelectedCategoryID] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     async function fetchCategories() {
@@ -37,51 +39,62 @@ function AddProductForm() {
 
   async function handleFormSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (selectedCategoryID === "") {
-      console.error("no category selected");
-      alert(`Error, try clicking "Add" in the Category Input`);
-      return;
+    setIsLoading(true);
+    let success;
+    try {
+      if (selectedCategoryID === "") {
+        console.error("no category selected");
+        alert(`Error, try clicking "Add" in the Category Input`);
+        return;
+      }
+
+      const formData = new FormData(e.target);
+      console.log(formData);
+
+      const masterID = formData.get("masterID") as string;
+      const productName = formData.get("name") as string;
+      const categoryID = selectedCategoryID;
+
+      const initialQuantity = Number(formData.get("quantity"));
+      const productPhotos = formData.getAll("img") as File[];
+      const isDisabled = formData.get("disabled") === "on";
+
+      const imageUrls: photoObj[] = [];
+
+      //I don't know why it doesnt just return a null or whatever but when there are no files selected, this is returned and must be accounted for.
+      if (productPhotos[0].type !== "application/octet-stream") {
+        // forEach cannot be asynchronous... ts cost me an hour of my life
+        const uploadPromises = productPhotos.map(async (file) => {
+          // console.log("Original file size: ", (file.size / 1024 / 1024).toFixed(2) + "MB");
+          const compressedFile = await imageCompression(file, options);
+          // console.log("Compressed size: ", (compressedFile.size / 1024 / 1024).toFixed(2) + "MB");
+          const url = await uploadImage(compressedFile);
+          if (url) imageUrls.push({ item: url });
+        });
+
+        await Promise.all(uploadPromises);
+      }
+
+      const newProduct: productInsert = {
+        master_id: masterID,
+        name: productName,
+        photo_paths: imageUrls,
+        category_id: categoryID,
+        initial_quantity: initialQuantity,
+        disabled: isDisabled,
+      };
+
+      success = await insertNewProduct(newProduct);
+    } catch {
+    } finally {
+      setIsLoading(false);
     }
-    const formData = new FormData(e.target);
-
-    const masterID = formData.get("masterID") as string;
-    const productName = formData.get("name") as string;
-    const categoryID = selectedCategoryID;
-
-    const initialQuantity = Number(formData.get("quantity"));
-    const productPhotos = formData.getAll("img") as File[];
-    const isDisabled = formData.get("disabled") === "on";
-
-    const imageUrls: photoObj[] = [];
-
-    //I don't know why it doesnt just return a null or whatever but when there are no files selected, this is returned and must be accounted for.
-    if (productPhotos[0].type === "application/octet-stream") {
-      // forEach cannot be asynchronous... ts cost me an hour of my life
-      const uploadPromises = productPhotos.map(async (file) => {
-        // console.log("Original file size: ", (file.size / 1024 / 1024).toFixed(2) + "MB");
-        const compressedFile = await imageCompression(file, options);
-        // console.log("Compressed size: ", (compressedFile.size / 1024 / 1024).toFixed(2) + "MB");
-        const url = await uploadImage(compressedFile);
-        if (url) imageUrls.push({ item: url });
-      });
-
-      await Promise.all(uploadPromises);
-    }
-
-    const newProduct: productInsert = {
-      master_id: masterID,
-      name: productName,
-      photo_paths: imageUrls,
-      category_id: categoryID,
-      initial_quantity: initialQuantity,
-      disabled: isDisabled,
-    };
-
-    const success = await insertNewProduct(newProduct);
     if (success) {
       alert("Item has been added to the inventory.");
+      console.log("adfg");
     } else {
       alert("Item has not been added.");
+      console.log("gfda");
     }
   }
 
