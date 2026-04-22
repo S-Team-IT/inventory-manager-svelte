@@ -26,7 +26,11 @@ export default function ProductImage({ name, photoUrls }: props) {
       <ImageList cols={1} sx={{ width: "300px" }}>
         <ImageListItem>
           <button className="none" onClick={toggleModal} type="button">
-            <img src={photoUrls[0].item} width="300px" aria-label="item-image"/>
+            <img
+              src={photoUrls[0].item}
+              width="300px"
+              aria-label="item-image"
+            />
           </button>
         </ImageListItem>
       </ImageList>
@@ -41,7 +45,7 @@ export default function ProductImage({ name, photoUrls }: props) {
           <ImageList cols={3} gap={30}>
             {photoUrls.map(({ item: url }, key) => (
               <ImageListItem key={url}>
-                <img src={url} alt={`${name} #${key + 1}`}/>
+                <img src={url} alt={`${name} #${key + 1}`} />
               </ImageListItem>
             ))}
           </ImageList>

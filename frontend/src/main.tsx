@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import App from "./app/app.tsx";
 import "./main.css";
 
-// biome-ignore lint: Forbidden non-null assertion but this is what vite gave me 
+// biome-ignore lint: Forbidden non-null assertion but this is what vite gave me
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <meta name="viewport" content="initial-scale=1, width=device-width" />

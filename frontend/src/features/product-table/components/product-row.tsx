@@ -27,7 +27,12 @@ function ProductRow({ product, handleProductSelection }: props) {
     <TableRow className={product.isDisabled ? "disabled-row" : ""}>
       <TableCell>{product.masterID}</TableCell>
       <TableCell>
-        <button className="none" onClick={handleFilterByMasterID} style={{ cursor: "pointer" }} type="button">
+        <button
+          className="none"
+          onClick={handleFilterByMasterID}
+          style={{ cursor: "pointer" }}
+          type="button"
+        >
           {truncateStringEllipsis(product.name, 20)}
         </button>
       </TableCell>

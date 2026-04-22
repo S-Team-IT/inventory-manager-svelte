@@ -23,15 +23,19 @@ function TransactionMessage({
   }
 
   return (
-    <button className="none" onClick={() => handleSelectTransaction(transaction)} type="button">
-        <ListItem>
-          <ListItemText
-            primary={`${transaction.quantityChanged > 0 ? "Incoming" : "Outgoing"} from ${transaction.logger.firstName}`}
-            secondary={`${transaction.quantityChanged} ${transaction.product.name}`}
-          ></ListItemText>
-          <Typography align="right">{relativeDateString}</Typography>
-        </ListItem>
-      </button>
+    <button
+      className="none"
+      onClick={() => handleSelectTransaction(transaction)}
+      type="button"
+    >
+      <ListItem>
+        <ListItemText
+          primary={`${transaction.quantityChanged > 0 ? "Incoming" : "Outgoing"} from ${transaction.logger.firstName}`}
+          secondary={`${transaction.quantityChanged} ${transaction.product.name}`}
+        ></ListItemText>
+        <Typography align="right">{relativeDateString}</Typography>
+      </ListItem>
+    </button>
   );
 }
 

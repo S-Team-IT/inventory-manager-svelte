@@ -16,11 +16,11 @@ export default function ProductAdmin() {
 
   return (
     <Grid container>
-        <Grid size="grow" />
-        <Grid size={3}>
-          <AddProductForm />
-        </Grid>
-        <Grid size="grow" />
+      <Grid size="grow" />
+      <Grid size={3}>
+        <AddProductForm />
       </Grid>
+      <Grid size="grow" />
+    </Grid>
   );
 }

@@ -59,10 +59,10 @@ function TransactionLog() {
     }
   }, [filter, filterArg, transactions]);
 
-  const fetchTransactions = useCallback(async()=> {
+  const fetchTransactions = useCallback(async () => {
     const transactions = await getAllTransactions();
     setTransactions(transactions);
-  }, [])
+  }, []);
 
   useEffect(() => {
     fetchTransactions();
