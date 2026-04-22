@@ -51,12 +51,10 @@ export type category = {
 };
 
 export type productInsert = {
-  product_id: string;
   master_id: string;
   name: string;
   photo_paths: string[];
   category_id: string;
-  supplier_id: string;
   initial_quantity: number;
   disabled: boolean;
 };

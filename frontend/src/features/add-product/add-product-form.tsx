@@ -67,12 +67,10 @@ function AddProductForm() {
     }
 
     const newProduct: productInsert = {
-      product_id: Math.floor(Math.random() * 10000 + 1).toString(),
       master_id: masterID,
       name: productName,
       photo_paths: imageUrls,
       category_id: categoryID,
-      supplier_id: "1",
       initial_quantity: initialQuantity,
       disabled: false,
     };
