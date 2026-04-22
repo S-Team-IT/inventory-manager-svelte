@@ -102,6 +102,8 @@ function AddProductForm() {
     setSelectedCategoryID(id);
   }
 
+  if (isLoading) return <Loading />
+
   return (
     <form onSubmit={handleFormSubmit} autoComplete="off">
       <Stack spacing={2}>
