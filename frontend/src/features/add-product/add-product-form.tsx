@@ -54,7 +54,8 @@ function AddProductForm() {
 
     const imageUrls: photoObj[] = [];
 
-    if (productPhotos.length > 0) {
+    //I don't know why it doesnt just return a null or whatever but when there are no files selected, this is returned and must be accounted for.
+    if (productPhotos[0].type === "application/octet-stream") {
       // forEach cannot be asynchronous... ts cost me an hour of my life
       const uploadPromises = productPhotos.map(async (file) => {
         // console.log("Original file size: ", (file.size / 1024 / 1024).toFixed(2) + "MB");
