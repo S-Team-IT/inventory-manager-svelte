@@ -54,7 +54,7 @@ export type productInsert = {
   master_id: string;
   name: string;
   photo_paths: photoObj[];
-  category_id: string;
+  category_id: string | null;
   initial_quantity: number;
   disabled: boolean;
 };

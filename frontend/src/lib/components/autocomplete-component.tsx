@@ -13,13 +13,14 @@ interface Props<T> {
   optionsArray: T[]; //Array of objects. Must have id & name properties.
   databaseInsert: (newValue: string) => Promise<T | null>; //The function which calls the database to create the new tuple
   returnIDAsValue: (id: string) => void; //State variable in parent for storing the ID of the selected object
+    isRequired: boolean //if input field has required flag
 }
 
 const filter = createFilterOptions<OptionWithInput>();
 
 export default function AutocompleteComponent<
   T extends { id: string; name: string },
->({ label, optionsArray, databaseInsert, returnIDAsValue }: Props<T>) {
+>({ label, optionsArray, databaseInsert, returnIDAsValue, isRequired}: Props<T>) {
   const [options, setOptions] = useState<OptionWithInput[]>(optionsArray);
   const [value, setValue] = useState<OptionWithInput | null>(null);
   const [loading, setLoading] = useState(false);
@@ -95,7 +96,7 @@ export default function AutocompleteComponent<
           {option.name}
         </li>
       )}
-      renderInput={(params) => <TextField required {...params} label={label} />}
+      renderInput={(params) => <TextField required={isRequired} {...params} label={label} />}
     />
   );
 }

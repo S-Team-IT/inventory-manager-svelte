@@ -42,12 +42,6 @@ function AddProductForm() {
     setIsLoading(true);
     let success;
     try {
-      if (selectedCategoryID === "") {
-        console.error("no category selected");
-        alert(`Error, try clicking "Add" in the Category Input`);
-        return;
-      }
-
       const formData = new FormData(e.target);
       console.log(formData);
 
@@ -79,7 +73,7 @@ function AddProductForm() {
         master_id: masterID,
         name: productName,
         photo_paths: imageUrls,
-        category_id: categoryID,
+        category_id: categoryID === "" ? null : categoryID,
         initial_quantity: initialQuantity,
         disabled: isDisabled,
       };
@@ -113,6 +107,7 @@ function AddProductForm() {
           optionsArray={productCategories}
           databaseInsert={insertNewCategory}
           returnIDAsValue={handleCategoryIDChange}
+          isRequired={false}
         />
         <TextField
           label="Quantity"
