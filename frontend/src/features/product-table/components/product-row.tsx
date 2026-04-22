@@ -28,7 +28,7 @@ function ProductRow({ product, handleProductSelection }: props) {
       <TableCell>{product.masterID}</TableCell>
       <TableCell>
         <button
-          className="none"
+          className="unset"
           onClick={handleFilterByMasterID}
           style={{ cursor: "pointer" }}
           type="button"

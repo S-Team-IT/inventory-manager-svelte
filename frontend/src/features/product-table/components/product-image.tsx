@@ -25,7 +25,7 @@ export default function ProductImage({ name, photoUrls }: props) {
     <>
       <ImageList cols={1} sx={{ width: "300px" }}>
         <ImageListItem>
-          <button className="none" onClick={toggleModal} type="button">
+          <button className="unset" onClick={toggleModal} type="button">
             <img
               src={photoUrls[0].item}
               width="300px"

@@ -6,6 +6,6 @@
   margin-top: 4%;
 }
 
-.none {
-  all: none;
+.unset {
+  all: unset;
 }

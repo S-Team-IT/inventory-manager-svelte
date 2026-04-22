@@ -24,7 +24,7 @@ function TransactionMessage({
 
   return (
     <button
-      className="none"
+      className="unset"
       onClick={() => handleSelectTransaction(transaction)}
       type="button"
     >
