@@ -1,7 +1,7 @@
 import { Button, Container, Stack, Typography } from "@mui/material";
 import { useNavigate } from "react-router";
 
-export default function MissingPage() {
+export default function Missing() {
   const navigate = useNavigate();
 
   function handleReturnHome() {

@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router";
 import ProductAdmin from "./product/product-admin";
 import ProductGeneral from "./product/product-general";
-import MissingPage from "./misc/missing-page";
+import Missing from "./misc/missing";
 
 function App() {
   const [session, setSession] = useState<Session | null>(null);
@@ -66,7 +66,7 @@ function App() {
                 <Route index element={<ProductGeneral />} />
                 <Route path="add" element={<ProductAdmin />} />
               </Route>
-              <Route path="/*" element={<MissingPage />} />
+              <Route path="/*" element={<Missing />} />
             </Routes>
           </BrowserRouter>
         </SessionContext>
