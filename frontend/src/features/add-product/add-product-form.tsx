@@ -85,12 +85,15 @@ function AddProductForm() {
     } catch {
     } finally {
       setIsLoading(false);
+      setImgInput([]);
     }
     if (success) {
       alert("Item has been added to the inventory.");
     } else {
       alert("Item has not been added.");
     }
+    // to update categories if a new one was added
+    window.location.reload();
   }
 
   function handleCategoryIDChange(id: string) {
