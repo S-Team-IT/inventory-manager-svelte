@@ -4,8 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "bruh": "oxfmt --init",
     "build": "tsc -b && vite build",
     "dev": "vite",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -26,6 +31,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.29.0",
+    "@biomejs/biome": "2.4.12",
     "@rolldown/plugin-babel": "^0.2.2",
     "@types/babel__core": "^7.20.5",
     "@types/node": "^24.12.2",
