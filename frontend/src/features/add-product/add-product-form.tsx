@@ -113,6 +113,7 @@ function AddProductForm() {
           label="Quantity"
           type="number"
           required
+          defaultValue="0"
           name="quantity"
           slotProps={{ htmlInput: { min: 0, step: 1 } }}
         />
