@@ -123,19 +123,6 @@ function AddProductForm() {
           returnIDAsValue={handleCategoryIDChange}
           isRequired={false}
         />
-        <TextField
-          label="Quantity"
-          type="number"
-          required
-          defaultValue="0"
-          name="quantity"
-          slotProps={{ htmlInput: { min: 0, step: 1 } }}
-        />
-        <FormControlLabel
-          control={<Checkbox name="disabled" />}
-          label="Disabled"
-        />
-
         <MuiFileInput
           value={imgInput}
           onChange={handleChangeImg}
@@ -155,6 +142,18 @@ function AddProductForm() {
               startAdornment: <AttachFileIcon />,
             },
           }}
+        />
+        <TextField
+          label="Quantity"
+          type="number"
+          required
+          defaultValue="0"
+          name="quantity"
+          slotProps={{ htmlInput: { min: 0, step: 1 } }}
+        />
+        <FormControlLabel
+          control={<Checkbox name="disabled" />}
+          label="Disabled"
         />
         <Button type="submit" variant="contained" size="large">
           Submit
