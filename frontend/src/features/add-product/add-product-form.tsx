@@ -40,7 +40,7 @@ function AddProductForm() {
   async function handleFormSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsLoading(true);
-    let success;
+    let success = false;
     try {
       const formData = new FormData(e.target);
       console.log(formData);
