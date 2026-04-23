@@ -99,7 +99,7 @@ function AddProductForm() {
 
   const [imgInput, setImgInput] = useState<File[] | undefined>([]);
 
-  const handleChange = (newInput: File[]) => {
+  const handleChangeImg = (newInput: File[]) => {
     setImgInput(newInput);
   };
 
@@ -133,7 +133,7 @@ function AddProductForm() {
 
         <MuiFileInput
           value={imgInput}
-          onChange={handleChange}
+          onChange={handleChangeImg}
           multiple
           placeholder="Insert photo(s)"
           getInputText={(value) => `${value.length} selected`}
