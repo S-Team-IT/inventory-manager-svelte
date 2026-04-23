@@ -1,3 +1,5 @@
+import AttachFileIcon from "@mui/icons-material/AttachFile";
+import CloseIcon from "@mui/icons-material/Close";
 import {
   Button,
   Checkbox,
@@ -14,6 +16,7 @@ import {
 } from "lib/database/categories-api";
 import { insertNewProduct } from "lib/database/products-api";
 import { uploadImage } from "lib/database/storage-api";
+import { MuiFileInput } from "mui-file-input";
 import { useEffect, useState } from "react";
 import type { category, photoObj, productInsert } from "types/supabase";
 import Loading from "../../app/misc/loading";
@@ -94,6 +97,12 @@ function AddProductForm() {
     setSelectedCategoryID(id);
   }
 
+  const [imgInput, setImgInput] = useState<File[] | undefined>([]);
+
+  const handleChange = (newInput: File[]) => {
+    setImgInput(newInput);
+  };
+
   if (isLoading) return <Loading />;
 
   return (
@@ -121,15 +130,27 @@ function AddProductForm() {
           control={<Checkbox name="disabled" />}
           label="Disabled"
         />
-        <Button
-          component="label"
-          variant="contained"
-          color="secondary"
-          tabIndex={-1}
-          size="large"
-        >
-          <input type="file" multiple name="img" accept="image/*" />
-        </Button>
+
+        <MuiFileInput
+          value={imgInput}
+          onChange={handleChange}
+          multiple
+          placeholder="Insert photo(s)"
+          getInputText={(value) => `${value.length} selected`}
+          clearIconButtonProps={{
+            title: "Remove",
+            children: <CloseIcon fontSize="small" />,
+          }}
+          variant="outlined"
+          slotProps={{
+            htmlInput: {
+              accept: "image/*",
+            },
+            input: {
+              startAdornment: <AttachFileIcon />,
+            },
+          }}
+        />
         <Button type="submit" variant="contained" size="large">
           Submit
         </Button>
