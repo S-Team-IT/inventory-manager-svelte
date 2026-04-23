@@ -43,6 +43,10 @@ function AddProductForm() {
 
   async function handleFormSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (!selectedCategoryID) {
+      alert("Please select category and click 'Add' first");
+      return;
+    }
     setIsLoading(true);
     let success = false;
     try {
@@ -121,7 +125,7 @@ function AddProductForm() {
           optionsArray={categories}
           databaseInsert={insertNewCategory}
           returnIDAsValue={handleCategoryIDChange}
-          isRequired={false}
+          isRequired={true}
         />
         <MuiFileInput
           required
