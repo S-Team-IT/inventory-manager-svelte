@@ -124,10 +124,11 @@ function AddProductForm() {
           isRequired={false}
         />
         <MuiFileInput
+          required
           value={imgInput}
           onChange={handleChangeImg}
           multiple
-          placeholder="Insert photo(s)"
+          placeholder="Insert photo(s)*"
           getInputText={(value) => `${value.length} selected`}
           clearIconButtonProps={{
             title: "Remove",
