@@ -26,14 +26,14 @@ function ProductRow({ product, handleProductSelection }: props) {
   return (
     <TableRow className={product.isDisabled ? "disabled-row" : ""}>
       <TableCell>{product.masterID}</TableCell>
-      <TableCell>
+      <TableCell sx={{ maxWidth: "200px" }}>
         <button
           className="unset"
           onClick={handleFilterByMasterID}
           style={{ cursor: "pointer" }}
           type="button"
         >
-          {truncateStringEllipsis(product.name, 20)}
+          {truncateStringEllipsis(product.name, 110)}
         </button>
       </TableCell>
       <TableCell>
@@ -41,7 +41,11 @@ function ProductRow({ product, handleProductSelection }: props) {
           <ProductImage name={product.name} photoUrls={product.photoUrls} />
         )}
       </TableCell>
-      <TableCell>{truncateStringEllipsis(product.category.name, 10)}</TableCell>
+      <TableCell>
+        {product.category
+          ? truncateStringEllipsis(product.category.name, 20)
+          : ""}
+      </TableCell>
       <TableCell align="right">{product.quantity}</TableCell>
       <TableCell>
         {(role === "Procurement" || role === "Project") &&

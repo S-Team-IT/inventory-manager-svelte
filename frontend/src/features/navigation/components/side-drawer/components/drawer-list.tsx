@@ -37,7 +37,7 @@ export default function DrawerList() {
                 <ListItemIcon>
                   <AddIcon />
                 </ListItemIcon>
-                <ListItemText primary="Add new product" />
+                <ListItemText primary="Add new item" />
               </ListItemButton>
             </RouterLink>
           </ListItem>

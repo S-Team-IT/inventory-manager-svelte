@@ -133,6 +133,7 @@ function QuantityForm({
               optionsArray={suppliers}
               databaseInsert={insertNewSupplier}
               returnIDAsValue={setSelectedSupplierID}
+              isRequired={true}
             />
           </>
         )}

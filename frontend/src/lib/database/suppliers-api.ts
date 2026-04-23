@@ -1,5 +1,5 @@
 import { supabase } from "lib/database/supabase";
-import type { category, supplier } from "types/supabase";
+import type { supplier } from "types/supabase";
 
 export async function getAllSuppliers(): Promise<supplier[]> {
   const { error, data } = await supabase

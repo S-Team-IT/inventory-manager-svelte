@@ -23,23 +23,18 @@ export default function ProductImage({ name, photoUrls }: props) {
 
   return (
     <>
-      <ImageList cols={1} sx={{ width: "300px" }}>
+      <ImageList cols={1} sx={{}}>
         <ImageListItem>
           <button className="unset" onClick={toggleModal} type="button">
             <img
               src={photoUrls[0].item}
-              width="300px"
+              style={{ maxWidth: "50px", maxHeight: "200px" }}
               aria-label="item-image"
             />
           </button>
         </ImageListItem>
       </ImageList>
-      <Dialog
-        open={isOpen}
-        onClose={toggleModal}
-        fullWidth={true}
-        maxWidth="lg"
-      >
+      <Dialog open={isOpen} onClose={toggleModal}>
         <DialogTitle sx={{ paddingBottom: 0 }}>{name}</DialogTitle>
         <DialogContent>
           <ImageList cols={3} gap={30}>
