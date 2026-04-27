@@ -18,7 +18,7 @@ export function OutgoingTransactionForm() {
         fullWidth
         margin="normal"
       />
-      <TextField label="Name" fullWidth margin="normal" name="name" />
+      <TextField label="Name" fullWidth margin="normal" name="name" required />
       <TextField label="Remarks" fullWidth margin="normal" name="remark" />
       <hr />
       <Typography variant="h6" sx={{ marginBottom: 2 }}>
