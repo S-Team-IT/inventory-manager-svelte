@@ -7,8 +7,9 @@ import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router";
 import Missing from "./misc/missing";
 import ProductGeneral from "./product/product-general";
-import ProductTest from "./product/product-procurement";
-import ProductAdmin from "./product/product-qs";
+import ProductQS from "./product/product-qs";
+import TransactionProcurement from "./transaction/transaction-procurement";
+import TransactionProject from "./transaction/transaction-project";
 
 function App() {
   const [session, setSession] = useState<Session | null>(null);
@@ -65,8 +66,15 @@ function App() {
             <Routes>
               <Route element={<Navigation />}>
                 <Route index element={<ProductGeneral />} />
-                <Route path="add" element={<ProductAdmin />} />
-                <Route path="addDO" element={<ProductTest />} />
+                <Route path="add-product" element={<ProductQS />} />
+                <Route
+                  path="incoming-transaction"
+                  element={<TransactionProcurement />}
+                />
+                <Route
+                  path="outgoing-transaction"
+                  element={<TransactionProject />}
+                />
               </Route>
               <Route path="/*" element={<Missing />} />
             </Routes>

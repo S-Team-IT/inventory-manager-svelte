@@ -9,7 +9,7 @@ import type { supplier, transactionInsert } from "types/supabase";
 import Loading from "../../app/misc/loading";
 import AddItemElement from "./add-item-element";
 
-export default function AddDeliveryOrderForm() {
+export default function IncomingTransactionForm() {
   const session = useContext(SessionContext);
   const [isLoading, setIsLoading] = useState(false);
   const [suppliers, setSuppliers] = useState<supplier[]>([]);

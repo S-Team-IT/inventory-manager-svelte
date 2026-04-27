@@ -1,8 +1,8 @@
-import { Grid } from "@mui/system";
 import AddProductForm from "features/add-product/add-product-form";
 import { RoleContext } from "lib/context/context";
 import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
+import Layout from "../layout";
 
 export default function ProductQS() {
   const role = useContext(RoleContext);
@@ -15,12 +15,8 @@ export default function ProductQS() {
   }, [role, navigate]);
 
   return (
-    <Grid container>
-      <Grid size="grow" />
-      <Grid size={3}>
-        <AddProductForm />
-      </Grid>
-      <Grid size="grow" />
-    </Grid>
+    <Layout spacing={3}>
+      <AddProductForm />
+    </Layout>
   );
 }
