@@ -1,4 +1,4 @@
-import { Button, TableCell, TableRow } from "@mui/material";
+import { Button, TableCell, TableRow, Typography } from "@mui/material";
 import { FilterContext, RoleContext } from "lib/context/context";
 import { truncateStringEllipsis } from "lib/miscellaneous";
 import { useContext } from "react";
@@ -25,7 +25,7 @@ function ProductRow({ product, handleProductSelection }: props) {
 
   return (
     <TableRow className={product.isDisabled ? "disabled-row" : ""}>
-      <TableCell>{product.masterID}</TableCell>
+      <TableCell><Typography variant="h3">{product.masterID}</Typography></TableCell>
       <TableCell sx={{ maxWidth: "200px" }}>
         <button
           className="unset"
