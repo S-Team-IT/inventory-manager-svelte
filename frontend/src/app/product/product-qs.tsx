@@ -4,7 +4,7 @@ import { RoleContext } from "lib/context/context";
 import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
 
-export default function ProductAdmin() {
+export default function ProductQS() {
   const role = useContext(RoleContext);
   const navigate = useNavigate();
 
