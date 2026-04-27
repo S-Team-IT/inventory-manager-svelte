@@ -6,10 +6,12 @@ import { getAllSuppliers, insertNewSupplier } from "lib/database/suppliers-api";
 import { insertBulkTransactions } from "lib/database/transactions-api";
 import { useContext, useEffect, useState } from "react";
 import type { supplier, transactionInsert } from "types/supabase";
+import Loading from "../../app/misc/loading";
 import AddItemElement from "./add-item-element";
 
 export default function AddDeliveryOrderForm() {
   const session = useContext(SessionContext);
+  const [isLoading, setIsLoading] = useState(false);
   const [suppliers, setSuppliers] = useState<supplier[]>([]);
   const [selectedSupplierID, setSelectedSupplierID] = useState("");
 
@@ -30,10 +32,22 @@ export default function AddDeliveryOrderForm() {
     const ref:string = data.get("ref") as string;
     const masters: string[] = data.getAll("master") as string[]
     // terrifying
-    const quantities: number[] = (data.getAll("quantity") as string[]).map((quantityString) => Number(quantityString))
-    
+    const quantities: number[] = (data.getAll("quantity") as string[]).map(
+      (quantityString) => Number(quantityString),
+    );
 
-    const deliveryID:string = await insertNewDeliveryOrder(selectedSupplierID, ref, date);
+    try {
+      setIsLoading(true);
+      const deliveryID: string = await insertNewDeliveryOrder(
+        selectedSupplierID,
+        ref,
+        date,
+      );
+      if (deliveryID === "") {
+        console.error("Delivery Order tuple ID is already inside database.");
+        alert("Delivery Order tuple ID is already inside database.");
+        return;
+      }
     const newTransactions: transactionInsert[] = [];  
     for(let i = 0; i < masters.length - 1; i++) {
       newTransactions.push({
@@ -43,8 +57,19 @@ export default function AddDeliveryOrderForm() {
         quantity_changed: quantities[i]
       })
     }
-    insertBulkTransactions(newTransactions);
+      const isSuccess = await insertBulkTransactions(newTransactions);
+      if (!isSuccess) throw new Error("Bulk insertion failed");
+    } catch (e) {
+      console.error(e);
+      return;
+    } finally {
+      setIsLoading(false);
+    }
+
+    alert("DO added :)");
   }
+
+  if (isLoading) return <Loading />;
 
   return (
     <form onSubmit={handleSubmit}>
