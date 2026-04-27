@@ -1,11 +1,11 @@
 import CssBaseline from "@mui/material/CssBaseline";
 import type { Session } from "@supabase/supabase-js";
-import Navigation from "features/navigation/navigation";
 import { RoleContext, SessionContext } from "lib/context/context";
 import { supabase } from "lib/database/supabase";
 import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router";
 import Missing from "./misc/missing";
+import Navigation from "./navigation/navigation";
 import ProductGeneral from "./product/product-general";
 import ProductQS from "./product/product-qs";
 import TransactionProcurement from "./transaction/transaction-procurement";

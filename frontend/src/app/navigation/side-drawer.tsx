@@ -1,5 +1,5 @@
 import { Drawer } from "@mui/material";
-import DrawerList from "./components/drawer-list";
+import DrawerList from "./drawer-list";
 
 interface props {
   isOpen: boolean;
