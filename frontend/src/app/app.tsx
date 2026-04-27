@@ -5,9 +5,10 @@ import { RoleContext, SessionContext } from "lib/context/context";
 import { supabase } from "lib/database/supabase";
 import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router";
-import ProductAdmin from "./product/product-admin";
-import ProductGeneral from "./product/product-general";
 import Missing from "./misc/missing";
+import ProductGeneral from "./product/product-general";
+import ProductTest from "./product/product-procurement";
+import ProductAdmin from "./product/product-qs";
 
 function App() {
   const [session, setSession] = useState<Session | null>(null);
@@ -65,6 +66,7 @@ function App() {
               <Route element={<Navigation />}>
                 <Route index element={<ProductGeneral />} />
                 <Route path="add" element={<ProductAdmin />} />
+                <Route path="addDO" element={<ProductTest />} />
               </Route>
               <Route path="/*" element={<Missing />} />
             </Routes>

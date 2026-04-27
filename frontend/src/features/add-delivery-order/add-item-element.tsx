@@ -1,11 +1,23 @@
-import { Button, Stack, TextField } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import {
+  Avatar,
+  Button,
+  Divider,
+  IconButton,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Stack,
+  TextField
+} from "@mui/material";
 import { getProductByMaster } from "lib/database/products-api";
 import { useState } from "react";
 
 type item = {
   master: string;
   name: string;
-  qty: number;
+  quantity: number;
 };
 
 export default function AddItemElement() {
@@ -25,16 +37,17 @@ export default function AddItemElement() {
     }
 
     if (isDuplicate()) {
-      alert("Item already listed.");
+      alert("Item already listed. Please delete it first.");
       return;
     }
 
     const name = await getProductByMaster(masterNo);
     if (name === "") {
       alert("Item is not found in list, please inform QS");
+      return;
     }
 
-    setItems([...items, { master: masterNo, name, qty: quantity }]);
+    setItems([...items, { master: masterNo, name, quantity }]);
   }
 
   function isDuplicate(): boolean {
@@ -42,6 +55,15 @@ export default function AddItemElement() {
     const duplicate = items.find(({ master }) => newMaster === master);
     if (duplicate) return true;
     return false;
+  }
+
+  function handleDelete(master: string): void {
+    const index: number = items.findIndex((i) => i.master === master);
+    if (index === -1) {
+      console.error("Item not found in items?");
+      return;
+    }
+    setItems(items.toSpliced(index, 1));
   }
 
   return (
@@ -65,11 +87,27 @@ export default function AddItemElement() {
           +
         </Button>
       </Stack>
-      <ul>
-        {items.map(({ master, name }) => (
-          <li key={master}>{name}</li>
+      <List>
+        {items.map(({ master, name, quantity }) => (<>
+          <ListItem
+            key={master}
+            secondaryAction={
+              <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(master)}>
+                <DeleteIcon />
+              </IconButton>
+            }
+          >
+            <ListItemAvatar>
+              <Avatar variant="rounded" sx={{ bgcolor: "secondary.main" }}>
+               {master}
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText primary={name} secondary={quantity}/>
+          </ListItem>
+          <Divider />
+          </>     
         ))}
-      </ul>
+      </List>
     </>
   );
 }

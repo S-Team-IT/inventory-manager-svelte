@@ -1,4 +1,4 @@
-import { TextField, Typography } from "@mui/material";
+import { Button, Stack, TextField, Typography } from "@mui/material";
 import AutocompleteComponent from "lib/components/autocomplete-component";
 import { getAllSuppliers, insertNewSupplier } from "lib/database/suppliers-api";
 import { useEffect, useState } from "react";
@@ -7,7 +7,7 @@ import AddItemElement from "./add-item-element";
 
 export default function AddDeliveryOrderForm() {
   const [suppliers, setSuppliers] = useState<supplier[]>([]);
-  const [selectedSupplierID, setSelectedSupplierID] = useState("");
+  const [_selectedSupplierID, setSelectedSupplierID] = useState("");
 
   useEffect(() => {
     async function fetchSuppliers(): Promise<void> {
@@ -19,7 +19,8 @@ export default function AddDeliveryOrderForm() {
 
   return (
     <form>
-      <Typography variant="h2">Delivery Order Info</Typography>
+      <Typography variant="h5">Add Delivery Order</Typography>
+      <Typography variant="h6">Delivery Order Info</Typography>
       <TextField
         required
         type="date"
@@ -38,9 +39,17 @@ export default function AddDeliveryOrderForm() {
         isRequired={true}
       />
       <TextField label="Ref" required fullWidth margin="normal" />
-      <hr />
-      <Typography variant="h2">Items</Typography>
+      <hr/>
+      <Typography variant="h6" sx={{marginBottom: 2}}>Items</Typography>
       <AddItemElement />
+      <Stack direction="row" spacing={2}>
+        <Button type="button" variant="outlined">
+          Clear
+        </Button>
+        <Button type="submit" variant="contained">
+          Submit
+        </Button>
+      </Stack>
     </form>
   );
 }
