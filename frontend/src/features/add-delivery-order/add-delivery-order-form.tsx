@@ -29,8 +29,8 @@ export default function AddDeliveryOrderForm() {
     const data: FormData = new FormData(e.target);
 
     const date: Date = new Date(Date.parse(data.get("date") as string));
-    const ref:string = data.get("ref") as string;
-    const masters: string[] = data.getAll("master") as string[]
+    const ref: string = data.get("ref") as string;
+    const masters: string[] = data.getAll("master") as string[];
     // terrifying
     const quantities: number[] = (data.getAll("quantity") as string[]).map(
       (quantityString) => Number(quantityString),
@@ -48,15 +48,16 @@ export default function AddDeliveryOrderForm() {
         alert("Delivery Order tuple ID is already inside database.");
         return;
       }
-    const newTransactions: transactionInsert[] = [];  
-    for(let i = 0; i < masters.length - 1; i++) {
-      newTransactions.push({
-        logger_id:session.user.id,
-        delivery_id: deliveryID, 
-        product_id: masters[i], 
-        quantity_changed: quantities[i]
-      })
-    }
+      const newTransactions: transactionInsert[] = [];
+      for (let i = 0; i < masters.length; i++) {
+        console.log(i);
+        newTransactions.push({
+          logger_id: session.user.id,
+          delivery_id: deliveryID,
+          product_id: masters[i],
+          quantity_changed: quantities[i],
+        });
+      }
       const isSuccess = await insertBulkTransactions(newTransactions);
       if (!isSuccess) throw new Error("Bulk insertion failed");
     } catch (e) {
@@ -92,10 +93,12 @@ export default function AddDeliveryOrderForm() {
         returnIDAsValue={setSelectedSupplierID}
         isRequired={true}
       />
-      <TextField label="Ref" required fullWidth margin="normal" name="ref"/>
-      <hr/>
-      <Typography variant="h6" sx={{marginBottom: 2}}>Items</Typography>
-      <AddItemElement/>
+      <TextField label="Ref" required fullWidth margin="normal" name="ref" />
+      <hr />
+      <Typography variant="h6" sx={{ marginBottom: 2 }}>
+        Items
+      </Typography>
+      <AddItemElement />
     </form>
   );
 }

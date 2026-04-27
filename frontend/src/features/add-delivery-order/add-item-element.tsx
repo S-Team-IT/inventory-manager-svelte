@@ -9,7 +9,7 @@ import {
   ListItemAvatar,
   ListItemText,
   Stack,
-  TextField
+  TextField,
 } from "@mui/material";
 import { getProductByMaster } from "lib/database/products-api";
 import { useState } from "react";
@@ -66,7 +66,7 @@ export default function AddItemElement() {
     setItems(items.toSpliced(index, 1));
   }
 
-  function handleClear():void {
+  function handleClear(): void {
     setItems([]);
   }
 
@@ -92,26 +92,31 @@ export default function AddItemElement() {
         </Button>
       </Stack>
       <List>
-        {items.map(({ master, name, quantity }) => (<>
-        <input type="hidden" name="master" value={master}/>
-        <input type="hidden" name="quantity" value={quantity}/>
-          <ListItem
-            key={master}
-            secondaryAction={
-              <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(master)}>
-                <DeleteIcon />
-              </IconButton>
-            }
-          >
-            <ListItemAvatar>
-              <Avatar variant="rounded" sx={{ bgcolor: "secondary.main" }}>
-               {master}
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={name} secondary={quantity}/>
-          </ListItem>
-          <Divider />
-          </>     
+        {items.map(({ master, name, quantity }) => (
+          <>
+            <input type="hidden" name="master" value={master} />
+            <input type="hidden" name="quantity" value={quantity} />
+            <ListItem
+              key={master}
+              secondaryAction={
+                <IconButton
+                  edge="end"
+                  aria-label="delete"
+                  onClick={() => handleDelete(master)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              }
+            >
+              <ListItemAvatar>
+                <Avatar variant="rounded" sx={{ bgcolor: "secondary.main" }}>
+                  {master}
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText primary={name} secondary={quantity} />
+            </ListItem>
+            <Divider />
+          </>
         ))}
       </List>
       <Stack direction="row" spacing={2}>

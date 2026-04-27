@@ -25,7 +25,9 @@ function ProductRow({ product, handleProductSelection }: props) {
 
   return (
     <TableRow className={product.isDisabled ? "disabled-row" : ""}>
-      <TableCell><Typography variant="h3">{product.masterID}</Typography></TableCell>
+      <TableCell>
+        <Typography variant="h3">{product.masterID}</Typography>
+      </TableCell>
       <TableCell sx={{ maxWidth: "200px" }}>
         <button
           className="unset"
