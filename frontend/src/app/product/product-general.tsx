@@ -1,5 +1,6 @@
 import { Button, Typography } from "@mui/material";
 import { Container, Grid, Stack } from "@mui/system";
+import AddDeliveryOrderForm from "features/add-delivery-order/add-delivery-order-form";
 import ProductTable from "features/product-table/product-table";
 import TransactionLog from "features/transaction-log/transaction-log";
 import { FilterContext } from "lib/context/context";
@@ -19,6 +20,9 @@ export default function ProductDashboard() {
     <FilterContext value={{ filter, setFilter, filterArg, setFilterArg }}>
       <Container maxWidth={false} sx={{ marginX: 2 }}>
         <Grid container spacing={2}>
+          <Grid size={12}>
+            <AddDeliveryOrderForm />
+          </Grid>
           {filter !== "none" && (
             <Grid size={12}>
               <Stack direction="row" spacing={2}>
