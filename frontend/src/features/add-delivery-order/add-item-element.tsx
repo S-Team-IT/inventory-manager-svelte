@@ -66,6 +66,10 @@ export default function AddItemElement() {
     setItems(items.toSpliced(index, 1));
   }
 
+  function handleClear():void {
+    setItems([]);
+  }
+
   return (
     <>
       <Stack direction="row" spacing={2}>
@@ -110,7 +114,7 @@ export default function AddItemElement() {
         ))}
       </List>
       <Stack direction="row" spacing={2}>
-        <Button type="button" variant="outlined">
+        <Button type="button" variant="outlined" onClick={handleClear}>
           Clear
         </Button>
         <Button type="submit" variant="contained">
