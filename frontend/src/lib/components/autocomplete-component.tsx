@@ -103,7 +103,12 @@ export default function AutocompleteComponent<
         </li>
       )}
       renderInput={(params) => (
-        <TextField required={isRequired} {...params} label={label} />
+        <TextField
+          required={isRequired}
+          {...params}
+          label={label}
+          margin="normal"
+        />
       )}
     />
   );
