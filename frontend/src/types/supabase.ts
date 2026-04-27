@@ -25,6 +25,13 @@ export type transaction = {
   deliveryID: string;
 };
 
+export type transactionInsert = {
+  logger_id:string,
+  delivery_id: string,
+  product_id: string,
+  quantity_changed: number,
+}
+
 export type supplier = {
   id: string;
   name: string;

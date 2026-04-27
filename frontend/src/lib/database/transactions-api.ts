@@ -1,6 +1,6 @@
 import type { PostgrestError } from "@supabase/supabase-js";
 import { supabase } from "lib/database/supabase";
-import type { transaction } from "types/supabase";
+import type { transaction, transactionInsert } from "types/supabase";
 
 export async function getAllTransactions(): Promise<transaction[]> {
   const { error, data } = await supabase
@@ -59,6 +59,17 @@ export async function insertNewTransaction(
 
   if (error) {
     console.error("Error inserting transaction: ", error);
+    return false;
+  }
+  return true;
+}
+
+export async function insertBulkTransactions(transactions: transactionInsert[]):Promise<boolean> {
+  console.log(transactions);
+
+  const {error} = await supabase.from("transactions").insert(transactions);
+  if (error) {
+    console.error("Error inserting bulk transactions: ", error);
     return false;
   }
   return true;
