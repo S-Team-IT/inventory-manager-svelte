@@ -1,11 +1,15 @@
 import { TextField, Typography } from "@mui/material";
 import AutocompleteComponent from "lib/components/autocomplete-component";
+import { SessionContext } from "lib/context/context";
+import { insertNewDeliveryOrder } from "lib/database/delivery-orders-api";
 import { getAllSuppliers, insertNewSupplier } from "lib/database/suppliers-api";
-import { useEffect, useState } from "react";
-import type { supplier } from "types/supabase";
+import { insertBulkTransactions } from "lib/database/transactions-api";
+import { useContext, useEffect, useState } from "react";
+import type { supplier, transactionInsert } from "types/supabase";
 import AddItemElement from "./add-item-element";
 
 export default function AddDeliveryOrderForm() {
+  const session = useContext(SessionContext);
   const [suppliers, setSuppliers] = useState<supplier[]>([]);
   const [selectedSupplierID, setSelectedSupplierID] = useState("");
 
@@ -17,16 +21,29 @@ export default function AddDeliveryOrderForm() {
     fetchSuppliers();
   }, []);
 
-  function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
+    if (!session) return;
     e.preventDefault();
     const data: FormData = new FormData(e.target);
 
-    const date = data.get("date");
-    const supplierID = selectedSupplierID;
-    const ref = data.get("ref");
-    const items = data.getAll("item")
+    const date: Date = new Date(Date.parse(data.get("date") as string));
+    const ref:string = data.get("ref") as string;
+    const masters: string[] = data.getAll("master") as string[]
+    // terrifying
+    const quantities: number[] = (data.getAll("quantity") as string[]).map((quantityString) => Number(quantityString))
+    
 
-    console.log(`${date} ${supplierID} ${ref} ${items}`)
+    const deliveryID:string = await insertNewDeliveryOrder(selectedSupplierID, ref, date);
+    const newTransactions: transactionInsert[] = [];  
+    for(let i = 0; i < masters.length - 1; i++) {
+      newTransactions.push({
+        logger_id:session.user.id,
+        delivery_id: deliveryID, 
+        product_id: masters[i], 
+        quantity_changed: quantities[i]
+      })
+    }
+    insertBulkTransactions(newTransactions);
   }
 
   return (
