@@ -1,8 +1,8 @@
 import { Button, Toolbar } from "@mui/material";
 import { useState } from "react";
 import { Outlet } from "react-router";
-import Navbar from "./navbar";
-import SideDrawer from "./side-drawer";
+import SideDrawer from "./drawer/side-drawer";
+import Navbar from "./navbar/navbar";
 
 function Navigation() {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
