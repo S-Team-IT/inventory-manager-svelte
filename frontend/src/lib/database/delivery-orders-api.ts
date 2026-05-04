@@ -1,10 +1,6 @@
 import { supabase } from "lib/database/supabase";
 import type { deliveryOrder } from "types/supabase";
 
-type returnValue = {
-  deliveryOrderID: string;
-};
-
 export async function insertNewDeliveryOrder(
   supplierID: string,
   orderID: string,
@@ -23,7 +19,11 @@ export async function insertNewDeliveryOrder(
     console.error("Error inserting delivery order: ", error);
     return "";
   }
-  return (data as returnValue).deliveryOrderID;
+  return (
+    data as {
+      deliveryOrderID: string;
+    }
+  ).deliveryOrderID;
 }
 
 export async function getDeliveryOrderByID(
