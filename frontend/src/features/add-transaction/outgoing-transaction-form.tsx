@@ -1,10 +1,15 @@
 import { TextField, Typography } from "@mui/material";
 import { SessionContext } from "lib/context/context";
+import { insertNewOutgoingTransaction } from "lib/database/outgoing-transactions-api";
+import {
+  getQuantityByMaster,
+  updateProductQuantity,
+} from "lib/database/products-api";
 import { insertBulkTransactions } from "lib/database/transactions-api";
 import { useContext, useState } from "react";
 import type { transactionInsert } from "types/supabase";
-import AddItemElement from "./add-item-element";
 import Loading from "../../app/misc/loading";
+import AddItemElement from "./add-item-element";
 
 export function OutgoingTransactionForm() {
   const session = useContext(SessionContext);
@@ -15,7 +20,7 @@ export function OutgoingTransactionForm() {
     e.preventDefault();
     const data: FormData = new FormData(e.target);
 
-    const date: Date = new Date(Date.parse(data.get("date") as string));
+    const useDate: Date = new Date(Date.parse(data.get("date") as string));
     const name: string = data.get("name") as string;
     const remark: string = data.get("remark") as string;
     const masters: string[] = data.getAll("master") as string[];
@@ -26,6 +31,16 @@ export function OutgoingTransactionForm() {
 
     try {
       setIsLoading(true);
+      const outgoingID: string = await insertNewOutgoingTransaction(
+        useDate,
+        name,
+        remark,
+      );
+      if (outgoingID === "") {
+        console.error("Outgoing tuple ID is already inside database.");
+        alert("Outgoing tuple ID is already inside database.");
+        return;
+      }
       const newTransactions: transactionInsert[] = [];
       for (let i = 0; i < masters.length; i++) {
         console.log(i);
@@ -33,17 +48,49 @@ export function OutgoingTransactionForm() {
           logger_id: session.user.id,
           product_id: masters[i],
           quantity_changed: quantities[i],
+          outgoing_id: outgoingID,
         });
       }
-      const isSuccess = await insertBulkTransactions(newTransactions);
-      if (!isSuccess) throw new Error("Bulk insertion failed");
+
+      if (!insertBulkTransactions(newTransactions)) {
+        throw new Error("Bulk insertion failed");
+      }
+
+      if (!updateQuantities(newTransactions)) {
+        throw new Error("update quantity failed");
+      }
     } catch (e) {
       console.error(e);
       return;
     } finally {
       setIsLoading(false);
     }
-    alert("DO added :)");
+    alert("Added :)");
+  }
+
+  async function updateQuantities(
+    transactions: transactionInsert[],
+  ): Promise<boolean> {
+    try {
+      transactions.forEach(
+        async ({
+          product_id: productID,
+          quantity_changed: quantityChanged,
+        }) => {
+          let currentQuantity: number | null =
+            await getQuantityByMaster(productID);
+          if (!currentQuantity) {
+            throw new Error("quantity not fetched(?)");
+          }
+          currentQuantity += quantityChanged;
+          updateProductQuantity(productID, currentQuantity);
+        },
+      );
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
+    return true;
   }
 
   if (isLoading) return <Loading />;

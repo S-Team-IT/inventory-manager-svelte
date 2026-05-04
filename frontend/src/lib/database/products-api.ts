@@ -60,3 +60,19 @@ export async function getProductByMaster(master: string): Promise<string> {
   }
   return data.name;
 }
+
+export async function getQuantityByMaster(
+  master: string,
+): Promise<number | null> {
+  const { error, data } = await supabase
+    .from("products")
+    .select("currentQuantity:current_quantity")
+    .eq("master_id", master)
+    .single()
+    .returns<{ currentQuantity: number }>();
+  if (error) {
+    console.error("Error getting product by master", error);
+    return null;
+  }
+  return data.currentQuantity;
+}
