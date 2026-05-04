@@ -2,6 +2,10 @@ import { TextField, Typography } from "@mui/material";
 import AutocompleteComponent from "lib/components/autocomplete-component";
 import { SessionContext } from "lib/context/context";
 import { insertNewDeliveryOrder } from "lib/database/delivery-orders-api";
+import {
+  getQuantityByMaster,
+  updateProductQuantity,
+} from "lib/database/products-api";
 import { getAllSuppliers, insertNewSupplier } from "lib/database/suppliers-api";
 import { insertBulkTransactions } from "lib/database/transactions-api";
 import { useContext, useEffect, useState } from "react";
@@ -58,8 +62,12 @@ export default function IncomingTransactionForm() {
           quantity_changed: quantities[i],
         });
       }
-      const isSuccess = await insertBulkTransactions(newTransactions);
-      if (!isSuccess) throw new Error("Bulk insertion failed");
+
+      const isInsertSuccessful = await insertBulkTransactions(newTransactions);
+      if (!isInsertSuccessful) throw new Error("Bulk insertion failed");
+
+      const isUpdateSuccessful = await updateQuantities(newTransactions);
+      if (!isUpdateSuccessful) throw new Error("Update quantity failed");
     } catch (e) {
       console.error(e);
       return;
@@ -70,10 +78,35 @@ export default function IncomingTransactionForm() {
     alert("DO added :)");
   }
 
+  async function updateQuantities(
+    transactions: transactionInsert[],
+  ): Promise<boolean> {
+    try {
+      transactions.forEach(
+        async ({
+          product_id: productID,
+          quantity_changed: quantityChanged,
+        }) => {
+          let currentQuantity: number | null =
+            await getQuantityByMaster(productID);
+          if (currentQuantity === null) {
+            throw new Error("quantity not fetched(?)");
+          }
+          currentQuantity += quantityChanged;
+          updateProductQuantity(productID, currentQuantity);
+        },
+      );
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
+    return true;
+  }
+
   if (isLoading) return <Loading />;
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} autoComplete="off">
       <Typography variant="h5">Add Delivery Order</Typography>
       <Typography variant="h6">Delivery Order Info</Typography>
       <TextField
