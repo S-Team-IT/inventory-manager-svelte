@@ -4,6 +4,7 @@ import { RoleContext, SessionContext } from "lib/context/context";
 import { supabase } from "lib/database/supabase";
 import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router";
+import AccountAdmin from "./account/account-admin";
 import Missing from "./misc/missing";
 import Navigation from "./navigation/navigation";
 import ProductGeneral from "./product/product-general";
@@ -74,6 +75,10 @@ function App() {
                 <Route
                   path="outgoing-transaction"
                   element={<TransactionProject />}
+                />
+                <Route
+                  path="add-account"
+                  element={<AccountAdmin />}
                 />
               </Route>
               <Route path="/*" element={<Missing />} />
