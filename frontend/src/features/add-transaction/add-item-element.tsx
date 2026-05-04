@@ -93,7 +93,7 @@ export default function AddItemElement() {
       </Stack>
       <List>
         {items.map(({ master, name, quantity }) => (
-          <>
+          <div key={master}>
             <input type="hidden" name="master" value={master} />
             <input type="hidden" name="quantity" value={quantity} />
             <ListItem
@@ -116,7 +116,7 @@ export default function AddItemElement() {
               <ListItemText primary={name} secondary={quantity} />
             </ListItem>
             <Divider />
-          </>
+          </div>
         ))}
       </List>
       <Stack direction="row" spacing={2}>
