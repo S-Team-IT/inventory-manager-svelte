@@ -8,24 +8,46 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { createProfile, createUser } from "lib/database/users-profiles-api";
+import { useState } from "react";
+
+type Roles = "QS" | "Procurement" | "Project";
 
 export default function AddAccountForm() {
+  const [password, _setPassword] = useState<number>(
+    Math.floor(Math.random() * 999999),
+  );
+  const [role, setRole] = useState<Roles>("QS");
+
   async function onSubmit(
     e: React.SubmitEvent<HTMLFormElement>,
   ): Promise<void> {
+    e.preventDefault();
     const data: FormData = new FormData(e.target);
     console.log(data);
+    const email: string = data.get("email") as string;
+    const password: string = data.get("password") as string;
+    const role: string = data.get("role") as string;
+
+    const userUUID = await createUser(email, password);
+    if (!userUUID) {
+      alert("Email is already registered.");
+      return;
+    }
+
+    const isSuccess = await createProfile(userUUID, "FIRST_NAME_HERE", role);
+    if (isSuccess)
   }
 
-  function generateRandomPassword(): number {
-    const randomNumber = Math.floor(Math.random() * 999999);
-    return randomNumber;
+  function handleChangeRole(e: React.ChangeEvent<HTMLInputElement, Element>) {
+    setRole(e.target.value as Roles);
   }
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit} autoComplete="off">
       <Typography variant="h5">Create account </Typography>
       <TextField
+        type="email"
         name="email"
         margin="normal"
         label="Email"
@@ -34,20 +56,19 @@ export default function AddAccountForm() {
         fullWidth
       />
       <TextField
-        name="password"
         margin="normal"
         label="Password"
         variant="outlined"
         fullWidth
-        required
         helperText="This is pre-generated, the user will be able to change their password once they login."
-        disabled
-        value={generateRandomPassword()}
+        disabled //WHY DOES THIS STOP IT FROM GETTING SENT TO FORM DATA???????
+        value={password}
       />
+      <input type="hidden" value={password} name="password" />
       <div>
         <FormControl fullWidth>
           <FormLabel>Role</FormLabel>
-          <RadioGroup name="role">
+          <RadioGroup name="role" value={role} onChange={handleChangeRole}>
             <FormControlLabel value="QS" control={<Radio />} label="QS" />
             <FormControlLabel
               value="Procurement"
