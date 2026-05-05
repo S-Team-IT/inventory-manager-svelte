@@ -1,16 +1,10 @@
 import { Button, Stack, TextField } from "@mui/material";
-import type { AuthError } from "@supabase/supabase-js";
 import { supabase } from "lib/database/supabase";
 import { useState } from "react";
 
 function EnterAccount() {
-  const [isSignIn, setIsSignIn] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  function handleSignOption() {
-    setIsSignIn(!isSignIn);
-  }
 
   function handleChangeEmail(e: React.ChangeEvent<HTMLInputElement>) {
     //Once you write one of these event handlers
@@ -24,12 +18,10 @@ function EnterAccount() {
 
   async function handleSubmission(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
-    let error: AuthError | null;
-    if (isSignIn) {
-      ({ error } = await supabase.auth.signInWithPassword({ email, password }));
-    } else {
-      ({ error } = await supabase.auth.signUp({ email, password }));
-    }
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
     if (error) {
       console.error("Error entering account: ", error);
       alert(error.message);
@@ -55,10 +47,7 @@ function EnterAccount() {
           slotProps={{ htmlInput: { minLength: 6 } }}
         />
         <Button type="submit" variant="outlined">
-          {isSignIn ? "Sign in" : "Sign Up"}
-        </Button>
-        <Button variant="outlined" onClick={handleSignOption}>
-          Switch
+          Sign in
         </Button>
       </Stack>
     </form>
