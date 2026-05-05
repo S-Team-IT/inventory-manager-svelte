@@ -67,8 +67,6 @@ export async function insertNewTransaction(
 export async function insertBulkTransactions(
   transactions: transactionInsert[],
 ): Promise<boolean> {
-  console.log(transactions);
-
   const { error } = await supabase.from("transactions").insert(transactions);
   if (error) {
     console.error("Error inserting bulk transactions: ", error);
