@@ -24,7 +24,6 @@ export default function AddAccountForm() {
   ): Promise<void> {
     e.preventDefault();
     const data: FormData = new FormData(e.target);
-    console.log(data);
     const email: string = data.get("email") as string;
     const password: string = data.get("password") as string;
     const role: string = data.get("role") as string;
@@ -35,8 +34,18 @@ export default function AddAccountForm() {
       return;
     }
 
-    const isSuccess = await createProfile(userUUID, "FIRST_NAME_HERE", role);
-    if (isSuccess)
+    const isProfileCreated = await createProfile(
+      userUUID,
+      "FIRST_NAME_HERE",
+      role,
+    );
+    if (isProfileCreated) {
+      alert(
+        "Account created! An email has been sent for the user to complete registration.",
+      );
+      return;
+    }
+    console.error("Profile not created");
   }
 
   function handleChangeRole(e: React.ChangeEvent<HTMLInputElement, Element>) {
