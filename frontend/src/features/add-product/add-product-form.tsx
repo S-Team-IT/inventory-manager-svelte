@@ -51,7 +51,6 @@ function AddProductForm() {
     let success = false;
     try {
       const formData = new FormData(e.target);
-      console.log(formData);
 
       const masterID = formData.get("masterID") as string;
       const name = formData.get("name") as string;

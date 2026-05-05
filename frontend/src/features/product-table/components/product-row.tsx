@@ -1,7 +1,9 @@
-import { Button, TableCell, TableRow, Typography } from "@mui/material";
-import { FilterContext, RoleContext } from "lib/context/context";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { IconButton, TableCell, TableRow, Typography } from "@mui/material";
+import { FilterContext } from "lib/context/context";
+import { deleteItem } from "lib/database/products-api";
 import { truncateStringEllipsis } from "lib/miscellaneous";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import type { product } from "types/supabase";
 import ProductImage from "./product-image";
 
@@ -14,14 +16,21 @@ interface props {
   ) => void;
 }
 
-function ProductRow({ product, handleProductSelection }: props) {
-  const role = useContext(RoleContext);
+function ProductRow({ product }: props) {
   const { setFilter, setFilterArg } = useContext(FilterContext);
+  const [isDeleted, setIsDeleted] = useState<boolean>(false);
 
   function handleFilterByMasterID() {
     setFilter("productid");
     setFilterArg(product.masterID);
   }
+
+  async function handleDeleteItem(masterID: string) {
+    const isDeleted = await deleteItem(masterID);
+    setIsDeleted(isDeleted);
+  }
+
+  if (isDeleted) return;
 
   return (
     <TableRow className={product.isDisabled ? "disabled-row" : ""}>
@@ -50,21 +59,9 @@ function ProductRow({ product, handleProductSelection }: props) {
       </TableCell>
       <TableCell align="right">{product.quantity}</TableCell>
       <TableCell>
-        {(role === "Procurement" || role === "Project") &&
-          !product.isDisabled && (
-            <Button
-              variant="outlined"
-              onClick={() =>
-                handleProductSelection(
-                  product.masterID,
-                  product.name,
-                  product.quantity,
-                )
-              }
-            >
-              Modify
-            </Button>
-          )}
+        <IconButton onClick={() => handleDeleteItem(product.masterID)}>
+          <DeleteIcon />
+        </IconButton>
       </TableCell>
     </TableRow>
   );

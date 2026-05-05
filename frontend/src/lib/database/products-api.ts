@@ -76,3 +76,15 @@ export async function getQuantityByMaster(
   }
   return data.currentQuantity;
 }
+
+export async function deleteItem(master: string): Promise<boolean> {
+  const { error } = await supabase
+    .from("products")
+    .delete()
+    .eq("master_id", master);
+  if (error) {
+    console.error("Error deleting item: ", error);
+    return false;
+  }
+  return true;
+}

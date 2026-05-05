@@ -54,7 +54,6 @@ export default function IncomingTransactionForm() {
       }
       const newTransactions: transactionInsert[] = [];
       for (let i = 0; i < masters.length; i++) {
-        console.log(i);
         newTransactions.push({
           logger_id: session.user.id,
           delivery_id: deliveryID,

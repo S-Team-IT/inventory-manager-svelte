@@ -32,14 +32,13 @@ export async function createProfile(
 }
 
 export async function updatePassword(newPassword: string): Promise<boolean> {
-  const { error, data } = await supabase.auth.updateUser({
+  const { error } = await supabase.auth.updateUser({
     password: newPassword,
   });
   if (error) {
     console.error("Error updating password: ", error);
     return false;
   }
-  console.log(data);
   return true;
 }
 
