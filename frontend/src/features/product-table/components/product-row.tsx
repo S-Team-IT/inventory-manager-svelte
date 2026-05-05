@@ -1,6 +1,6 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton, TableCell, TableRow, Typography } from "@mui/material";
-import { FilterContext, RoleContext } from "lib/context/context";
+import { FilterContext } from "lib/context/context";
 import { deleteItem } from "lib/database/products-api";
 import { truncateStringEllipsis } from "lib/miscellaneous";
 import { useContext, useState } from "react";
@@ -16,8 +16,7 @@ interface props {
   ) => void;
 }
 
-function ProductRow({ product, handleProductSelection }: props) {
-  const role = useContext(RoleContext);
+function ProductRow({ product }: props) {
   const { setFilter, setFilterArg } = useContext(FilterContext);
   const [isDeleted, setIsDeleted] = useState<boolean>(false);
 
