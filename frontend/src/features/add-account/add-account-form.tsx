@@ -63,15 +63,7 @@ export default function AddAccountForm() {
         variant="outlined"
         required
         fullWidth
-      />
-      <TextField
-        margin="normal"
-        label="Password"
-        variant="outlined"
-        fullWidth
-        helperText="This is pre-generated, the user will be able to change their password once they login."
-        disabled //WHY DOES THIS STOP IT FROM GETTING SENT TO FORM DATA???????
-        value={password}
+        helperText="The email will be sent a link to complete registration"
       />
       <input type="hidden" value={password} name="password" />
       <div>
