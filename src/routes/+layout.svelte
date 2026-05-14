@@ -58,7 +58,7 @@
 				</ul>
 			</div>
 		{:else}
-			<button class="btn">Sign in</button>
+			<a class="btn" href={resolve('/user/sign-in')}>Sign in</a>
 		{/if}
 	</div>
 </div>
