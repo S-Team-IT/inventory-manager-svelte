@@ -1,10 +1,22 @@
-import { form } from '$app/server';
+import { form, query } from '$app/server';
 import { sql } from '$lib/server/postgres';
-import { email, password, zString } from '$lib/types/schemaTypes';
+import type { User } from '$lib/types/databaseTypes';
+import { email, id, password, zString } from '$lib/types/schemaTypes';
 import { handleQueryErrors } from '$lib/utils/errorHandling';
 import { hashPassword } from '$lib/utils/hash';
-import { invalid } from '@sveltejs/kit';
+import { error, invalid } from '@sveltejs/kit';
 import z from 'zod';
+
+export const getUser = query(id, async (id) => {
+	try {
+		const [user] = await sql<User[]>`
+			SELECT id, email, name, password_hash AS "passwordHash", role FROM users 
+			WHERE id = ${id}`;
+		if (!user) error(404, 'User not found.');
+	} catch (e) {
+		handleQueryErrors(e);
+	}
+});
 
 export const createUser = form(
 	z
