@@ -78,6 +78,6 @@ async function getSession(id: string): Promise<Session | null> {
 	return session;
 }
 
-async function deleteSession(id: string): Promise<void> {
+export async function deleteSession(id: string): Promise<void> {
 	await sql`DELETE FROM sessions WHERE id = ${id}`;
 }
