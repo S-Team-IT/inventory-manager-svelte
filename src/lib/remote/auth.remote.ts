@@ -44,7 +44,7 @@ function setTokenCookie(token: string): void {
 // 	return cookies.get('token');
 // }
 
-function deleteSessionCookie(): void {
+function deleteTokenCookie(): void {
 	const { cookies } = getRequestEvent();
 	cookies.delete('token', { path: '/' });
 }
