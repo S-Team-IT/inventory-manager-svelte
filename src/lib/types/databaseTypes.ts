@@ -19,3 +19,25 @@ export type Session = SessionClient & {
 export type SessionWithToken = Session & {
 	token: string;
 };
+
+export type Generic = {
+	id: string;
+	name: string;
+};
+
+export type Supplier = Generic;
+export type Category = Generic;
+
+export type Item = {
+	id: number;
+	masterNumber: string;
+	name: string;
+	category: string;
+	categoryID?: string;
+	supplier: string;
+	supplierID?: string;
+	quantity: number;
+	isDisabled: boolean;
+	thumbnailUrl: string;
+	photoUrls?: { item: string }[] | [];
+};
