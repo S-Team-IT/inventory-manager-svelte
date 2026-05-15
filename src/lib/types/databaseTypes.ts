@@ -9,10 +9,10 @@ export type User = {
 export type SessionClient = {
 	id: string;
 	createdAt: Date;
-	userID: string;
 };
 
 export type Session = SessionClient & {
+	userID: string;
 	secretHash: Uint8Array;
 };
 
