@@ -20,7 +20,7 @@
 			isLoading = true;
 			if (await submit()) {
 				isFilling = false;
-				if (remoteForm.result?.success) form.reset();
+				if (remoteForm.result?.success !== false) form.reset();
 			}
 
 			isLoading = false;
