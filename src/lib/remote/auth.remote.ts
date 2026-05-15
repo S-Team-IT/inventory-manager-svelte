@@ -58,7 +58,7 @@ async function createSession(userID: string): Promise<SessionWithToken> {
 	return sessionWithToken;
 }
 
-async function validateSessionToken(token: string): Promise<Session | null> {
+export async function validateSessionToken(token: string): Promise<Session | null> {
 	const tokenParts = token.split('.');
 	if (tokenParts.length !== 2) {
 		return null;
