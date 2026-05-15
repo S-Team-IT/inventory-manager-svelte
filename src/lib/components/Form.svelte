@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { RemoteQueryUpdate } from '@sveltejs/kit';
 
-	let { remoteForm, legend = '', children, errorMsg, successMsg, isFilling } = $props();
+	let { remoteForm, legend, children, errorMsg, successMsg, isFilling } = $props();
 
 	let isLoading: boolean = $state(false);
 </script>
