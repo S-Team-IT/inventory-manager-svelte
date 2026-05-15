@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { invalidateAll } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import favicon from '$lib/assets/favicon.ico';
+	import { signOut } from '$lib/remote/auth.remote';
 	import './layout.css';
 
 	let { children, data } = $props();
@@ -50,7 +52,13 @@
 						>
 							Profile
 						</a>
-						<button>Sign out</button>
+						<button
+							onclick={async () => {
+								await signOut(data.session.id);
+								invalidateAll();
+							}}
+							>Sign out
+						</button>
 					</li>
 				</ul>
 			</div>
