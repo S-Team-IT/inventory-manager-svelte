@@ -1,13 +1,13 @@
 import { form, query } from '$app/server';
 import { sql } from '$lib/server/postgres';
 import type { User } from '$lib/types/databaseTypes';
-import { email, id, password, zString } from '$lib/types/schemaTypes';
+import { email, password, serial, zString } from '$lib/types/schemaTypes';
 import { handleQueryErrors } from '$lib/utils/errorHandling';
 import { hashPassword } from '$lib/utils/hash';
 import { error, invalid } from '@sveltejs/kit';
 import z from 'zod';
 
-export const getUser = query(id, async (id) => {
+export const getUser = query(serial, async (id) => {
 	try {
 		const [user] = await sql<User[]>`
 			SELECT id, email, name, password_hash AS "passwordHash", role FROM users 
