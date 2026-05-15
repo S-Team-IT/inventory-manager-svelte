@@ -23,7 +23,8 @@ export const signIn = form(z.object({ email, password }), async ({ email, passwo
 			console.error(`UNEXPECTED ERROR SIGNING IN ${email}, ${password}`);
 			return { success: false };
 		}
-
+		const newSessionWithToken = await createSession(user.id);
+		setTokenCookie(newSessionWithToken.token);
 		redirect(303, '/');
 	} catch (e) {
 		handleQueryErrors(e);
