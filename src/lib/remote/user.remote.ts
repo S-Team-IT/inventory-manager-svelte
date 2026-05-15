@@ -19,7 +19,10 @@ export const createUser = form(
 			const passwordHash = await hashPassword(password);
 			const result =
 				await sql`INSERT INTO users (email, name, password_hash, role) VALUES(${email}, ${name}, ${passwordHash}, ${role})`;
-			if (result.count !== 1) throw new Error('Failed to create user');
+			if (result.count !== 1) {
+				console.error(`UNEXPECTED ERROR CREATING USER ${email}, ${name}, ${passwordHash}, ${role}`);
+				return { success: false };
+			}
 		} catch (e) {
 			handleQueryErrors(e, (psqlError) => {
 				if (psqlError.code === '23505') {

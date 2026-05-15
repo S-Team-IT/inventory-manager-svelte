@@ -12,8 +12,11 @@ export const signIn = form(z.object({ email, password }), async ({ email, passwo
 		const [user] = await sql<
 			User[]
 		>`SELECT id, email, name, password_hash AS "passwordHash", role FROM users WHERE email = ${email}`;
-		if (!user || !(await comparePasswordHash(password, user.passwordHash)))
+		if (!user || !(await comparePasswordHash(password, user.passwordHash))) {
+			console.error(`UNEXPECTED ERROR SIGNING IN ${email}, ${password}`);
 			return { success: false };
+		}
+
 		redirect(303, '/');
 	} catch (e) {
 		handleQueryErrors(e);
