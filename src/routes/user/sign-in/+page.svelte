@@ -8,7 +8,13 @@
 	const oninput = () => (isFilling = true);
 </script>
 
-<Form remoteForm={signIn} errorMsg="Invalid credentials" successMsg="Signed in" {isFilling}>
+<Form
+	legend="Sign in"
+	remoteForm={signIn}
+	errorMsg="Invalid credentials"
+	successMsg="Signed in"
+	{isFilling}
+>
 	<Input label="Email" type="email" field={email} {oninput} placeholder="example@domain.com" />
 	<Input
 		label="Password"
