@@ -1,9 +1,14 @@
 <script lang="ts">
+	import Input from '$lib/components/Input.svelte';
 	import { signIn } from '$lib/remote/auth.remote';
 	const { email, password } = signIn.fields;
 
 	let isLoading: boolean = $state(false);
 	let isFilling: boolean = $state(true);
+
+	const onclick = () => {
+		isFilling = true;
+	};
 </script>
 
 <form
@@ -11,7 +16,7 @@
 		isLoading = true;
 		if (await submit()) {
 			isFilling = false;
-			if (signIn.result.success) form.reset();
+			if (signIn.result?.success) form.reset();
 		}
 
 		isLoading = false;
@@ -22,28 +27,14 @@
 		disabled={isLoading}
 	>
 		<legend class="fieldset-legend text-xl">Login</legend>
-		<label class="input">
-			<span class="label">Email:</span>
-			<input
-				placeholder="example@domain.com"
-				{...email.as('email')}
-				onclick={() => (isFilling = true)}
-			/>
-		</label>
-		{#each email.issues() as issue, index (index)}
-			<p class="issue">{issue.message}</p>
-		{/each}
-		<label class="input">
-			<span class="label">Password:</span>
-			<input
-				placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
-				{...password.as('password')}
-				onclick={() => (isFilling = true)}
-			/>
-		</label>
-		{#each password.issues() as issue, index (index)}
-			<p class="issue">{issue.message}</p>
-		{/each}
+		<Input label="Email" type="email" field={email} {onclick} placeholder="John" />
+		<Input
+			label="Password"
+			type="password"
+			field={password}
+			{onclick}
+			placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
+		/>
 		<button type="submit" class="btn">Sign in</button>
 		{#if isLoading}
 			<p>Loading...</p>
