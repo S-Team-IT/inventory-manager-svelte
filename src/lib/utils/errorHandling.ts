@@ -9,6 +9,7 @@ export const handleQueryErrors = (e: unknown, customPsqlHandler?: (e: PostgresEr
 		if (psqlError.code.startsWith('0800')) error(500, 'Database connection failed');
 		if (psqlError.code === '42601') throw new Error('Syntax error found in query statement');
 		if (customPsqlHandler) customPsqlHandler(psqlError);
+		console.error(e);
 		throw new Error('Unhandled psql error', { cause: e });
 	}
 	throw new Error('Unhandled error', { cause: e });

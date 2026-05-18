@@ -4,7 +4,7 @@
 	import { signIn } from '$lib/remote/auth.remote';
 	const { email, password } = signIn.fields;
 
-	let isFilling: boolean = $state(true);
+	let isFilling = $state<boolean>(true);
 	const oninput = () => (isFilling = true);
 </script>
 

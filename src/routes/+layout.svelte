@@ -1,10 +1,11 @@
 <script lang="ts">
+	import { invalidateAll } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import favicon from '$lib/assets/favicon.ico';
+	import { signOut } from '$lib/remote/auth.remote';
 	import './layout.css';
 
-	let { children } = $props();
-	let isLoggedIn: boolean = $state(false);
+	let { children, data } = $props();
 </script>
 
 <svelte:head>
@@ -12,7 +13,7 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<div class="navbar bg-base-100 shadow-sm">
+<div class="navbar mb-4 bg-base-100 shadow-sm">
 	<div class="navbar-start space-x-2 text-xl">
 		<a class="btn text-2xl" href={resolve('/')}>Home</a>
 		<div class="dropdown">
@@ -31,11 +32,9 @@
 			</ul>
 		</div>
 	</div>
-	<div class="navbar-center">
-		<button class="btn" onclick={() => (isLoggedIn = !isLoggedIn)}>{isLoggedIn}</button>
-	</div>
+	<div class="navbar-center"></div>
 	<div class="me-2 navbar-end">
-		{#if isLoggedIn}
+		{#if data.user}
 			<div class="dropdown dropdown-end">
 				<div tabindex="0" role="button" class="btn avatar btn-circle btn-ghost">
 					<div class="w-10 rounded-full bg-green-600"></div>
@@ -53,7 +52,13 @@
 						>
 							Profile
 						</a>
-						<button>Sign out</button>
+						<button
+							onclick={async () => {
+								await signOut(data.session.id);
+								invalidateAll();
+							}}
+							>Sign out
+						</button>
 					</li>
 				</ul>
 			</div>

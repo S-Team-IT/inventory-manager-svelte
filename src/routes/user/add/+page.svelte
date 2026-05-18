@@ -4,7 +4,7 @@
 	import { createUser } from '$lib/remote/user.remote';
 	const { email, password, role, name } = createUser.fields;
 
-	let isFilling: boolean = $state(true);
+	let isFilling = $state<boolean>(true);
 	const oninput = () => (isFilling = true);
 </script>
 

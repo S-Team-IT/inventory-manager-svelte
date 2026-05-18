@@ -3,7 +3,7 @@
 
 	let { remoteForm, legend, children, errorMsg, successMsg, isFilling } = $props();
 
-	let isLoading: boolean = $state(false);
+	let isLoading = $state<boolean>(false);
 </script>
 
 <form
