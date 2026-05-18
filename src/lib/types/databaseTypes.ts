@@ -38,4 +38,5 @@ export type Item = {
 	supplierID?: string;
 	thumbnail: string;
 	photos: { item: string }[] | [];
+	quantity: number;
 };
