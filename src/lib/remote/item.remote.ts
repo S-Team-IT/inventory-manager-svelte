@@ -1,6 +1,7 @@
 import { query } from '$app/server';
-import { handleQueryErrors } from '$lib/utils/errorHandling';
 import { sql } from '$lib/server/postgres';
+import type { Item } from '$lib/types/databaseTypes';
+import { handleQueryErrors } from '$lib/utils/errorHandling';
 
 export const getItems = query(async () => {
 	try {
@@ -19,7 +20,7 @@ export const getItems = query(async () => {
 
 export const getItemsFullInfo = query(async () => {
 	try {
-		return await sql`SELECT
+		return await sql<Item[]>`SELECT
        i.id,
        i.name,
        c.name AS "category",
