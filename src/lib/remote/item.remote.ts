@@ -12,7 +12,8 @@ export const getItems = query(async () => {
       category_id AS "categoryID",
       supplier_id AS "supplierID",
       thumbnail,
-      photos
+      photos,
+      quantity
       FROM items`;
 	} catch (e) {
 		handleQueryErrors(e);
@@ -30,7 +31,8 @@ export const getItemsFullInfo = query(async () => {
        s.name AS "supplier",
        i.supplier_id AS "supplierID",
        i.thumbnail,
-       i.photos
+       i.photos,
+       i.quantity
        FROM items i
        JOIN categories c ON i.category_id = c.id
        JOIN suppliers s ON i.supplier_id = s.id`;
