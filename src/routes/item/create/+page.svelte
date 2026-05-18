@@ -42,7 +42,7 @@
 		{oninput}
 		placeholder="Select Supplier or create a new one"
 	/>
-	<Input label="Quantity" type="text" field={quantity} {oninput} placeholder="0" value="0" />
+	<Input label="Quantity" type="number" field={quantity} {oninput} placeholder="0" value="0" />
 	<fieldset class="fieldset gap-0">
 		<legend class="fieldset-legend">Pick a thumbnail</legend>
 		<input type="file" class="file-input" />
