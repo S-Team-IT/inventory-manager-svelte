@@ -1,4 +1,6 @@
 <script lang="ts">
+	import InputIssues from '$lib/components/inputIssues.svelte';
+
 	const {
 		label,
 		type,
@@ -15,6 +17,4 @@
 	<span class="label">{label}:</span>
 	<input {...field.as(type, value)} {placeholder} {oninput} />
 </label>
-{#each field.issues() as issue, i (i)}
-	<p class="issue">{issue.message}</p>
-{/each}
+<InputIssues {field} />
