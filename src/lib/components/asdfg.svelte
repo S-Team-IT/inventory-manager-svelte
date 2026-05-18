@@ -6,13 +6,14 @@
 		oninput = () => {
 			console.log('NO ONINPUT');
 		},
-		placeholder = ''
+		placeholder = '',
+		value = ''
 	} = $props();
 </script>
 
-<label class="input">
+<label class="input w-full">
 	<span class="label">{label}:</span>
-	<input {...field.as(type)} {placeholder} {oninput} />
+	<input {...field.as(type, value)} {placeholder} {oninput} />
 </label>
 {#each field.issues() as issue, i (i)}
 	<p class="issue">{issue.message}</p>

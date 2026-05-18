@@ -1,12 +1,13 @@
 <script lang="ts">
 	import type { RemoteQueryUpdate } from '@sveltejs/kit';
 
-	let { remoteForm, legend, children, errorMsg, successMsg, isFilling } = $props();
+	let { remoteForm, legend, children, errorMsg, successMsg, isFilling, classes } = $props();
 
 	let isLoading = $state<boolean>(false);
 </script>
 
 <form
+	class="w-125 {classes}"
 	{...remoteForm.enhance(
 		async ({
 			form,
@@ -28,7 +29,7 @@
 	)}
 >
 	<fieldset
-		class="fieldset w-xs rounded-box border border-base-300 bg-base-200 p-4"
+		class="fieldset gap-3 rounded-box border border-base-300 bg-base-200 p-4"
 		disabled={isLoading}
 	>
 		<legend class="fieldset-legend text-xl">{legend}</legend>
