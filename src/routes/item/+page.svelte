@@ -13,7 +13,7 @@
 		| 'quantityReverse'
 		| 'lastChanged';
 
-	let sortOption = $state<SortOption>('master');
+	let sortOption = $state<SortOption>('lastChanged');
 	let sortedItems = $derived.by(() => {
 		switch (sortOption) {
 			case 'master':
@@ -51,7 +51,7 @@
 </script>
 
 <button
-	class="btn {sortOption === 'lastChanged' ? '' : 'btn-soft'} btn-primary"
+	class="btn {sortOption === 'lastChanged' ? '' : 'btn-soft'} ms-4 btn-primary"
 	onclick={() => {
 		sortOption = 'lastChanged';
 	}}>Last changed</button
@@ -86,11 +86,13 @@
 			else sortOption = option;
 		}}
 		>{head}
-		{#if sortOption === option}
-			↓
-		{:else if sortOption === optionReverse}
-			↑
-		{/if}
+		<span class="text-white">
+			{#if sortOption === option}
+				↓
+			{:else if sortOption === optionReverse}
+				↑
+			{/if}
+		</span>
 	</button>
 {/snippet}
 
