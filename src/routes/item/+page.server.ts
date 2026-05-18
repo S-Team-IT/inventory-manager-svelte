@@ -1,7 +1,7 @@
-import { getItems } from '$lib/remote/item.remote';
+import { getItemsFullInfo } from '$lib/remote/item.remote';
 
 export async function load() {
-	const items = await getItems();
+	const items = await getItemsFullInfo();
 	return {
 		items
 	};
