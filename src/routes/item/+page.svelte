@@ -43,11 +43,14 @@
 			return list.toSorted((a, b) => String(b[property]).localeCompare(String(a[property])));
 		return list.toSorted((a, b) => String(a[property]).localeCompare(String(b[property])));
 	}
+
+	let selectedItems = $state();
 </script>
 
 <table class="table max-w-200">
 	<thead>
 		<tr>
+			<th></th>
 			<th class="w-25">
 				{@render sortingHeader('master', 'masterReverse', 'Master')}
 			</th>
@@ -83,6 +86,21 @@
 
 {#snippet row({ master, name, category, thumbnail, photos, quantity }: Item)}
 	<tr class="hover:bg-base-300">
+		<th
+			><input
+				type="checkbox"
+				bind:group={selectedItems}
+				value={master}
+				onchange={(e) => {
+					const element = e.target as HTMLInputElement;
+					if (element.checked) {
+						element.parentElement?.parentElement?.classList.add('bg-base-300');
+					} else {
+						element.parentElement?.parentElement?.classList.remove('bg-base-300');
+					}
+				}}
+			/></th
+		>
 		<th class="w-25 text-2xl">{master}</th>
 		<th class="flex w-50 items-center justify-center">
 			<button
