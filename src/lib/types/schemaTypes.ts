@@ -2,6 +2,8 @@ import * as z from 'zod';
 
 export const zString = z.string().trim();
 
+export const zNumber = z.number().int().gte(0);
+
 export const serial = z.coerce
 	.number()
 	.int()
