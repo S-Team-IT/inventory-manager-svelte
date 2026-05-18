@@ -8,38 +8,55 @@
 		| 'name'
 		| 'nameReverse'
 		| 'category'
-		| 'categoryReverse';
+		| 'categoryReverse'
+		| 'quantity'
+		| 'quantityReverse';
+
 	let sortOption = $state<SortOption>('master');
 	let sortedItems = $derived.by(() => {
 		switch (sortOption) {
 			case 'master':
-				return data.items?.toSorted((a, b) => a.master.localeCompare(b.master));
+				return sortItems(data.items, 'master');
 			case 'masterReverse':
-				return data.items?.toSorted((a, b) => b.master.localeCompare(a.master));
+				return sortItems(data.items, 'master', true);
 			case 'name':
-				return data.items?.toSorted((a, b) => a.name.localeCompare(b.name));
+				return sortItems(data.items, 'name');
 			case 'nameReverse':
-				return data.items?.toSorted((a, b) => b.name.localeCompare(a.name));
+				return sortItems(data.items, 'name', true);
 			case 'category':
-				return data.items?.toSorted((a, b) => a.category.localeCompare(b.category));
+				return sortItems(data.items, 'category');
 			case 'categoryReverse':
-				return data.items?.toSorted((a, b) => b.category.localeCompare(a.category));
+				return sortItems(data.items, 'category', true);
+			case 'quantity':
+				return sortItems(data.items, 'quantity');
+			case 'quantityReverse':
+				return sortItems(data.items, 'quantity', true);
 		}
 	});
+
+	function sortItems(
+		list: Item[],
+		property: 'master' | 'name' | 'category' | 'quantity',
+		isReverse = false
+	): Item[] {
+		if (isReverse)
+			return list.toSorted((a, b) => String(b[property]).localeCompare(String(a[property])));
+		return list.toSorted((a, b) => String(a[property]).localeCompare(String(b[property])));
+	}
 </script>
 
 <table class="table max-w-200">
 	<thead>
 		<tr>
 			<th class="w-25">
-				{@render sortingHeader('master', 'masterReverse', 'Name')}
+				{@render sortingHeader('master', 'masterReverse', 'Master')}
 			</th>
 			<th class="w-50">Photos</th>
 			<th>
 				{@render sortingHeader('name', 'nameReverse', 'Name')}
 			</th>
-			<th>{@render sortingHeader('category', 'categoryReverse', 'Name')}</th>
-			<th>Quantity</th>
+			<th>{@render sortingHeader('category', 'categoryReverse', 'Category')}</th>
+			<th>{@render sortingHeader('quantity', 'quantityReverse', 'Qty')}</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -64,7 +81,7 @@
 	</button>
 {/snippet}
 
-{#snippet row({ master, name, category, thumbnail, photos }: Item)}
+{#snippet row({ master, name, category, thumbnail, photos, quantity }: Item)}
 	<tr class="hover:bg-base-300">
 		<th class="w-25 text-2xl">{master}</th>
 		<th class="flex w-50 items-center justify-center">
@@ -95,5 +112,6 @@
 		</th>
 		<th>{name}</th>
 		<th>{category}</th>
+		<th>{quantity}</th>
 	</tr>
 {/snippet}
