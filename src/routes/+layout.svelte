@@ -13,7 +13,7 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<div class="navbar mb-4 bg-base-100 shadow-sm">
+<div class="navbar bg-base-100 shadow-sm">
 	<div class="navbar-start space-x-2 text-xl">
 		<a class="btn text-2xl" href={resolve('/')}>Home</a>
 		<div class="dropdown">
