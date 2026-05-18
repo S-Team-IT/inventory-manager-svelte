@@ -13,9 +13,9 @@
 	let sortedItems = $derived.by(() => {
 		switch (sortOption) {
 			case 'master':
-				return data.items?.toSorted((a, b) => a.id - b.id);
+				return data.items?.toSorted((a, b) => a.master.localeCompare(b.master));
 			case 'masterReverse':
-				return data.items?.toSorted((a, b) => b.id - a.id);
+				return data.items?.toSorted((a, b) => b.master.localeCompare(a.master));
 			case 'name':
 				return data.items?.toSorted((a, b) => a.name.localeCompare(b.name));
 			case 'nameReverse':
@@ -64,18 +64,18 @@
 	</button>
 {/snippet}
 
-{#snippet row({ id, name, category, thumbnail, photos }: Item)}
+{#snippet row({ master, name, category, thumbnail, photos }: Item)}
 	<tr class="hover:bg-base-300">
-		<th class="w-25 text-2xl">{id}</th>
+		<th class="w-25 text-2xl">{master}</th>
 		<th class="flex w-50 items-center justify-center">
 			<button
 				onclick={() => {
-					const dialog = document.querySelector(`#modal${id}`);
+					const dialog = document.querySelector(`#modal${master}`);
 					(dialog as HTMLDialogElement).showModal();
 				}}><img src={thumbnail} alt="thumbnail" loading="lazy" /></button
 			>
 			{#if photos.length != 0}{/if}
-			<dialog id={`modal${id}`} class="modal">
+			<dialog id={`modal${master}`} class="modal">
 				<div class="modal-box">
 					<form method="dialog">
 						<button class="btn absolute top-2 right-2 btn-circle btn-ghost btn-sm">✕</button>
