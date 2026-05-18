@@ -7,6 +7,7 @@ export const getItems = query(async () => {
 	try {
 		return await sql`SELECT
       id,
+      master_number AS "master",
       name,
       category_id AS "categoryID",
       supplier_id AS "supplierID",
@@ -22,6 +23,7 @@ export const getItemsFullInfo = query(async () => {
 	try {
 		return await sql<Item[]>`SELECT
        i.id,
+       i.master_number AS "master",
        i.name,
        c.name AS "category",
        i.category_id AS "categoryID",

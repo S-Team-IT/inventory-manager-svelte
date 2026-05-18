@@ -30,6 +30,7 @@ export type Category = Generic;
 
 export type Item = {
 	id: number;
+	master: string;
 	name: string;
 	category: string;
 	categoryID?: string;
