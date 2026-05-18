@@ -14,37 +14,26 @@
 		| 'lastChanged';
 
 	let sortOption = $state<SortOption>('lastChanged');
-	let sortedItems = $derived.by(() => {
-		switch (sortOption) {
-			case 'master':
-				return sortItems(data.items, 'master');
-			case 'masterReverse':
-				return sortItems(data.items, 'master', true);
-			case 'name':
-				return sortItems(data.items, 'name');
-			case 'nameReverse':
-				return sortItems(data.items, 'name', true);
-			case 'category':
-				return sortItems(data.items, 'category');
-			case 'categoryReverse':
-				return sortItems(data.items, 'category', true);
-			case 'quantity':
-				return sortItems(data.items, 'quantity');
-			case 'quantityReverse':
-				return sortItems(data.items, 'quantity', true);
-			case 'lastChanged':
-				return sortItems(data.items, 'lastChanged');
-		}
-	});
+	let sortedItems = $derived.by(() => sortItems(data.items, sortOption));
 
-	function sortItems(
-		list: Item[],
-		property: 'master' | 'name' | 'category' | 'quantity' | 'lastChanged',
-		isReverse = false
-	): Item[] {
-		if (isReverse)
-			return list.toSorted((a, b) => String(b[property]).localeCompare(String(a[property])));
-		return list.toSorted((a, b) => String(a[property]).localeCompare(String(b[property])));
+	function sortItems(list: Item[], sortOption: SortOption): Item[] {
+		if (sortOption.includes('Reverse')) {
+			const property = sortOption.slice(0, -7) as keyof Item;
+			return list.toSorted((a, b) =>
+				String(b[property]).localeCompare(String(a[property]), 'en', {
+					sensitivity: 'base',
+					numeric: true
+				})
+			);
+		} else {
+			const property = sortOption as keyof Item;
+			return list.toSorted((a, b) =>
+				String(a[property]).localeCompare(String(b[property]), 'en', {
+					sensitivity: 'base',
+					numeric: true
+				})
+			);
+		}
 	}
 
 	let selectedItems = $state([]);
