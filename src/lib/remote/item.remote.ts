@@ -4,7 +4,7 @@ import type { Item } from '$lib/types/databaseTypes';
 import { handleQueryErrors } from '$lib/utils/errorHandling';
 import { form } from '$app/server';
 import * as z from 'zod';
-import { zString, masterNumber, zNumber, zImgFile } from '$lib/types/schemaTypes';
+import { zString, masterNumber, zNumber, zImgFile, zBoolean } from '$lib/types/schemaTypes';
 
 export const getItems = query(async () => {
 	try {
@@ -55,7 +55,7 @@ export const createItem = form(
 		quantity: zNumber,
 		thumbnail: zImgFile,
 		photos: z.array(zImgFile),
-		isDisabled: z.boolean()
+		isDisabled: zBoolean
 	}),
 	async () => {}
 );
