@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Item } from '$lib/types/databaseTypes.js';
+	import { SvelteSet } from 'svelte/reactivity';
 
 	const { data } = $props();
 	type SortOption =
@@ -36,7 +37,7 @@
 		}
 	}
 
-	let selectedItems = $state([]);
+	let selectedItems = new SvelteSet<string>();
 </script>
 
 <button
@@ -63,7 +64,7 @@
 	</thead>
 	<tbody>
 		{#each sortedItems as item (item.id)}
-			{@render row(item)}
+			{@render ItemRow(item, selectedItems)}
 		{/each}
 	</tbody>
 </table>
@@ -85,19 +86,22 @@
 	</button>
 {/snippet}
 
-{#snippet row({ master, name, category, thumbnail, photos, quantity }: Item)}
+{#snippet ItemRow(
+	{ master, name, category, thumbnail, photos, quantity }: Item,
+	selectedItems: SvelteSet<string>
+)}
 	<tr class="hover:bg-base-300">
 		<th
 			><input
 				type="checkbox"
-				value={master}
-				bind:group={selectedItems}
 				onchange={(e) => {
 					const element = e.target as HTMLInputElement;
 					if (element.checked) {
 						element.parentElement?.parentElement?.classList.add('bg-base-300');
+						selectedItems.add(master);
 					} else {
 						element.parentElement?.parentElement?.classList.remove('bg-base-300');
+						selectedItems.delete(master);
 					}
 				}}
 			/></th
