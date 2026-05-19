@@ -72,11 +72,13 @@
 			field={photos}
 			subtitle="Gallery photos"
 		/>
-		<label class="label">
-			<input {...isDisabled.as('checkbox')} class="checkbox checkbox-lg checkbox-secondary" />
-			Disabled
-		</label>
-		<InputIssues field={isDisabled} />
+		<div class="mb-2">
+			<label class="label">
+				<input {...isDisabled.as('checkbox')} class="checkbox checkbox-lg checkbox-secondary" />
+				Disabled
+			</label>
+			<InputIssues field={isDisabled} />
+		</div>
 		<button type="submit" class="btn btn-primary">Add</button>
 	</Form>
 
