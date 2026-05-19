@@ -61,5 +61,6 @@
 		<input {...isDisabled.as('checkbox')} class="checkbox checkbox-lg checkbox-secondary" />
 		Disabled
 	</label>
+	<InputIssues field={isDisabled} />
 	<button type="submit" class="btn btn-primary">Add</button>
 </Form>
