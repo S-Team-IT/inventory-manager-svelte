@@ -30,7 +30,7 @@
 	)}
 >
 	<fieldset
-		class="fieldset gap-2 rounded-box border border-base-300 bg-base-200 p-4"
+		class="fieldset gap-0 rounded-box border border-base-300 bg-base-200 p-4"
 		disabled={isLoading}
 	>
 		<legend class="fieldset-legend text-xl">{legend}</legend>

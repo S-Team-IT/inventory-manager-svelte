@@ -13,8 +13,10 @@
 	} = $props();
 </script>
 
-<label class="input w-full">
-	<span class="label">{label}:</span>
-	<input {...field.as(type, value)} {placeholder} {oninput} />
-</label>
-<InputIssues {field} />
+<div class="mb-4">
+	<label class="input w-full">
+		<span class="label">{label}:</span>
+		<input {...field.as(type, value)} {placeholder} {oninput} />
+	</label>
+	<InputIssues {field} />
+</div>

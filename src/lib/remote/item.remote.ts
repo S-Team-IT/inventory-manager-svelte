@@ -68,5 +68,5 @@ export const createItem = form(
 		isDisabled = false
 	}) => {
 		console.log(masterNumber, name, category, supplier, quantity, thumbnail, photos, isDisabled);
-	}
+  }
 );
