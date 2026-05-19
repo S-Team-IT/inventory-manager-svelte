@@ -57,5 +57,16 @@ export const createItem = form(
 		photos: z.array(zImgFile),
 		isDisabled: zBoolean
 	}),
-	async () => {}
+	async ({
+		masterNumber,
+		name,
+		category,
+		supplier,
+		quantity,
+		thumbnail,
+		photos,
+		isDisabled = false
+	}) => {
+		console.log(masterNumber, name, category, supplier, quantity, thumbnail, photos, isDisabled);
+	}
 );
