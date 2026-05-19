@@ -8,7 +8,7 @@
 
 <form
 	enctype="multipart/form-data"
-	class="w-125 {classes}"
+	class="w-full max-w-100 {classes}"
 	{...remoteForm.enhance(
 		async ({
 			form,
