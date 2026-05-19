@@ -58,7 +58,7 @@
 	</fieldset>
 	<InputIssues field={photos} />
 	<label class="label">
-		<input {...isDisabled.as('checkbox')} />
+		<input {...isDisabled.as('checkbox')} class="checkbox checkbox-lg checkbox-secondary" />
 		Disabled
 	</label>
 	<button type="submit" class="btn btn-primary">Add</button>
