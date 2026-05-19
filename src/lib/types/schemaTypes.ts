@@ -11,6 +11,9 @@ export const zImgFile = z
 		['image/gif', 'image/jpeg', 'image/png', 'image/svg+xml', 'image/webp'],
 		'Unsupported file format.'
 	); //why don't they have a wildcard bruh
+// Remote form only includes the checkbox input if it's checked,
+// so it has to be marked as optional & default to false to work with checkboxes
+export const zBoolean = z.coerce.boolean<boolean>().optional().default(false);
 
 export const serial = z.coerce
 	.number()
