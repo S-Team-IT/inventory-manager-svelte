@@ -1,11 +1,13 @@
 <script lang="ts">
+	import Combobox from '$lib/components/combobox.svelte';
 	import Form from '$lib/components/form.svelte';
 	import Input from '$lib/components/input.svelte';
-	import InputIssues from '$lib/components/inputIssues.svelte';
 	import InputFile from '$lib/components/inputFile.svelte';
-	import Combobox from '$lib/components/combobox.svelte';
+	import InputIssues from '$lib/components/inputIssues.svelte';
+	import type { EnhanceParams } from '$lib/types/types';
 
 	import { createItem } from '$lib/remote/item.remote';
+	import type { Item } from '$lib/types/databaseTypes.js';
 	const { masterNumber, name, category, supplier, quantity, thumbnail, photos, isDisabled } =
 		createItem.fields;
 
@@ -33,6 +35,11 @@
 		});
 		return urlList;
 	});
+
+	async function enhanceCallback({ data, submit }: EnhanceParams) {
+		console.log(data);
+		await submit!();
+	}
 </script>
 
 <div class="flex">
@@ -43,6 +50,7 @@
 		successMsg="Added new item"
 		{isFilling}
 		classes="grow"
+		{enhanceCallback}
 	>
 		<Input
 			label="Master Number"
