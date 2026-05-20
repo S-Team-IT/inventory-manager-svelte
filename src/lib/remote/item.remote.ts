@@ -67,8 +67,17 @@ export const createItem = form(
 		isDisabled = false
 	}) => {
 		console.log(masterNumber, name, category, supplier, quantity, thumbnail, photos, isDisabled);
-
-		const [categoryResult] = await sql<Category[]>`
+		const thumbnailStr = 'http://dummyimage.com/173x100.png/dddddd/000000';
+		const photosArray = [
+			{ item: 'http://dummyimage.com/108x100.png/ff4444/ffffff' },
+			{ item: 'http://dummyimage.com/116x100.png/dddddd/000000' },
+			{ item: 'http://dummyimage.com/182x100.png/cc0000/ffffff' },
+			{ item: 'http://dummyimage.com/239x100.png/ff4444/ffffff' },
+			{ item: 'http://dummyimage.com/194x100.png/cc0000/ffffff' }
+		];
+		try {
+			const newItem = await sql.begin(async (sql) => {
+				const [categoryResult] = await sql<Category[]>`
 			WITH i AS(
 				INSERT INTO categories (name) VALUES (${category}) 
 				ON CONFLICT(name) DO NOTHING
@@ -79,7 +88,7 @@ export const createItem = form(
 			SELECT id FROM categories WHERE name = ${category}
 			LIMIT 1;`;
 
-		const [supplierResult] = await sql<Supplier[]>`
+				const [supplierResult] = await sql<Supplier[]>`
 			WITH i AS(
 				INSERT INTO suppliers (name) VALUES (${supplier}) 
 				ON CONFLICT(name) DO NOTHING
@@ -90,16 +99,7 @@ export const createItem = form(
 			SELECT id FROM suppliers WHERE name = ${supplier}
 			LIMIT 1;`;
 
-		const thumbnailStr = 'http://dummyimage.com/173x100.png/dddddd/000000';
-		const photosArray = [
-			{ item: 'http://dummyimage.com/108x100.png/ff4444/ffffff' },
-			{ item: 'http://dummyimage.com/116x100.png/dddddd/000000' },
-			{ item: 'http://dummyimage.com/182x100.png/cc0000/ffffff' },
-			{ item: 'http://dummyimage.com/239x100.png/ff4444/ffffff' },
-			{ item: 'http://dummyimage.com/194x100.png/cc0000/ffffff' }
-		];
-
-		const [itemResult] = await sql<Item[]>`
+				const [itemResult] = await sql<Item[]>`
 		WITH i AS (
 			INSERT INTO items 
 			(master_number, name, category_id, supplier_id, quantity, thumbnail, photos)
@@ -123,7 +123,12 @@ export const createItem = form(
 		FROM i 
 		JOIN categories c ON i.category_id = c.id 
 		JOIN suppliers s ON i.supplier_id = s.id;`;
+				return itemResult;
+			});
 
-		return { success: true, item: itemResult };
+			return { success: true, item: newItem };
+		} catch (e) {
+			handleQueryErrors(e);
+		}
 	}
 );
