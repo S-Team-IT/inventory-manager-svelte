@@ -1,5 +1,12 @@
 <script lang="ts">
+	import ItemCard from '$lib/components/itemCard.svelte';
+
 	const { data } = $props();
+	$inspect(data.item);
 </script>
 
-<h1>You are viewing item {data.slug}</h1>
+{#if !data.item}
+	404 not found
+{:else}
+	<ItemCard {...data.item} />
+{/if}
