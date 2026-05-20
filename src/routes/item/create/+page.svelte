@@ -110,3 +110,20 @@
 	</div>
 	<div class="grow"></div>
 </div>
+
+{#snippet itemCard({
+	masterNumber,
+	name,
+	category,
+	categoryID,
+	supplier,
+	supplierID,
+	quantity
+}: Item)}
+	<h1>{masterNumber}| {name}</h1>
+	<div>
+		Category: {categoryID} | {category} <br />
+		Supplier: {supplierID} | {supplier}<br />
+		Quantity: {quantity}
+	</div>
+{/snippet}
