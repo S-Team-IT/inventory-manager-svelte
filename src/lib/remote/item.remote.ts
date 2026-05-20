@@ -110,7 +110,7 @@ export const createItem = form(
 			${supplierResult.id}, 
 			${quantity}, 
 			${thumbnailStr},
-			${JSON.stringify(photosArray)})
+			${sql.json(photosArray)})
 			RETURNING *
 		)
 		SELECT i.master_number AS "masterNumber",
