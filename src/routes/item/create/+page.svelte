@@ -1,15 +1,14 @@
 <script lang="ts">
-	import PhotoPreview from './photoPreview.svelte';
-
 	import Combobox from '$lib/components/combobox.svelte';
 	import Form from '$lib/components/form.svelte';
 	import Input from '$lib/components/input.svelte';
 	import InputFile from '$lib/components/inputFile.svelte';
 	import InputIssues from '$lib/components/inputIssues.svelte';
-	import type { EnhanceParams } from '$lib/types/types';
-
 	import { createItem } from '$lib/remote/item.remote';
-	import type { Item } from '$lib/types/databaseTypes.js';
+	import type { EnhanceParams } from '$lib/types/types';
+	import ItemCard from './itemCard.svelte';
+	import PhotoPreview from './photoPreview.svelte';
+
 	const { masterNumber, name, category, supplier, quantity, thumbnail, photos, isDisabled } =
 		createItem.fields;
 
@@ -79,24 +78,7 @@
 	</div>
 	<div class="grow">
 		{#if createItem.result?.success}
-			{@render itemCard({ ...createItem.result.item })}
+			<ItemCard {...createItem.result.item} />
 		{/if}
 	</div>
 </div>
-
-{#snippet itemCard({
-	masterNumber,
-	name,
-	category,
-	categoryID,
-	supplier,
-	supplierID,
-	quantity
-}: Item)}
-	<h1>{masterNumber}| {name}</h1>
-	<div>
-		Category: {categoryID} | {category} <br />
-		Supplier: {supplierID} | {supplier}<br />
-		Quantity: {quantity}
-	</div>
-{/snippet}
