@@ -122,7 +122,7 @@ export const createItem = form(
 		i.quantity
 		FROM i 
 		JOIN categories c ON i.category_id = c.id 
-		JOIN suppliers s ON i.supplier_id = s.id`;
+		JOIN suppliers s ON i.supplier_id = s.id;`;
 
 		return { success: true, item: itemResult };
 	}
