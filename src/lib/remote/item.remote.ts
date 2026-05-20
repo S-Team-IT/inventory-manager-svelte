@@ -1,10 +1,9 @@
-import { query } from '$app/server';
+import { form, query } from '$app/server';
 import { sql } from '$lib/server/postgres';
-import type { Item } from '$lib/types/databaseTypes';
+import type { Category, Item, Supplier } from '$lib/types/databaseTypes';
+import { masterNumber, zBoolean, zImgFile, zNumber, zString } from '$lib/types/schemaTypes';
 import { handleQueryErrors } from '$lib/utils/errorHandling';
-import { form } from '$app/server';
 import * as z from 'zod';
-import { zString, masterNumber, zNumber, zImgFile, zBoolean } from '$lib/types/schemaTypes';
 
 export const getItems = query(async () => {
 	try {
@@ -68,5 +67,50 @@ export const createItem = form(
 		isDisabled = false
 	}) => {
 		console.log(masterNumber, name, category, supplier, quantity, thumbnail, photos, isDisabled);
-  }
+
+		const [categoryResult] = await sql<
+			Category[]
+		>`INSERT INTO categories (name) VALUES (${category}) ON CONFLICT(name) DO UPDATE SET name = EXCLUDED.name RETURNING *`;
+		const [supplierResult] = await sql<
+			Supplier[]
+		>`INSERT INTO suppliers (name) VALUES (${supplier}) ON CONFLICT(name) DO UPDATE SET name = EXCLUDED.name RETURNING *;`;
+
+		const thumbnailStr = 'http://dummyimage.com/173x100.png/dddddd/000000';
+		const photosArray = [
+			{ item: 'http://dummyimage.com/108x100.png/ff4444/ffffff' },
+			{ item: 'http://dummyimage.com/116x100.png/dddddd/000000' },
+			{ item: 'http://dummyimage.com/182x100.png/cc0000/ffffff' },
+			{ item: 'http://dummyimage.com/239x100.png/ff4444/ffffff' },
+			{ item: 'http://dummyimage.com/194x100.png/cc0000/ffffff' }
+		];
+
+		const [itemResult] = await sql<Item[]>`
+		WITH i AS (
+			INSERT INTO items 
+			(master_number, name, category_id, supplier_id, quantity, thumbnail, photos)
+			VALUES(
+			${masterNumber}, 
+			${name}, 
+			${categoryResult.id}, 
+			${supplierResult.id}, 
+			${quantity}, 
+			${thumbnailStr},
+			${JSON.stringify(photosArray)})
+			RETURNING *
+		)
+		SELECT i.master_number AS "masterNumber",
+		i.name,
+		c.name AS "category",
+		c.id AS "categoryID",
+		s.name AS "supplier",
+		s.id AS "supplierID",
+		i.quantity
+		FROM i 
+		JOIN categories c ON i.category_id = c.id 
+		JOIN suppliers s ON i.supplier_id = s.id
+`;
+		console.log(itemResult);
+
+		return { success: true, item: itemResult };
+	}
 );
