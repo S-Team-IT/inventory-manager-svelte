@@ -12,7 +12,7 @@
 	onclick={() => {
 		const dialog = document.querySelector(`#modal${id}`);
 		(dialog as HTMLDialogElement).showModal();
-	}}><img src={thumbnailSrc} alt="thumbnail" loading="lazy" /></button
+	}}><img src={thumbnailSrc} alt="thumbnail" loading="lazy" class="w-full" /></button
 >
 <dialog id={`modal${id}`} class="modal">
 	<div class="modal-box">
