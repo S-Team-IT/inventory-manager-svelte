@@ -108,7 +108,11 @@
 			</div>
 		{/if}
 	</div>
-	<div class="grow"></div>
+	<div class="grow">
+		{#if createItem.result?.success}
+			{@render itemCard({ ...createItem.result.item })}
+		{/if}
+	</div>
 </div>
 
 {#snippet itemCard({
