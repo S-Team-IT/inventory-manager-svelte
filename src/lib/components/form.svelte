@@ -1,13 +1,5 @@
 <script lang="ts">
-	import type { RemoteQueryUpdate } from '@sveltejs/kit';
-
-	type formEnhance = {
-		form?: HTMLFormElement;
-		data?: unknown;
-		submit?: () => Promise<boolean> & {
-			updates: (...updates: RemoteQueryUpdate[]) => Promise<boolean>;
-		};
-	};
+	import type { EnhanceParams } from '$lib/types/types';
 
 	let {
 		remoteForm,
