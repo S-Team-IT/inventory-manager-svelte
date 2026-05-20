@@ -12,9 +12,9 @@
 		| 'categoryReverse'
 		| 'quantity'
 		| 'quantityReverse'
-		| 'lastChanged';
+		| 'lastChangedReverse';
 
-	let sortOption = $state<SortOption>('lastChanged');
+	let sortOption = $state<SortOption>('lastChangedReverse');
 	let sortedItems = $derived.by(() => sortItems(data.items, sortOption));
 
 	function sortItems(list: Item[], sortOption: SortOption): Item[] {
@@ -41,9 +41,9 @@
 </script>
 
 <button
-	class="btn {sortOption === 'lastChanged' ? '' : 'btn-soft'} ms-4 btn-primary"
+	class="btn {sortOption === 'lastChangedReverse' ? '' : 'btn-soft'} ms-4 btn-primary"
 	onclick={() => {
-		sortOption = 'lastChanged';
+		sortOption = 'lastChangedReverse';
 	}}>Last changed</button
 >
 
