@@ -80,9 +80,15 @@ export const createItem = form(
 			LIMIT 1;`;
 
 		const [supplierResult] = await sql<Supplier[]>`
-			INSERT INTO suppliers (name) VALUES (${supplier}) 
-			ON CONFLICT(name) DO UPDATE SET name = name 
-			RETURNING *;`;
+			WITH i AS(
+				INSERT INTO suppliers (name) VALUES (${supplier}) 
+				ON CONFLICT(name) DO NOTHING
+				RETURNING id
+			)
+			SELECT id FROM i
+			UNION ALL
+			SELECT id FROM suppliers WHERE name = ${supplier}
+			LIMIT 1;`;`;
 
 		const thumbnailStr = 'http://dummyimage.com/173x100.png/dddddd/000000';
 		const photosArray = [
