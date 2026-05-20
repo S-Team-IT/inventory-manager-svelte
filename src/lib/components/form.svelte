@@ -2,29 +2,41 @@
 	import type { RemoteQueryUpdate } from '@sveltejs/kit';
 
 	type formEnhance = {
-		form: HTMLFormElement;
-		submit: () => Promise<boolean> & {
+		form?: HTMLFormElement;
+		data?: unknown;
+		submit?: () => Promise<boolean> & {
 			updates: (...updates: RemoteQueryUpdate[]) => Promise<boolean>;
 		};
 	};
 
-	let { remoteForm, legend, children, errorMsg, successMsg, isFilling, classes = '' } = $props();
+	let {
+		remoteForm,
+		legend,
+		children,
+		errorMsg,
+		successMsg,
+		isFilling,
+		classes = '',
+		enhanceFunction = defaultEnhance
+	} = $props();
 
 	let isLoading = $state<boolean>(false);
+
+	async function defaultEnhance({ form, submit }: formEnhance) {
+		isLoading = true;
+		if (await submit!()) {
+			isFilling = false;
+			if (remoteForm.result?.success !== false) form!.reset();
+		}
+
+		isLoading = false;
+	}
 </script>
 
 <form
 	enctype="multipart/form-data"
 	class="w-full max-w-100 {classes}"
-	{...remoteForm.enhance(async ({ form, submit }: formEnhance) => {
-		isLoading = true;
-		if (await submit()) {
-			isFilling = false;
-			if (remoteForm.result?.success !== false) form.reset();
-		}
-
-		isLoading = false;
-	})}
+	{...remoteForm.enhance(enhanceFunction)}
 >
 	<fieldset
 		class="fieldset gap-0 rounded-box border border-base-300 bg-base-200 p-4"
