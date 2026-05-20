@@ -1,16 +1,7 @@
 <script lang="ts">
 	import InputIssues from '$lib/components/inputIssues.svelte';
 
-	const {
-		label,
-		type,
-		field,
-		oninput = () => {
-			console.log('NO ONINPUT');
-		},
-		placeholder = '',
-		value = ''
-	} = $props();
+	const { label, type, field, oninput, placeholder = '', value = '' } = $props();
 </script>
 
 <div class="mb-4">
