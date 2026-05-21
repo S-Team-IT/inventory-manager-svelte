@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
 	import { editItem } from '$lib/remote/item.remote';
 	import Form from './base/form.svelte';
 
@@ -24,4 +24,4 @@
 			</div>
 		</div>
 	</Form>
-</dialog>
+</dialog> -->
