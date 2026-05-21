@@ -3,6 +3,7 @@
 	import { resolve } from '$app/paths';
 	import favicon from '$lib/assets/favicon.ico';
 	import { signOut } from '$lib/remote/auth.remote';
+	import { Toaster } from 'svelte-sonner';
 	import './layout.css';
 
 	let { children, data } = $props();
@@ -70,3 +71,5 @@
 </div>
 
 {@render children()}
+
+<Toaster richColors position="bottom-right" />
