@@ -9,14 +9,14 @@
 	import ItemCard from './itemCard.svelte';
 	import PhotoPreview from './photoPreview.svelte';
 
-	const { masterNumber, name, category, supplier, quantity, thumbnail, photos, isDisabled } =
+	const { master, name, category, supplier, quantity, thumbnail, photos, isDisabled } =
 		createItem.fields;
 
 	const { data } = $props();
 	let addedItems = $state<Item[]>([]);
 	let deletedItems = $state<string[]>([]);
 	let filteredItems = $derived.by(() => {
-		return addedItems.filter(({ masterNumber }) => !deletedItems.includes(masterNumber));
+		return addedItems.filter(({ master }) => !deletedItems.includes(master));
 	});
 </script>
 
@@ -32,9 +32,9 @@
 		}}
 	>
 		<Input
-			label="Master Number"
+			label="Master"
 			type="text"
-			field={masterNumber}
+			field={master}
 			placeholder="Enter master number"
 		/>
 		<Input label="Name" type="text" field={name} placeholder="Enter item name" />

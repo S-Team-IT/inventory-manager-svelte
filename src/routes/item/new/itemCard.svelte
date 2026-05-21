@@ -8,7 +8,7 @@
 
 	let {
 		id,
-		masterNumber,
+		master,
 		name,
 		category,
 		supplier,
@@ -19,18 +19,18 @@
 	}: Item & { deletedItems: string[] } = $props();
 
 	function openDeleteConfirmation() {
-		const modal = document.querySelector(`#confirm-modal${masterNumber}`);
+		const modal = document.querySelector(`#confirm-modal${master}`);
 		(modal as HTMLDialogElement).showModal();
 	}
 
 	function closeDeleteConfirmation() {
-		const modal = document.querySelector(`#confirm-modal${masterNumber}`);
+		const modal = document.querySelector(`#confirm-modal${master}`);
 		(modal as HTMLDialogElement).close();
 	}
 </script>
 
 <div class="card bg-accent shadow-sm">
-	<ImageModal id={masterNumber} thumbnailSrc={thumbnail} gallerySrc={photos} />
+	<ImageModal id={master} thumbnailSrc={thumbnail} gallerySrc={photos} />
 	<div class="card-body p-4 text-gray-800">
 		<h2 class="card-title flex-col items-start gap-0 text-2xl">
 			{name}
@@ -51,14 +51,14 @@
 			<button
 				class="btn h-12.5 w-12.5 btn-soft btn-primary"
 				aria-label="edit"
-				onclick={() => goto(resolve('/item/[slug]', { slug: masterNumber }))}
+				onclick={() => goto(resolve('/item/[slug]', { slug: master }))}
 				><span class="icon-[boxicons--edit]"></span></button
 			>
 		</div>
 	</div>
 </div>
 
-<dialog id={`confirm-modal${masterNumber}`} class="modal">
+<dialog id={`confirm-modal${master}`} class="modal">
 	<div class="modal-box">
 		<h2 class="text-lg">Are you sure you want to delete {name}?</h2>
 		<div class="modal-action">
@@ -69,14 +69,14 @@
 				{...deleteItem.for(id).enhance(async ({ submit }) => {
 					if (await submit()) {
 						toast.success('Item deleted');
-						deletedItems.push(masterNumber);
+						deletedItems.push(master);
 						closeDeleteConfirmation();
 					} else {
 						toast.error('Failed to delete item');
 					}
 				})}
 			>
-				<input {...deleteItem.fields.masterNumber.as('hidden', masterNumber)} />
+				<input {...deleteItem.fields.master.as('hidden', master)} />
 				<button class="btn btn-primary">Confirm</button>
 			</form>
 		</div>

@@ -1,7 +1,7 @@
 import { form, query } from '$app/server';
 import { sql } from '$lib/server/postgres';
 import type { Category, Item, Supplier } from '$lib/types/databaseTypes';
-import { masterNumber, zBoolean, zImgFile, zNumber, zString } from '$lib/types/schemaTypes';
+import { master, zBoolean, zImgFile, zNumber, zString } from '$lib/types/schemaTypes';
 import { handleQueryErrors } from '$lib/utils/errorHandling';
 import { error } from '@sveltejs/kit';
 import * as z from 'zod';
@@ -28,7 +28,7 @@ export const getItemsFullInfo = query(async () => {
 	try {
 		return await sql<Item[]>`SELECT
 			i.id,
-			i.master_number AS "masterNumber",
+			i.master_number AS "master",
 			i.name,
 			c.name AS "category",
 			i.category_id AS "categoryID",
@@ -46,11 +46,11 @@ export const getItemsFullInfo = query(async () => {
 	}
 });
 
-export const getItemFullInfo = query(masterNumber, async (masterNumber) => {
+export const getItemFullInfo = query(master, async (master) => {
 	try {
 		const result = await sql<Item[]>`SELECT
 			i.id,
-			i.master_number AS "masterNumber",
+			i.master_number AS "master",
 			i.name,
 			c.name AS "category",
 			i.category_id AS "categoryID",
@@ -63,7 +63,7 @@ export const getItemFullInfo = query(masterNumber, async (masterNumber) => {
 			FROM items i
 			JOIN categories c ON i.category_id = c.id
 			JOIN suppliers s ON i.supplier_id = s.id
-			WHERE master_number = ${masterNumber}`;
+			WHERE master_number = ${master}`;
 		if (result.count !== 1) error(404, 'Item not found.');
 		return result[0];
 	} catch (e) {
@@ -73,7 +73,7 @@ export const getItemFullInfo = query(masterNumber, async (masterNumber) => {
 
 export const createItem = form(
 	z.object({
-		masterNumber,
+		master,
 		name: zString.min(1, 'Name cannot be empty.'),
 		category: zString.min(1, 'Category cannot be empty.'),
 		supplier: zString.min(1, 'Supplier cannot be empty.'),
@@ -83,7 +83,7 @@ export const createItem = form(
 		isDisabled: zBoolean
 	}),
 	async ({
-		masterNumber,
+		master,
 		name,
 		category,
 		supplier,
@@ -129,7 +129,7 @@ export const createItem = form(
 					INSERT INTO items 
 					(master_number, name, category_id, supplier_id, quantity, thumbnail, photos)
 					VALUES(
-					${masterNumber}, 
+					${master}, 
 					${name}, 
 					${categoryResult.id}, 
 					${supplierResult.id}, 
@@ -138,7 +138,7 @@ export const createItem = form(
 					${sql.json(photosArray)})
 					RETURNING *
 				)
-				SELECT i.master_number AS "masterNumber",
+				SELECT i.master_number AS "master",
 				i.id,
 				i.name,
 				c.name AS "category",
@@ -162,9 +162,9 @@ export const createItem = form(
 	}
 );
 
-export const deleteItem = form(z.object({ masterNumber }), async ({ masterNumber }) => {
+export const deleteItem = form(z.object({ master }), async ({ master }) => {
 	try {
-		const result = await sql`DELETE FROM items WHERE master_number = ${masterNumber}`;
+		const result = await sql`DELETE FROM items WHERE master_number = ${master}`;
 		if (result.count !== 0) return { success: false };
 		return { success: true };
 	} catch (e) {

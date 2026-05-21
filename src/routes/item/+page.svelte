@@ -89,7 +89,7 @@
 {/snippet}
 
 {#snippet ItemRow(
-	{ masterNumber, name, category, thumbnail, photos, quantity }: Item,
+	{ master, name, category, thumbnail, photos, quantity }: Item,
 	selectedItems: SvelteSet<string>
 )}
 	<tr class="hover:bg-base-300">
@@ -104,20 +104,20 @@
 						const element = e.target as HTMLInputElement;
 						if (element.checked) {
 							element.parentElement?.parentElement?.parentElement?.classList.add('bg-base-300');
-							selectedItems.add(masterNumber);
+							selectedItems.add(master);
 						} else {
 							element.parentElement?.parentElement?.classList.remove('bg-base-300');
-							selectedItems.delete(masterNumber);
+							selectedItems.delete(master);
 						}
 					}}
 				/>
 			</label>
 		</th>
-		<th class="w-25 text-center text-2xl">{masterNumber}</th>
+		<th class="w-25 text-center text-2xl">{master}</th>
 		<th class="flex w-50 items-center justify-center">
-			<ImageModal id={masterNumber} thumbnailSrc={thumbnail} gallerySrc={photos} />
+			<ImageModal id={master} thumbnailSrc={thumbnail} gallerySrc={photos} />
 		</th>
-		<th><a href={resolve('/item/[slug]', { slug: masterNumber })} class="underline">{name}</a></th>
+		<th><a href={resolve('/item/[slug]', { slug: master })} class="underline">{name}</a></th>
 		<th>{category}</th>
 		<th class="text-center">{quantity}</th>
 	</tr>

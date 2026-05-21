@@ -3,7 +3,7 @@
 	import type { Item } from '$lib/types/databaseTypes.js';
 
 	const { data } = $props();
-	let { masterNumber, name, category, categoryID, supplier, supplierID, quantity }: Item = $derived(
+	let { master, name, category, categoryID, supplier, supplierID, quantity }: Item = $derived(
 		data.item
 	);
 </script>
@@ -21,7 +21,7 @@
 {:else}
 	<div class="max-w-75">
 		<h1>{name}</h1>
-		<h2>{masterNumber}</h2>
+		<h2>{master}</h2>
 		<select name="" id="">
 			<option value={categoryID}>{category}</option>
 		</select>

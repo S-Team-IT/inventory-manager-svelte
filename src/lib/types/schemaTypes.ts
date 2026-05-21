@@ -24,7 +24,7 @@ export const serial = z.coerce
 export const email = z.email().trim().toLowerCase();
 export const password = z.string().trim().min(8, 'Min. 8 characters');
 
-export const masterNumber = z
+export const master = z
 	.string()
 	.regex(/^\d/, 'Master Number should start with a number.')
 	.toLowerCase()
