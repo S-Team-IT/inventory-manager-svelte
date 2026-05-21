@@ -161,3 +161,13 @@ export const createItem = form(
 );
 
 export const editItem = form(z.object(), async () => {});
+
+export const deleteItem = form(z.object({ masterNumber }), async ({ masterNumber }) => {
+	try {
+		const result = await sql`DELETE FROM items WHERE master_number = ${masterNumber}`;
+		if (result.count !== 0) return { success: false };
+		return { success: true };
+	} catch (e) {
+		handleQueryErrors(e);
+	}
+});
