@@ -4,7 +4,17 @@
 	import type { Item } from '$lib/types/databaseTypes';
 	import { toast } from 'svelte-sonner';
 
-	let { masterNumber, name, category, supplier, quantity, thumbnail, photos }: Item = $props();
+	let {
+		id,
+		masterNumber,
+		name,
+		category,
+		supplier,
+		quantity,
+		thumbnail,
+		photos,
+		deletedItems
+	}: Item & { deletedItems: string[] } = $props();
 
 	function openDeleteConfirmation() {
 		const modal = document.querySelector(`#confirm-modal${masterNumber}`);
@@ -46,11 +56,14 @@
 				<button class="btn btn-soft btn-secondary">Cancel</button>
 			</form>
 			<form
-				{...deleteItem.enhance(async ({ submit }) => {
+				{...deleteItem.for(id).enhance(async ({ submit }) => {
 					if (await submit()) {
-						toast.success('Deleted');
+						toast.success('Item deleted');
+						deletedItems.push(masterNumber);
 						const modal = document.querySelector(`#confirm-modal${masterNumber}`);
 						(modal as HTMLDialogElement).close();
+					} else {
+						toast.error('Failed to delete item');
 					}
 				})}
 			>
