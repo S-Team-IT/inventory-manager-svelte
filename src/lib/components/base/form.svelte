@@ -31,8 +31,8 @@
 				toast.error(errorMsg);
 			}
 			afterSubmit(form, data, submit);
-			isLoading = false;
 		}
+		isLoading = false;
 	}
 </script>
 
