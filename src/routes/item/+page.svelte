@@ -1,10 +1,8 @@
 <script lang="ts">
-	import ImageModal from '../../lib/components/imageModal.svelte';
-
-	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import type { Item } from '$lib/types/databaseTypes.js';
 	import { SvelteSet } from 'svelte/reactivity';
+	import ImageModal from '../../lib/components/imageModal.svelte';
 
 	const { data } = $props();
 	type SortOption =
@@ -94,12 +92,7 @@
 	{ masterNumber, name, category, thumbnail, photos, quantity }: Item,
 	selectedItems: SvelteSet<string>
 )}
-	<tr
-		class="hover:bg-base-300"
-		onclick={() => {
-			goto(resolve('/item/[slug]', { slug: masterNumber }));
-		}}
-	>
+	<tr class="hover:bg-base-300">
 		<th>
 			<!-- svelte-ignore a11y_click_events_have_key_events -->
 			<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
@@ -124,7 +117,7 @@
 		<th class="flex w-50 items-center justify-center">
 			<ImageModal id={masterNumber} thumbnailSrc={thumbnail} gallerySrc={photos} />
 		</th>
-		<th>{name}</th>
+		<th><a href={resolve('/item/[slug]', { slug: masterNumber })} class="underline">{name}</a></th>
 		<th>{category}</th>
 		<th class="text-center">{quantity}</th>
 	</tr>
