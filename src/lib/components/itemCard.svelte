@@ -4,17 +4,7 @@
 	import type { Item } from '$lib/types/databaseTypes';
 	import { toast } from 'svelte-sonner';
 
-	let {
-		masterNumber,
-		name,
-		category,
-		supplier,
-		quantity,
-		thumbnail,
-		photos,
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		isItemDeleted
-	}: Item & { isItemDeleted: boolean } = $props();
+	let { masterNumber, name, category, supplier, quantity, thumbnail, photos }: Item = $props();
 
 	function openDeleteConfirmation() {
 		const modal = document.querySelector(`#confirm-modal${masterNumber}`);
@@ -61,7 +51,6 @@
 						toast.success('Deleted');
 						const modal = document.querySelector(`#confirm-modal${masterNumber}`);
 						(modal as HTMLDialogElement).close();
-						isItemDeleted = true;
 					}
 				})}
 			>
