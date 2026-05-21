@@ -53,7 +53,7 @@
 						>
 							Profile
 						</a>
-						<a href={resolve('/user/create')}>Add new user</a>
+						<a href={resolve('/user/new')}>Add new user</a>
 						<button
 							onclick={async () => {
 								await signOut(data.session.id);
