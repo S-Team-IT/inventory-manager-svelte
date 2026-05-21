@@ -1,6 +1,8 @@
 <script lang="ts">
 	import ImageModal from '../../lib/components/imageModal.svelte';
 
+	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import type { Item } from '$lib/types/databaseTypes.js';
 	import { SvelteSet } from 'svelte/reactivity';
 
@@ -92,11 +94,18 @@
 	{ masterNumber, name, category, thumbnail, photos, quantity }: Item,
 	selectedItems: SvelteSet<string>
 )}
-	<tr class="hover:bg-base-300">
-		<th
-			><input
+	<tr
+		class="hover:bg-base-300"
+		onclick={() => {
+			goto(resolve('/item/[slug]', { slug: masterNumber }));
+		}}
+	>
+		<th>
+			<input
 				type="checkbox"
+				onclick={(e) => e.stopPropagation()}
 				onchange={(e) => {
+					console.log('checked');
 					const element = e.target as HTMLInputElement;
 					if (element.checked) {
 						element.parentElement?.parentElement?.classList.add('bg-base-300');
@@ -106,8 +115,8 @@
 						selectedItems.delete(masterNumber);
 					}
 				}}
-			/></th
-		>
+			/>
+		</th>
 		<th class="w-25 text-2xl">{masterNumber}</th>
 		<th class="flex w-50 items-center justify-center">
 			<ImageModal id={masterNumber} thumbnailSrc={thumbnail} gallerySrc={photos} />

@@ -9,7 +9,8 @@
 </script>
 
 <button
-	onclick={() => {
+	onclick={(e) => {
+		e.stopPropagation();
 		const dialog = document.querySelector(`#img-modal${id}`);
 		(dialog as HTMLDialogElement).showModal();
 	}}><img src={thumbnailSrc} alt="thumbnail" loading="lazy" class="w-full" /></button
