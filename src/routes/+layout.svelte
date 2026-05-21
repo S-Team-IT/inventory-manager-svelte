@@ -3,6 +3,7 @@
 	import { resolve } from '$app/paths';
 	import favicon from '$lib/assets/favicon.ico';
 	import { signOut } from '$lib/remote/auth.remote';
+	import { toast, Toaster } from 'svelte-sonner';
 	import './layout.css';
 
 	let { children, data } = $props();
@@ -13,7 +14,7 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<div class="navbar mb-4 bg-base-100 shadow-sm">
+<div class="navbar bg-base-100 shadow-sm">
 	<div class="navbar-start space-x-2 text-xl">
 		<a class="btn text-2xl" href={resolve('/')}>Home</a>
 		<div class="dropdown">
@@ -24,7 +25,7 @@
 			>
 				<li><a href={resolve('/item')}>Item List</a></li>
 				<div class="divider m-0.5">QS</div>
-				<li><a href={resolve('/item/create')}>Add Item</a></li>
+				<li><a href={resolve('/item/new')}>Add Item</a></li>
 				<div class="divider m-0.5">Procurement</div>
 				<li><a href={resolve('/item/add')}>Add Delivery Order</a></li>
 				<div class="divider m-0.5">Project</div>
@@ -52,10 +53,12 @@
 						>
 							Profile
 						</a>
+						<a href={resolve('/user/new')}>Add new user</a>
 						<button
 							onclick={async () => {
 								await signOut(data.session.id);
 								invalidateAll();
+								toast.success('Signed out');
 							}}
 							>Sign out
 						</button>
@@ -69,3 +72,5 @@
 </div>
 
 {@render children()}
+
+<Toaster richColors position="bottom-right" duration={2000} />

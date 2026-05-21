@@ -19,7 +19,7 @@ export const signIn = form(z.object({ email, password }), async ({ email, passwo
 		}
 		const newSessionWithToken = await createSession(user.id);
 		setTokenCookie(newSessionWithToken.token);
-		redirect(303, '/');
+		redirect(303, '/?loggedIn=true');
 	} catch (e) {
 		handleQueryErrors(e);
 	}
@@ -38,11 +38,6 @@ function setTokenCookie(token: string): void {
 	const { cookies } = getRequestEvent();
 	cookies.set('token', token, { path: '/' });
 }
-
-// function getTokenCookie(): string | undefined {
-// 	const { cookies } = getRequestEvent();
-// 	return cookies.get('token');
-// }
 
 function deleteTokenCookie(): void {
 	const { cookies } = getRequestEvent();

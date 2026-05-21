@@ -1,0 +1,37 @@
+<script lang="ts">
+	import Form from '$lib/components/base/form.svelte';
+	import Input from '$lib/components/base/input.svelte';
+	import { createUser } from '$lib/remote/user.remote';
+
+	const { email, password, role, name } = createUser.fields;
+</script>
+
+<Form
+	legend="Create new user"
+	remoteForm={createUser}
+	errorMsg="Something went wrong, please try again."
+	successMsg="User created."
+>
+	<input {...password.as('hidden', '12345678')} />
+	<Input label="Email" type="email" field={email} placeholder="example@domain.com" />
+	<Input label="Name" type="text" field={name} placeholder="John" />
+	<div class="flex flex-col space-y-2">
+		<label>
+			<input class="radio" {...role.as('radio', 'QS')} required />
+			QS
+		</label>
+		<label>
+			<input class="radio" {...role.as('radio', 'Procurement')} />
+			Procurement
+		</label>
+		<label>
+			<input class="radio" {...role.as('radio', 'Project')} />
+			Project
+		</label>
+	</div>
+
+	{#each role.issues() as issue, index (index)}
+		<p class="issue">{issue.message}</p>
+	{/each}
+	<button type="submit" class="btn mt-1">Create</button>
+</Form>

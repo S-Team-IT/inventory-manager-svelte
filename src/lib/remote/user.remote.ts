@@ -36,6 +36,7 @@ export const createUser = form(
 				console.error(`UNEXPECTED ERROR CREATING USER ${email}, ${name}, ${passwordHash}, ${role}`);
 				return { success: false };
 			}
+			return { success: true };
 		} catch (e) {
 			handleQueryErrors(e, (psqlError) => {
 				if (psqlError.code === '23505') {

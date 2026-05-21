@@ -1,5 +1,8 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import type { Item } from '$lib/types/databaseTypes.js';
+	import { SvelteSet } from 'svelte/reactivity';
+	import ImageModal from '../../lib/components/imageModal.svelte';
 
 	const { data } = $props();
 	type SortOption =
@@ -11,9 +14,9 @@
 		| 'categoryReverse'
 		| 'quantity'
 		| 'quantityReverse'
-		| 'lastChanged';
+		| 'lastChangedReverse';
 
-	let sortOption = $state<SortOption>('lastChanged');
+	let sortOption = $state<SortOption>('lastChangedReverse');
 	let sortedItems = $derived.by(() => sortItems(data.items, sortOption));
 
 	function sortItems(list: Item[], sortOption: SortOption): Item[] {
@@ -36,13 +39,13 @@
 		}
 	}
 
-	let selectedItems = $state([]);
+	let selectedItems = new SvelteSet<string>();
 </script>
 
 <button
-	class="btn {sortOption === 'lastChanged' ? '' : 'btn-soft'} ms-4 btn-primary"
+	class="btn {sortOption === 'lastChangedReverse' ? '' : 'btn-soft'} ms-4 btn-primary"
 	onclick={() => {
-		sortOption = 'lastChanged';
+		sortOption = 'lastChangedReverse';
 	}}>Last changed</button
 >
 
@@ -50,7 +53,7 @@
 	<thead>
 		<tr>
 			<th></th>
-			<th class="w-25">
+			<th class="w-25 text-center">
 				{@render sortingHeader('master', 'masterReverse', 'Master')}
 			</th>
 			<th class="w-50">Photos</th>
@@ -58,12 +61,12 @@
 				{@render sortingHeader('name', 'nameReverse', 'Name')}
 			</th>
 			<th>{@render sortingHeader('category', 'categoryReverse', 'Category')}</th>
-			<th>{@render sortingHeader('quantity', 'quantityReverse', 'Qty')}</th>
+			<th class="text-center">{@render sortingHeader('quantity', 'quantityReverse', 'Qty')}</th>
 		</tr>
 	</thead>
 	<tbody>
 		{#each sortedItems as item (item.id)}
-			{@render row(item)}
+			{@render ItemRow(item, selectedItems)}
 		{/each}
 	</tbody>
 </table>
@@ -85,52 +88,37 @@
 	</button>
 {/snippet}
 
-{#snippet row({ master, name, category, thumbnail, photos, quantity }: Item)}
+{#snippet ItemRow(
+	{ master, name, category, thumbnail, photos, quantity }: Item,
+	selectedItems: SvelteSet<string>
+)}
 	<tr class="hover:bg-base-300">
-		<th
-			><input
-				type="checkbox"
-				value={master}
-				bind:group={selectedItems}
-				onchange={(e) => {
-					const element = e.target as HTMLInputElement;
-					if (element.checked) {
-						element.parentElement?.parentElement?.classList.add('bg-base-300');
-					} else {
-						element.parentElement?.parentElement?.classList.remove('bg-base-300');
-					}
-				}}
-			/></th
-		>
-		<th class="w-25 text-2xl">{master}</th>
-		<th class="flex w-50 items-center justify-center">
-			<button
-				onclick={() => {
-					const dialog = document.querySelector(`#modal${master}`);
-					(dialog as HTMLDialogElement).showModal();
-				}}><img src={thumbnail} alt="thumbnail" loading="lazy" /></button
-			>
-			{#if photos.length != 0}{/if}
-			<dialog id={`modal${master}`} class="modal">
-				<div class="modal-box">
-					<form method="dialog">
-						<button class="btn absolute top-2 right-2 btn-circle btn-ghost btn-sm">✕</button>
-					</form>
-					<h3 class="text-lg font-bold">{name} gallery</h3>
-					<div class="grid grid-cols-3 gap-2">
-						<img src={thumbnail} alt="thumbnail" loading="lazy" />
-						{#each photos as { item }, i (i)}
-							<img src={item} alt={`photo #${i}`} loading="lazy" />
-						{/each}
-					</div>
-				</div>
-				<form method="dialog" class="modal-backdrop">
-					<button>close</button>
-				</form>
-			</dialog>
+		<th>
+			<!-- svelte-ignore a11y_click_events_have_key_events -->
+			<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+			<label class="p-2" onclick={(e) => e.stopPropagation()}>
+				<input
+					type="checkbox"
+					onchange={(e) => {
+						console.log('checked');
+						const element = e.target as HTMLInputElement;
+						if (element.checked) {
+							element.parentElement?.parentElement?.parentElement?.classList.add('bg-base-300');
+							selectedItems.add(master);
+						} else {
+							element.parentElement?.parentElement?.classList.remove('bg-base-300');
+							selectedItems.delete(master);
+						}
+					}}
+				/>
+			</label>
 		</th>
-		<th>{name}</th>
+		<th class="w-25 text-center text-2xl">{master}</th>
+		<th class="flex w-50 items-center justify-center">
+			<ImageModal id={master} thumbnailSrc={thumbnail} gallerySrc={photos} />
+		</th>
+		<th><a href={resolve('/item/[slug]', { slug: master })} class="underline">{name}</a></th>
 		<th>{category}</th>
-		<th>{quantity}</th>
+		<th class="text-center">{quantity}</th>
 	</tr>
 {/snippet}
