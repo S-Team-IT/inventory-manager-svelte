@@ -21,6 +21,11 @@
 		(modal as HTMLDialogElement).showModal();
 	}
 
+	function closeDeleteConfirmation() {
+		const modal = document.querySelector(`#confirm-modal${masterNumber}`);
+		(modal as HTMLDialogElement).close();
+	}
+
 	function handleEdit() {}
 </script>
 
@@ -39,8 +44,10 @@
 			<button
 				class="btn size-12.5 btn-soft btn-error"
 				aria-label="delete"
-				onclick={openDeleteConfirmation}><span class="icon-[tabler--trash]"></span></button
+				onclick={openDeleteConfirmation}
 			>
+				<span class="icon-[tabler--trash]"></span>
+			</button>
 			<button class="btn h-12.5 w-12.5 btn-soft btn-primary" aria-label="edit" onclick={handleEdit}
 				><span class="icon-[boxicons--edit]"></span></button
 			>
@@ -60,8 +67,7 @@
 					if (await submit()) {
 						toast.success('Item deleted');
 						deletedItems.push(masterNumber);
-						const modal = document.querySelector(`#confirm-modal${masterNumber}`);
-						(modal as HTMLDialogElement).close();
+						closeDeleteConfirmation();
 					} else {
 						toast.error('Failed to delete item');
 					}

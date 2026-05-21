@@ -4,9 +4,9 @@
 	import Input from '$lib/components/base/input.svelte';
 	import InputFile from '$lib/components/base/inputFile.svelte';
 	import InputIssues from '$lib/components/base/inputIssues.svelte';
-	import ItemCard from '$lib/components/itemCard.svelte';
 	import { createItem } from '$lib/remote/item.remote.js';
 	import type { Item } from '$lib/types/databaseTypes.js';
+	import ItemCard from './itemCard.svelte';
 	import PhotoPreview from './photoPreview.svelte';
 
 	const { masterNumber, name, category, supplier, quantity, thumbnail, photos, isDisabled } =
