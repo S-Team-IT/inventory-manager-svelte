@@ -55,7 +55,7 @@
 	<thead>
 		<tr>
 			<th></th>
-			<th class="w-25">
+			<th class="w-25 text-center">
 				{@render sortingHeader('master', 'masterReverse', 'Master')}
 			</th>
 			<th class="w-50">Photos</th>
@@ -63,7 +63,7 @@
 				{@render sortingHeader('name', 'nameReverse', 'Name')}
 			</th>
 			<th>{@render sortingHeader('category', 'categoryReverse', 'Category')}</th>
-			<th>{@render sortingHeader('quantity', 'quantityReverse', 'Qty')}</th>
+			<th class="text-center">{@render sortingHeader('quantity', 'quantityReverse', 'Qty')}</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -120,12 +120,12 @@
 				/>
 			</label>
 		</th>
-		<th class="w-25 text-2xl">{masterNumber}</th>
+		<th class="w-25 text-center text-2xl">{masterNumber}</th>
 		<th class="flex w-50 items-center justify-center">
 			<ImageModal id={masterNumber} thumbnailSrc={thumbnail} gallerySrc={photos} />
 		</th>
 		<th>{name}</th>
 		<th>{category}</th>
-		<th>{quantity}</th>
+		<th class="text-center">{quantity}</th>
 	</tr>
 {/snippet}
