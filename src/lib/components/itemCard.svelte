@@ -2,8 +2,19 @@
 	import ImageModal from '$lib/components/imageModal.svelte';
 	import { deleteItem } from '$lib/remote/item.remote';
 	import type { Item } from '$lib/types/databaseTypes';
+	import { toast } from 'svelte-sonner';
 
-	let { masterNumber, name, category, supplier, quantity, thumbnail, photos }: Item = $props();
+	let {
+		masterNumber,
+		name,
+		category,
+		supplier,
+		quantity,
+		thumbnail,
+		photos,
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		isItemDeleted
+	}: Item & { isItemDeleted: boolean } = $props();
 
 	function openDeleteConfirmation() {
 		const modal = document.querySelector(`#confirm-modal${masterNumber}`);
@@ -44,7 +55,16 @@
 			<form method="dialog">
 				<button class="btn btn-soft btn-secondary">Cancel</button>
 			</form>
-			<form>
+			<form
+				{...deleteItem.enhance(async ({ submit }) => {
+					if (await submit()) {
+						toast.success('Deleted');
+						const modal = document.querySelector(`#confirm-modal${masterNumber}`);
+						(modal as HTMLDialogElement).close();
+						isItemDeleted = true;
+					}
+				})}
+			>
 				<input {...deleteItem.fields.masterNumber.as('hidden', masterNumber)} />
 				<button class="btn btn-primary">Confirm</button>
 			</form>
