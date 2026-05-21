@@ -3,6 +3,7 @@ import { sql } from '$lib/server/postgres';
 import type { Category, Item, Supplier } from '$lib/types/databaseTypes';
 import { masterNumber, zBoolean, zImgFile, zNumber, zString } from '$lib/types/schemaTypes';
 import { handleQueryErrors } from '$lib/utils/errorHandling';
+import { error } from '@sveltejs/kit';
 import * as z from 'zod';
 
 export const getItems = query(async () => {
@@ -45,9 +46,9 @@ export const getItemsFullInfo = query(async () => {
 	}
 });
 
-export const getItem = query(masterNumber, async (masterNumber) => {
+export const getItemFullInfo = query(masterNumber, async (masterNumber) => {
 	try {
-		const [result] = await sql<Item[]>`SELECT
+		const result = await sql<Item[]>`SELECT
 			i.id,
 			i.master_number AS "masterNumber",
 			i.name,
@@ -63,7 +64,8 @@ export const getItem = query(masterNumber, async (masterNumber) => {
 			JOIN categories c ON i.category_id = c.id
 			JOIN suppliers s ON i.supplier_id = s.id
 			WHERE master_number = ${masterNumber}`;
-		return result;
+		if (result.count !== 1) error(404, 'Item not found.');
+		return result[0];
 	} catch (e) {
 		handleQueryErrors(e);
 	}
@@ -159,8 +161,6 @@ export const createItem = form(
 		}
 	}
 );
-
-export const editItem = form(z.object(), async () => {});
 
 export const deleteItem = form(z.object({ masterNumber }), async ({ masterNumber }) => {
 	try {
