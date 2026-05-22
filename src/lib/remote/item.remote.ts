@@ -3,7 +3,7 @@ import { sql } from '$lib/server/postgres';
 import type { Category, Item, Supplier } from '$lib/types/databaseTypes';
 import { master, zBoolean, zImgFile, zNumber, zString } from '$lib/types/schemaTypes';
 import { handleQueryErrors } from '$lib/utils/errorHandling';
-import { error } from '@sveltejs/kit';
+import { error, invalid } from '@sveltejs/kit';
 import * as z from 'zod';
 
 export const getItems = query(async () => {
@@ -171,3 +171,13 @@ export const deleteItem = form(z.object({ master }), async ({ master }) => {
 		handleQueryErrors(e);
 	}
 });
+
+export const editMaster = form(z.object({ id: zString, master }), async ({ id, master }, issue) => {
+	try {
+		const result = await sql`UPDATE items SET master_number = ${master} WHERE id = ${id}`;
+		if (result.count !== 0) invalid(issue.master('Failed to update.'));
+	} catch (e) {
+		handleQueryErrors(e);
+	}
+});
+
