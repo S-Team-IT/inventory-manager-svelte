@@ -4,7 +4,7 @@
 
 	let {
 		remoteForm,
-		legend,
+		legend = '',
 		children,
 		errorMsg,
 		successMsg,
