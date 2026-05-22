@@ -29,7 +29,7 @@ export type Supplier = Generic;
 export type Category = Generic;
 
 export type Item = {
-	id: number;
+	id: string;
 	master: string;
 	name: string;
 	category: string;
