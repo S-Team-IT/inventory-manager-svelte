@@ -6,7 +6,7 @@
 	import InputIssues from '$lib/components/base/inputIssues.svelte';
 	import { createItem } from '$lib/remote/item.remote.js';
 	import type { Item } from '$lib/types/databaseTypes.js';
-	import ItemCard from './itemCard.svelte';
+	import ItemCard from '$lib/components/itemCard.svelte';
 	import PhotoPreview from './photoPreview.svelte';
 
 	const { master, name, category, supplier, quantity, thumbnail, photos, isDisabled } =
