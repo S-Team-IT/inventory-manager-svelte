@@ -175,8 +175,9 @@ export const deleteItem = form(z.object({ master }), async ({ master }) => {
 export const editMaster = form(z.object({ id: zString, master }), async ({ id, master }, issue) => {
 	try {
 		const result = await sql`UPDATE items SET master_number = ${master} WHERE id = ${id}`;
-		if (result.count !== 0) invalid(issue.master('Failed to update.'));
+		if (result.count !== 1) invalid(issue.master('Failed to update.'));
 	} catch (e) {
+		// Check if deletedItems is present
 		handleQueryErrors(e);
 	}
 });
@@ -186,7 +187,7 @@ export const editName = form(
 	async ({ id, name }, issue) => {
 		try {
 			const result = await sql`UPDATE items SET name = ${name} WHERE id = ${id}`;
-			if (result.count !== 0) invalid(issue.name('Failed to update.'));
+			if (result.count !== 1) invalid(issue.name('Failed to update.'));
 		} catch (e) {
 			handleQueryErrors(e);
 		}
