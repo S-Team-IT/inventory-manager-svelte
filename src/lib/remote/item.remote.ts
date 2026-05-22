@@ -181,3 +181,14 @@ export const editMaster = form(z.object({ id: zString, master }), async ({ id, m
 	}
 });
 
+export const editName = form(
+	z.object({ id: zString, name: zString }),
+	async ({ id, name }, issue) => {
+		try {
+			const result = await sql`UPDATE items SET name = ${name} WHERE id = ${id}`;
+			if (result.count !== 0) invalid(issue.name('Failed to update.'));
+		} catch (e) {
+			handleQueryErrors(e);
+		}
+	}
+);
