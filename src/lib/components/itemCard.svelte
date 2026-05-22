@@ -15,8 +15,8 @@
 		quantity,
 		thumbnail,
 		photos,
-		deletedItems
-	}: Item & { deletedItems: string[] } = $props();
+		deletedItems = undefined
+	}: Item & { deletedItems?: string[] | undefined } = $props();
 
 	function openDeleteConfirmation() {
 		const modal = document.querySelector(`#confirm-modal${master}`);
@@ -51,7 +51,7 @@
 			<button
 				class="btn h-12.5 w-12.5 btn-soft btn-primary"
 				aria-label="edit"
-				onclick={() => goto(resolve('/item/[slug]', { slug: master }))}
+				onclick={() => goto(resolve('/item/[slug]', { slug: id }))}
 				><span class="icon-[boxicons--edit]"></span></button
 			>
 		</div>
@@ -66,10 +66,11 @@
 				<button class="btn btn-soft btn-secondary">Cancel</button>
 			</form>
 			<form
-				{...deleteItem.for(id).enhance(async ({ submit }) => {
+				{...deleteItem.for(id).enhance(async ({ form, submit }) => {
 					if (await submit()) {
+						form.reset();
 						toast.success('Item deleted');
-						deletedItems.push(master);
+						if (deletedItems) deletedItems.push(master);
 						closeDeleteConfirmation();
 					} else {
 						toast.error('Failed to delete item');
