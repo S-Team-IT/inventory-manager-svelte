@@ -93,7 +93,7 @@
 {/snippet}
 
 {#snippet ItemRow(
-	{ id, master, name, category, thumbnail, photos, quantity, lastChanged }: Item,
+	{ id, master, name, category, thumbnail, photos, quantity }: Item,
 	selectedItems: SvelteSet<string>
 )}
 	<tr class="hover:bg-base-300">
@@ -124,6 +124,5 @@
 		<th><a href={resolve('/item/[slug]', { slug: id })} class="underline">{name}</a></th>
 		<th>{category}</th>
 		<th class="text-center">{quantity}</th>
-		<th>{lastChanged}</th>
 	</tr>
 {/snippet}
