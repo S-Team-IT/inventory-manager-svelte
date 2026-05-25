@@ -4,7 +4,7 @@ import type { DB_Stock } from '$lib/types/databaseTypes';
 import { master, zNumber, zString } from '$lib/types/schemaTypes';
 import { handleQueryErrors } from '$lib/utils/errorHandling';
 import { invalid } from '@sveltejs/kit';
-import { compareDesc, isAfter, isBefore } from 'date-fns';
+import { isBefore } from 'date-fns';
 import * as z from 'zod';
 import { getOrCreateSupplier } from './supplier.remote';
 
