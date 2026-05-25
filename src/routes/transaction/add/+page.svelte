@@ -14,7 +14,7 @@
 		quantity: number;
 	};
 
-	const { date, supplier, id, masters, quantities } = createTransaction.fields;
+	const { date, supplier, deliveryID, masters, quantities } = createTransaction.fields;
 
 	const { data } = $props();
 	let masterInput = $state<string>('');
@@ -44,7 +44,12 @@
 		list={data.suppliers}
 		subtitle="New suppliers can be added as needed"
 	/>
-	<Input label="DO Number" field={id} type="text" />
+	<Input
+		label="DO Number"
+		field={deliveryID}
+		type="text"
+		placeholder="Enter delivery order number"
+	/>
 	<div class="divider mt-0"></div>
 	<fieldset class="mb-4">
 		<label class="input mb-2 w-full pr-0">
