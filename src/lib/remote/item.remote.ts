@@ -16,7 +16,7 @@ export const getItems = query(async () => {
 			supplier_id AS "supplierID",
 			thumbnail,
 			photos,
-			quantity,
+			initial_quantity AS "quantity",
 			last_changed AS "lastChanged"
 			FROM items`;
 	} catch (e) {
@@ -36,7 +36,7 @@ export const getItemsFullInfo = query(async () => {
 			i.supplier_id AS "supplierID",
 			i.thumbnail,
 			i.photos,
-			i.quantity,
+			i.initial_quantity AS "quantity",
 			i.last_changed AS "lastChanged"
 			FROM items i
 			JOIN categories c ON i.category_id = c.id
@@ -58,7 +58,7 @@ export const getItemFullInfo = query(zString, async (id) => {
 			i.supplier_id AS "supplierID",
 			i.thumbnail,
 			i.photos,
-			i.quantity,
+			i.initial_quantity AS "quantity",
 			i.last_changed AS "lastChanged"
 			FROM items i
 			JOIN categories c ON i.category_id = c.id
@@ -127,7 +127,7 @@ export const createItem = form(
 				const [itemResult] = await sql<Item[]>`
 				WITH i AS (
 					INSERT INTO items 
-					(master_number, name, category_id, supplier_id, quantity, thumbnail, photos)
+					(master_number, name, category_id, supplier_id, initial_quantity, thumbnail, photos)
 					VALUES(
 					${master}, 
 					${name}, 
@@ -145,7 +145,7 @@ export const createItem = form(
 				c.id AS "categoryID",
 				s.name AS "supplier",
 				s.id AS "supplierID",
-				i.quantity,
+				i.initial_quantity AS "quantity",
 				i.thumbnail,
 				i.photos
 				FROM i 
