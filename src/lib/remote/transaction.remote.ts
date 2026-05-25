@@ -17,7 +17,7 @@ export const createIncomingTransaction = form(
 	async ({ date, supplier, deliveryID, ids, quantities }) => {
 		const { locals } = getRequestEvent();
 		try {
-			const newDeliveryOrder = await sql.begin(async () => {
+			await sql.begin(async () => {
 				const supplierResult = await getOrCreateSupplier(supplier);
 				if (!supplierResult)
 					throw new Error('createIncomingTransaction: Supplier result is undefined');
@@ -35,10 +35,10 @@ export const createIncomingTransaction = form(
 						quantity: quantities[i]
 					};
 				});
-				console.log(items);
 				await sql`INSERT INTO incoming_items ${sql(items)}`;
 				return;
 			});
+			return { success: true };
 		} catch (e) {
 			handleQueryErrors(e);
 		}
