@@ -5,6 +5,7 @@
 	import InputIssues from '$lib/components/base/inputIssues.svelte';
 	import { getItemName } from '$lib/remote/item.remote.js';
 	import { createTransaction } from '$lib/remote/transaction.remote.js';
+	import type { EnhanceParams } from '$lib/types/types.js';
 	import {} from 'os';
 	import { toast } from 'svelte-sonner';
 
@@ -31,6 +32,14 @@
 	legend="Enter Delivery Order"
 	errorMsg="Failed to submit DO"
 	successMsg="DO added"
+	onSuccess={({ form }: EnhanceParams) => {
+		form!.supplier.reset();
+		form!.deliveryID.reset();
+		form!.masters.reset();
+		form!.quantities.reset();
+		items = [];
+		masterInput = '';
+	}}
 >
 	<Input
 		label="Delivery Date"
