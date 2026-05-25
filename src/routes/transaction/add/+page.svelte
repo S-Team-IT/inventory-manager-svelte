@@ -2,6 +2,7 @@
 	import Combobox from '$lib/components/base/combobox.svelte';
 	import Form from '$lib/components/base/form.svelte';
 	import Input from '$lib/components/base/input.svelte';
+	import InputIssues from '$lib/components/base/inputIssues.svelte';
 	import { getItemName } from '$lib/remote/item.remote.js';
 	import { createTransaction } from '$lib/remote/transaction.remote.js';
 	import {} from 'os';
@@ -31,7 +32,12 @@
 	errorMsg="Failed to submit DO"
 	successMsg="DO added"
 >
-	<Input label="Delivery Date" type="date" field={date} />
+	<Input
+		label="Delivery Date"
+		type="date"
+		field={date}
+		value={new Date().toISOString().split('T')[0]}
+	/>
 	<Combobox
 		label="Supplier"
 		field={supplier}
@@ -43,7 +49,7 @@
 	<fieldset class="mb-4">
 		<label class="input mb-2 w-full pr-0">
 			<span class="label">Add items:</span>
-			<input type="text" bind:value={masterInput} />
+			<input type="text" bind:value={masterInput} placeholder="Enter master number" />
 			<button
 				class="btn rounded-s-none btn-primary"
 				type="button"
@@ -57,12 +63,13 @@
 					const newItem = {
 						master: masterInput,
 						name: result.name,
-						quantity: 0
+						quantity: 1
 					};
 					items.push(newItem);
 				}}>Add item</button
 			>
 		</label>
+		<InputIssues field={masters} />
 		<table class="table table-zebra">
 			<thead>
 				<tr>
@@ -86,6 +93,7 @@
 								step="1"
 								min="0"
 							/>
+							<InputIssues field={quantities[i]} />
 							<input {...masters[i].as('hidden', master)} />
 							<input {...quantities[i].as('hidden', quantity)} />
 						</th>
@@ -94,5 +102,5 @@
 			</tbody>
 		</table>
 	</fieldset>
-	<button class="btn btn-primary">Add</button>
+	<button class="btn btn-soft btn-primary">Add Delivery Order</button>
 </Form>
