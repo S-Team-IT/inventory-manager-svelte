@@ -5,8 +5,6 @@
 	import InputIssues from '$lib/components/base/inputIssues.svelte';
 	import { getItemNameByMaster } from '$lib/remote/item.remote.js';
 	import { createIncomingTransaction } from '$lib/remote/transaction.remote.js';
-	import type { EnhanceParams } from '$lib/types/types.js';
-	import {} from 'os';
 	import { toast } from 'svelte-sonner';
 
 	type itemQuantity = {
@@ -33,7 +31,7 @@
 	legend="Enter Delivery Order"
 	errorMsg="Failed to submit DO"
 	successMsg="DO added"
-	onSuccess={({ form }: EnhanceParams) => {
+	onSuccess={() => {
 		items = [];
 		masterInput = '';
 	}}
