@@ -1,9 +1,8 @@
-import { query, form } from '$app/server';
-import type { Supplier } from '$lib/types/databaseTypes';
+import { command, query } from '$app/server';
 import { sql } from '$lib/server/postgres';
-import { handleQueryErrors } from '$lib/utils/errorHandling';
-import * as z from 'zod';
+import type { Supplier } from '$lib/types/databaseTypes';
 import { zString } from '$lib/types/schemaTypes';
+import { handleQueryErrors } from '$lib/utils/errorHandling';
 
 export const getSuppliers = query(async () => {
 	try {
@@ -13,9 +12,19 @@ export const getSuppliers = query(async () => {
 	}
 });
 
-export const createCategory = form(z.object({ name: zString }), async ({ name }) => {
+export const getOrCreateSupplier = command(zString, async (name) => {
 	try {
-		return await sql`INSERT INTO suppliers (name) VALUES (${name}) RETURNING id`;
+		const [result] = await sql<Supplier[]>`
+			WITH i AS(
+				INSERT INTO suppliers (name) VALUES (${name}) 
+				ON CONFLICT(name) DO NOTHING
+				RETURNING id
+			)
+			SELECT id FROM i
+			UNION ALL
+			SELECT id FROM suppliers WHERE name = ${name}
+			LIMIT 1;`;
+		return result;
 	} catch (e) {
 		handleQueryErrors(e);
 	}

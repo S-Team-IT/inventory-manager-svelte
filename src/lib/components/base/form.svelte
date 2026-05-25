@@ -26,9 +26,9 @@
 
 		if (await submit()) {
 			if (remoteForm.result.success) {
+				toast.success(successMsg);
 				onSuccess(data);
 				form.reset();
-				toast.success(successMsg);
 			} else {
 				toast.error(errorMsg);
 			}

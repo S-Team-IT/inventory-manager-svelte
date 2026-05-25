@@ -39,5 +39,11 @@ export type Item = {
 	thumbnail: string;
 	photos: { item: string }[] | [];
 	quantity: number;
-	lastChanged: Date;
+	lastStocked: Date;
+};
+
+export type DB_Stock = {
+	incoming_id: string;
+	item_id: string;
+	quantity: number;
 };

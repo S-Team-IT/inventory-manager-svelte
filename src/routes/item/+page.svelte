@@ -14,14 +14,14 @@
 		| 'categoryReverse'
 		| 'quantity'
 		| 'quantityReverse'
-		| 'lastChanged';
+		| 'lastStocked';
 
-	let sortOption = $state<SortOption>('lastChanged');
+	let sortOption = $state<SortOption>('lastStocked');
 	let sortedItems = $derived.by(() => sortItems(data.items, sortOption));
 
 	function sortItems(list: Item[], sortOption: SortOption): Item[] {
-		if (sortOption === 'lastChanged') {
-			return list.toSorted((a, b) => b.lastChanged.getTime() - a.lastChanged.getTime());
+		if (sortOption === 'lastStocked') {
+			return list.toSorted((a, b) => b.lastStocked.getTime() - a.lastStocked.getTime());
 		}
 
 		if (sortOption.includes('Reverse')) {
@@ -47,10 +47,10 @@
 </script>
 
 <button
-	class="btn {sortOption === 'lastChanged' ? '' : 'btn-soft'} ms-4 btn-primary"
+	class="btn {sortOption === 'lastStocked' ? '' : 'btn-soft'} ms-4 btn-primary"
 	onclick={() => {
-		sortOption = 'lastChanged';
-	}}>Last changed</button
+		sortOption = 'lastStocked';
+	}}>Last Stocked</button
 >
 
 <table class="table max-w-200">
@@ -104,7 +104,6 @@
 				<input
 					type="checkbox"
 					onchange={(e) => {
-						console.log('checked');
 						const element = e.target as HTMLInputElement;
 						if (element.checked) {
 							element.parentElement?.parentElement?.parentElement?.classList.add('bg-base-300');

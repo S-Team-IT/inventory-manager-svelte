@@ -1,10 +1,12 @@
 import { form, query } from '$app/server';
 import { sql } from '$lib/server/postgres';
-import type { Category, Item, Supplier } from '$lib/types/databaseTypes';
+import type { Item } from '$lib/types/databaseTypes';
 import { master, zBoolean, zImgFile, zNumber, zString } from '$lib/types/schemaTypes';
 import { handleQueryErrors } from '$lib/utils/errorHandling';
 import { error, invalid } from '@sveltejs/kit';
 import * as z from 'zod';
+import { getOrCreateCategory } from './category.remote';
+import { getOrCreateSupplier } from './supplier.remote';
 
 export const getItems = query(async () => {
 	try {
@@ -16,8 +18,8 @@ export const getItems = query(async () => {
 			supplier_id AS "supplierID",
 			thumbnail,
 			photos,
-			quantity,
-			last_changed AS "lastChanged"
+			initial_quantity AS "quantity",
+			last_stocked AS "lastStocked"
 			FROM items`;
 	} catch (e) {
 		handleQueryErrors(e);
@@ -36,8 +38,8 @@ export const getItemsFullInfo = query(async () => {
 			i.supplier_id AS "supplierID",
 			i.thumbnail,
 			i.photos,
-			i.quantity,
-			i.last_changed AS "lastChanged"
+			i.initial_quantity AS "quantity",
+			i.last_stocked AS "lastStocked"
 			FROM items i
 			JOIN categories c ON i.category_id = c.id
 			JOIN suppliers s ON i.supplier_id = s.id`;
@@ -58,8 +60,8 @@ export const getItemFullInfo = query(zString, async (id) => {
 			i.supplier_id AS "supplierID",
 			i.thumbnail,
 			i.photos,
-			i.quantity,
-			i.last_changed AS "lastChanged"
+			i.initial_quantity AS "quantity",
+			i.last_stocked AS "lastStocked"
 			FROM items i
 			JOIN categories c ON i.category_id = c.id
 			JOIN suppliers s ON i.supplier_id = s.id
@@ -102,32 +104,16 @@ export const createItem = form(
 		];
 		try {
 			const newItem = await sql.begin(async (sql) => {
-				const [categoryResult] = await sql<Category[]>`
-				WITH i AS(
-					INSERT INTO categories (name) VALUES (${category}) 
-					ON CONFLICT(name) DO NOTHING
-					RETURNING id
-				)
-				SELECT id FROM i
-				UNION ALL
-				SELECT id FROM categories WHERE name = ${category}
-				LIMIT 1;`;
+				const categoryResult = await getOrCreateCategory(category);
+				const supplierResult = await getOrCreateSupplier(supplier);
 
-				const [supplierResult] = await sql<Supplier[]>`
-				WITH i AS(
-					INSERT INTO suppliers (name) VALUES (${supplier}) 
-					ON CONFLICT(name) DO NOTHING
-					RETURNING id
-				)
-				SELECT id FROM i
-				UNION ALL
-				SELECT id FROM suppliers WHERE name = ${supplier}
-				LIMIT 1;`;
+				if (!categoryResult || !supplierResult)
+					throw new Error('Create Item: Category or Supplier result is undefined');
 
 				const [itemResult] = await sql<Item[]>`
 				WITH i AS (
 					INSERT INTO items 
-					(master_number, name, category_id, supplier_id, quantity, thumbnail, photos)
+					(master_number, name, category_id, supplier_id, initial_quantity, thumbnail, photos)
 					VALUES(
 					${master}, 
 					${name}, 
@@ -145,7 +131,7 @@ export const createItem = form(
 				c.id AS "categoryID",
 				s.name AS "supplier",
 				s.id AS "supplierID",
-				i.quantity,
+				i.initial_quantity AS "quantity",
 				i.thumbnail,
 				i.photos
 				FROM i 
@@ -174,8 +160,7 @@ export const deleteItem = form(z.object({ master }), async ({ master }) => {
 
 export const editMaster = form(z.object({ id: zString, master }), async ({ id, master }, issue) => {
 	try {
-		const result =
-			await sql`UPDATE items SET master_number = ${master}, last_changed = ${new Date()} WHERE id = ${id}`;
+		const result = await sql`UPDATE items SET master_number = ${master} WHERE id = ${id}`;
 		if (result.count !== 1) invalid(issue.master('Failed to update.'));
 	} catch (e) {
 		// Check if deletedItems is present
@@ -187,8 +172,7 @@ export const editName = form(
 	z.object({ id: zString, name: zString }),
 	async ({ id, name }, issue) => {
 		try {
-			const result =
-				await sql`UPDATE items SET name = ${name}, last_changed = ${new Date()} WHERE id = ${id}`;
+			const result = await sql`UPDATE items SET name = ${name} WHERE id = ${id}`;
 			if (result.count !== 1) invalid(issue.name('Failed to update.'));
 		} catch (e) {
 			handleQueryErrors(e);
@@ -201,20 +185,10 @@ export const editCategory = form(
 	async ({ id, category }, issue) => {
 		try {
 			const updatedItem = await sql.begin(async (sql) => {
-				const [categoryResult] = await sql<Category[]>`
-				WITH i AS(
-					INSERT INTO categories (name) VALUES (${category}) 
-					ON CONFLICT(name) DO NOTHING
-					RETURNING id
-				)
-				SELECT id FROM i
-				UNION ALL
-				SELECT id FROM categories WHERE name = ${category}
-				LIMIT 1;`;
+				const categoryResult = await getOrCreateCategory(category);
+				if (!categoryResult) throw new Error('editCategory: Category result is unde');
 
-				const itemResult =
-					await sql`UPDATE items SET category_id = ${categoryResult.id}, last_changed = ${new Date()} WHERE id = ${id}`;
-				return itemResult;
+				return await sql`UPDATE items SET category_id = ${categoryResult.id} WHERE id = ${id}`;
 			});
 
 			if (updatedItem.count !== 1) invalid(issue.category('Failed to update'));
@@ -229,19 +203,11 @@ export const editSupplier = form(
 	async ({ id, supplier }, issue) => {
 		try {
 			const updatedItem = await sql.begin(async (sql) => {
-				const [supplierResult] = await sql<Supplier[]>`
-				WITH i AS(
-					INSERT INTO suppliers (name) VALUES (${supplier}) 
-					ON CONFLICT(name) DO NOTHING
-					RETURNING id
-				)
-				SELECT id FROM i
-				UNION ALL
-				SELECT id FROM suppliers WHERE name = ${supplier}
-				LIMIT 1;`;
+				const supplierResult = await getOrCreateSupplier(supplier);
+				if (!supplierResult) throw new Error('editSupplier: Supplier result is undefined');
 
 				const itemResult =
-					await sql`UPDATE items SET supplier_id = ${supplierResult.id}, last_changed = ${new Date()} WHERE id = ${id}`;
+					await sql`UPDATE items SET supplier_id = ${supplierResult.id} WHERE id = ${id}`;
 				return itemResult;
 			});
 
@@ -251,3 +217,13 @@ export const editSupplier = form(
 		}
 	}
 );
+
+export const getItemNameByMaster = query(zString, async (master) => {
+	try {
+		const result = await sql<Item[]>`SELECT id, name FROM items WHERE master_number = ${master}`;
+		if (result.count !== 1) return undefined;
+		return result[0];
+	} catch (e) {
+		handleQueryErrors(e);
+	}
+});
