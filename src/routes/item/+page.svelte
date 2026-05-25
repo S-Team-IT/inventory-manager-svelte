@@ -104,7 +104,6 @@
 				<input
 					type="checkbox"
 					onchange={(e) => {
-						console.log('checked');
 						const element = e.target as HTMLInputElement;
 						if (element.checked) {
 							element.parentElement?.parentElement?.parentElement?.classList.add('bg-base-300');
