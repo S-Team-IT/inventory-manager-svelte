@@ -41,3 +41,9 @@ export type Item = {
 	quantity: number;
 	lastStocked: Date;
 };
+
+export type DB_Stock = {
+	incoming_id: string;
+	item_id: string;
+	quantity: number;
+};
