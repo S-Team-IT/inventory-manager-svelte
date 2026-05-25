@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-export const zString = z.string().trim();
+export const zString = z.string().min(1, 'Please enter something.').trim();
 export const zNumber = z
 	.number()
 	.int('Number be an integer.')
