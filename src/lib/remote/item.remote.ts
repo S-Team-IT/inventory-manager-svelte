@@ -17,7 +17,7 @@ export const getItems = query(async () => {
 			thumbnail,
 			photos,
 			initial_quantity AS "quantity",
-			last_changed AS "lastChanged"
+			last_stocked AS "lastStocked"
 			FROM items`;
 	} catch (e) {
 		handleQueryErrors(e);
@@ -37,7 +37,7 @@ export const getItemsFullInfo = query(async () => {
 			i.thumbnail,
 			i.photos,
 			i.initial_quantity AS "quantity",
-			i.last_changed AS "lastChanged"
+			i.last_stocked AS "lastStocked"
 			FROM items i
 			JOIN categories c ON i.category_id = c.id
 			JOIN suppliers s ON i.supplier_id = s.id`;
@@ -59,7 +59,7 @@ export const getItemFullInfo = query(zString, async (id) => {
 			i.thumbnail,
 			i.photos,
 			i.initial_quantity AS "quantity",
-			i.last_changed AS "lastChanged"
+			i.last_stocked AS "lastStocked"
 			FROM items i
 			JOIN categories c ON i.category_id = c.id
 			JOIN suppliers s ON i.supplier_id = s.id
