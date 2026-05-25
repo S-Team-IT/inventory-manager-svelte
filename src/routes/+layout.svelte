@@ -27,9 +27,9 @@
 				<div class="divider m-0.5">QS</div>
 				<li><a href={resolve('/item/new')}>Add Item</a></li>
 				<div class="divider m-0.5">Procurement</div>
-				<li><a href={resolve('/item/add')}>Add Delivery Order</a></li>
+				<li><a href={resolve('/transaction/add')}>Add Delivery Order</a></li>
 				<div class="divider m-0.5">Project</div>
-				<li><a href={resolve('/item/subtract')}>Remove Quantity</a></li>
+				<li><a href={resolve('/transaction/subtract')}>Remove Quantity</a></li>
 			</ul>
 		</div>
 	</div>
