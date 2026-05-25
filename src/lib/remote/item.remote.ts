@@ -174,8 +174,7 @@ export const deleteItem = form(z.object({ master }), async ({ master }) => {
 
 export const editMaster = form(z.object({ id: zString, master }), async ({ id, master }, issue) => {
 	try {
-		const result =
-			await sql`UPDATE items SET master_number = ${master}, last_changed = ${new Date()} WHERE id = ${id}`;
+		const result = await sql`UPDATE items SET master_number = ${master} WHERE id = ${id}`;
 		if (result.count !== 1) invalid(issue.master('Failed to update.'));
 	} catch (e) {
 		// Check if deletedItems is present
@@ -187,8 +186,7 @@ export const editName = form(
 	z.object({ id: zString, name: zString }),
 	async ({ id, name }, issue) => {
 		try {
-			const result =
-				await sql`UPDATE items SET name = ${name}, last_changed = ${new Date()} WHERE id = ${id}`;
+			const result = await sql`UPDATE items SET name = ${name} WHERE id = ${id}`;
 			if (result.count !== 1) invalid(issue.name('Failed to update.'));
 		} catch (e) {
 			handleQueryErrors(e);
@@ -213,7 +211,7 @@ export const editCategory = form(
 				LIMIT 1;`;
 
 				const itemResult =
-					await sql`UPDATE items SET category_id = ${categoryResult.id}, last_changed = ${new Date()} WHERE id = ${id}`;
+					await sql`UPDATE items SET category_id = ${categoryResult.id} WHERE id = ${id}`;
 				return itemResult;
 			});
 
@@ -241,7 +239,7 @@ export const editSupplier = form(
 				LIMIT 1;`;
 
 				const itemResult =
-					await sql`UPDATE items SET supplier_id = ${supplierResult.id}, last_changed = ${new Date()} WHERE id = ${id}`;
+					await sql`UPDATE items SET supplier_id = ${supplierResult.id} WHERE id = ${id}`;
 				return itemResult;
 			});
 
