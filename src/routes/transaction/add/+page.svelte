@@ -13,7 +13,7 @@
 		quantity: number;
 	};
 
-	const { date, supplier, id } = createTransaction.fields;
+	const { date, supplier, id, masters, quantities } = createTransaction.fields;
 
 	const { data } = $props();
 	let masterInput = $state<string>('');
@@ -72,7 +72,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#each items as { master, name }, i (i)}
+				{#each items as { master, name, quantity }, i (i)}
 					<tr>
 						<th class="w-15">{master}</th>
 						<th>{truncateString(name, 20)}</th>
@@ -80,13 +80,15 @@
 							><input
 								class="w-10 border ps-1"
 								type="number"
-								name=""
-								id=""
+								id={`input${i}`}
+								name={`input${i}`}
 								bind:value={items[i].quantity}
 								step="1"
 								min="0"
-							/></th
-						>
+							/>
+							<input {...masters[i].as('hidden', master)} />
+							<input {...quantities[i].as('hidden', quantity)} />
+						</th>
 					</tr>
 				{/each}
 			</tbody>
