@@ -1,7 +1,8 @@
-import { form, getRequestEvent } from '$app/server';
+import { form, getRequestEvent, query } from '$app/server';
 import { sql } from '$lib/server/postgres';
-import type { DB_Stock } from '$lib/types/databaseTypes';
+import type { DB_Stock, IncomingTransaction } from '$lib/types/databaseTypes';
 import { master, zNumber, zString } from '$lib/types/schemaTypes';
+import type { CompleteIncomingTransaction, TransactionItem } from '$lib/types/types';
 import { handleQueryErrors } from '$lib/utils/errorHandling';
 import { invalid } from '@sveltejs/kit';
 import { isBefore } from 'date-fns';
@@ -90,6 +91,31 @@ export const createOutgoingTransaction = form(
 		}
 	}
 );
+
+export const getIncomingTransactions = query(async () => {
+	try {
+		const result = await sql<IncomingTransaction[]>`
+		SELECT inc_t.id, 
+			inc_t.created_at AS "createdAt", 
+			inc_t.delivery_date AS "deliveryDate", 
+			s.name AS "supplier", 
+			inc_t.delivery_ref AS "deliveryID",
+			inc_i.item_id AS "itemID",
+			i.name AS "itemName",
+			inc_i.quantity
+		FROM incoming_transactions inc_t
+		JOIN incoming_items inc_i
+		ON inc_t.id = inc_i.transaction_id
+		JOIN items i
+		ON inc_i.item_id = i.id
+		JOIN suppliers s
+		ON inc_t.supplier_id = s.id`;
+		const sortedTransactions = sortTransactions(result);
+		return sortedTransactions;
+	} catch (e) {
+		handleQueryErrors(e);
+	}
+});
 
 function generateDB_StockArray(
 	itemIDs: string[],
