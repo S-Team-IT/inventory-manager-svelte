@@ -1,10 +1,14 @@
 import { getSuppliers } from '$lib/remote/supplier.remote';
+import { getIncomingTransactions } from '$lib/remote/transaction.remote';
 
 export async function load() {
 	const suppliers = await getSuppliers();
 	if (!suppliers) throw new Error('getSuppliers returned undefined');
+	const transactions = await getIncomingTransactions();
+	if (!transactions) throw new Error('getIncomingTransactions returned undefined');
 
 	return {
-		suppliers
+		suppliers,
+		transactions
 	};
 }
