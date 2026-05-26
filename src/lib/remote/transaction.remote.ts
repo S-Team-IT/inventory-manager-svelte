@@ -34,14 +34,8 @@ export const createIncomingTransaction = form(
 					logger_id, created_at, delivery_date, supplier_id, delivery_ref)
 					VALUES(${locals.user.id}, ${new Date()}, ${date}, ${supplierResult.id}, ${deliveryID}) RETURNING id`;
 
-				const items: DB_Stock[] = [];
-				ids.forEach((id, i) => {
-					items[i] = {
-						incoming_id: transactionResult.id,
-						item_id: id,
-						quantity: quantities[i]
-					};
-				});
+				const items = generateDB_StockArray(ids, quantities, transactionResult.id);
+
 				await sql`INSERT INTO incoming_items ${sql(items)}`;
 				return;
 			});
@@ -62,3 +56,18 @@ export const createIncomingTransaction = form(
 		}
 	}
 );
+function generateDB_StockArray(
+	itemIDs: string[],
+	quantities: number[],
+	transactionID: string
+): DB_Stock[] {
+	const items: DB_Stock[] = [];
+	itemIDs.forEach((id, i) => {
+		items[i] = {
+			incoming_id: transactionID,
+			item_id: id,
+			quantity: quantities[i]
+		};
+	});
+	return items;
+}
