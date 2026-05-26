@@ -93,7 +93,7 @@
 								name={`input${i}`}
 								bind:value={items[i].quantity}
 								step="1"
-								min="0"
+								min="1"
 							/>
 							<InputIssues field={quantities[i]} />
 							<input {...ids[i].as('hidden', id)} />
