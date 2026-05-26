@@ -132,3 +132,32 @@ function generateDB_StockArray(
 	});
 	return items;
 }
+
+function sortTransactions(transactions: IncomingTransaction[]): CompleteIncomingTransaction[] {
+	if (transactions.length === 0) return [];
+	let newID = transactions[0].id;
+	const sortedList: CompleteIncomingTransaction[] = [];
+	const sortedTransactions: TransactionItem[] = [];
+	transactions.forEach(
+		({ id, createdAt, deliveryDate, supplier, deliveryID, itemID, itemName, quantity }) => {
+			if (id !== newID) {
+				const shallowSortedTransactions = sortedTransactions.slice();
+				sortedList.push({
+					id,
+					createdAt,
+					deliveryDate,
+					supplier,
+					deliveryID,
+					items: shallowSortedTransactions
+				});
+				console.log(JSON.stringify(sortedList, null, 2));
+				sortedTransactions.length = 0;
+				newID = id;
+				console.log(JSON.stringify(sortedList, null, 2));
+			}
+			const newTransactionItem = { id: itemID, name: itemName, quantity };
+			sortedTransactions.push(newTransactionItem);
+		}
+	);
+	return sortedList;
+}
