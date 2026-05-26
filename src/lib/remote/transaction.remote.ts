@@ -34,14 +34,8 @@ export const createIncomingTransaction = form(
 					logger_id, created_at, delivery_date, supplier_id, delivery_ref)
 					VALUES(${locals.user.id}, ${new Date()}, ${date}, ${supplierResult.id}, ${deliveryID}) RETURNING id`;
 
-				const items: DB_Stock[] = [];
-				ids.forEach((id, i) => {
-					items[i] = {
-						incoming_id: transactionResult.id,
-						item_id: id,
-						quantity: quantities[i]
-					};
-				});
+				const items = generateDB_StockArray(ids, quantities, transactionResult.id);
+
 				await sql`INSERT INTO incoming_items ${sql(items)}`;
 				return;
 			});
@@ -62,3 +56,53 @@ export const createIncomingTransaction = form(
 		}
 	}
 );
+
+export const createOutgoingTransaction = form(
+	z
+		.object({
+			date: z.iso.date(),
+			expender: zString,
+			remarks: z.string().trim(),
+			ids: z.array(master, 'Please add an item.'),
+			quantities: z.array(zNumber.min(1, 'Quantity must be at least 1.'))
+		})
+		.refine((obj) => isBefore(obj.date, new Date()), {
+			error: 'Date cannot be in the future.',
+			path: ['date']
+		}),
+	async ({ date, expender, remarks, ids, quantities }) => {
+		const { locals } = getRequestEvent();
+		try {
+			await sql.begin(async () => {
+				const [transactionResult] = await sql<{ id: string }[]>`
+					INSERT INTO outgoing_transactions(
+					logger_id, created_at, expend_date, expender, remarks)
+					VALUES(${locals.user.id}, ${new Date()}, ${date}, ${expender}, ${remarks}) RETURNING id`;
+
+				const items = generateDB_StockArray(ids, quantities, transactionResult.id);
+
+				await sql`INSERT INTO outgoing_items ${sql(items)}`;
+				return;
+			});
+			return { success: true };
+		} catch (e) {
+			handleQueryErrors(e);
+		}
+	}
+);
+
+function generateDB_StockArray(
+	itemIDs: string[],
+	quantities: number[],
+	transactionID: string
+): DB_Stock[] {
+	const items: DB_Stock[] = [];
+	itemIDs.forEach((id, i) => {
+		items[i] = {
+			incoming_id: transactionID,
+			item_id: id,
+			quantity: quantities[i]
+		};
+	});
+	return items;
+}
