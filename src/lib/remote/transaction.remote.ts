@@ -142,14 +142,13 @@ function sortTransactions(transactions: IncomingTransaction[]): CompleteIncoming
 	transactions.forEach(
 		({ id, createdAt, deliveryDate, supplier, deliveryID, itemID, master, itemName, quantity }) => {
 			if (id !== newID) {
-				const shallowSortedTransactions = sortedTransactions.slice();
 				sortedList.push({
 					id,
 					createdAt,
 					deliveryDate,
 					supplier,
 					deliveryID,
-					items: shallowSortedTransactions
+					items: sortedTransactions.slice()
 				});
 				console.log(JSON.stringify(sortedList, null, 2));
 				sortedTransactions.length = 0;
