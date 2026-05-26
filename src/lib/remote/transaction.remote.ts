@@ -100,6 +100,7 @@ export const getIncomingTransactions = query(async () => {
 			inc_t.delivery_date AS "deliveryDate", 
 			s.name AS "supplier", 
 			inc_t.delivery_ref AS "deliveryID",
+			i.master_number AS master,
 			inc_i.item_id AS "itemID",
 			i.name AS "itemName",
 			inc_i.quantity
@@ -139,7 +140,7 @@ function sortTransactions(transactions: IncomingTransaction[]): CompleteIncoming
 	const sortedList: CompleteIncomingTransaction[] = [];
 	const sortedTransactions: TransactionItem[] = [];
 	transactions.forEach(
-		({ id, createdAt, deliveryDate, supplier, deliveryID, itemID, itemName, quantity }) => {
+		({ id, createdAt, deliveryDate, supplier, deliveryID, itemID, master, itemName, quantity }) => {
 			if (id !== newID) {
 				const shallowSortedTransactions = sortedTransactions.slice();
 				sortedList.push({
@@ -155,7 +156,7 @@ function sortTransactions(transactions: IncomingTransaction[]): CompleteIncoming
 				newID = id;
 				console.log(JSON.stringify(sortedList, null, 2));
 			}
-			const newTransactionItem = { id: itemID, name: itemName, quantity };
+			const newTransactionItem = { id: itemID, master, name: itemName, quantity };
 			sortedTransactions.push(newTransactionItem);
 		}
 	);

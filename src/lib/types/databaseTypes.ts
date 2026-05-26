@@ -55,6 +55,7 @@ export type IncomingTransaction = {
 	supplier: string;
 	deliveryID: string;
 	itemID: string;
+	master: string;
 	itemName: string;
 	quantity: number;
 };
