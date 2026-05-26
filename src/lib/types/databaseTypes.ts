@@ -47,3 +47,14 @@ export type DB_Stock = {
 	item_id: string;
 	quantity: number;
 };
+
+export type IncomingTransaction = {
+	id: string;
+	createdAt: Date;
+	deliveryDate: Date;
+	supplier: string;
+	deliveryID: string;
+	itemID: string;
+	itemName: string;
+	quantity: number;
+};
