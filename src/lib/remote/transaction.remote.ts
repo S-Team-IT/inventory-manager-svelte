@@ -56,6 +56,41 @@ export const createIncomingTransaction = form(
 		}
 	}
 );
+
+export const createOutgoingTransaction = form(
+	z
+		.object({
+			date: z.iso.date(),
+			expender: zString,
+			remarks: z.string().trim(),
+			ids: z.array(master, 'Please add an item.'),
+			quantities: z.array(zNumber.min(1, 'Quantity must be at least 1.'))
+		})
+		.refine((obj) => isBefore(obj.date, new Date()), {
+			error: 'Date cannot be in the future.',
+			path: ['date']
+		}),
+	async ({ date, expender, remarks, ids, quantities }) => {
+		const { locals } = getRequestEvent();
+		try {
+			await sql.begin(async () => {
+				const [transactionResult] = await sql<{ id: string }[]>`
+					INSERT INTO outgoing_transactions(
+					logger_id, created_at, expend_date, expender, remarks)
+					VALUES(${locals.user.id}, ${new Date()}, ${date}, ${expender}, ${remarks}) RETURNING id`;
+
+				const items = generateDB_StockArray(ids, quantities, transactionResult.id);
+
+				await sql`INSERT INTO outgoing_items ${sql(items)}`;
+				return;
+			});
+			return { success: true };
+		} catch (e) {
+			handleQueryErrors(e);
+		}
+	}
+);
+
 function generateDB_StockArray(
 	itemIDs: string[],
 	quantities: number[],
