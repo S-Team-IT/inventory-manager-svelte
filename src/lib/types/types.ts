@@ -14,3 +14,12 @@ export type TransactionItem = {
 	name: string;
 	quantity: number;
 };
+
+export type CompleteIncomingTransaction = {
+	id: string;
+	createdAt: Date;
+	deliveryDate: Date;
+	supplier: string;
+	deliveryID: string;
+	items: TransactionItem[];
+};
