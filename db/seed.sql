@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict T71M9tKQNk7ysh39ViH3uWNaOUjEvgHxWZqxO3h9VXIgdawbxvV7eppefitSBs4
+\restrict 4a4rHgWRIV75hlTeB3wfUrssEMLducyTuWGCDpkKhxTWdtaECHH1cpeSgz7yhl8
 
 -- Dumped from database version 18.3
 -- Dumped by pg_dump version 18.3
@@ -84,6 +84,7 @@ COPY public.incoming_transactions (id, logger_id, created_at, delivery_date, sup
 44	1	2026-05-25 17:32:10.53+08	2026-05-25	1	DO 1231231231
 45	1	2026-05-25 17:32:29.87+08	2026-06-12	1	12132312312312312
 46	1	2026-05-25 17:33:18.483+08	2026-05-25	1	201231231
+47	1	2026-05-26 10:42:04.923+08	2026-05-26	1	123123123123123123123
 \.
 
 
@@ -102,7 +103,7 @@ COPY public.items (id, name, category_id, supplier_id, thumbnail, photos, master
 -- Data for Name: incoming_items; Type: TABLE DATA; Schema: public; Owner: inventory_user
 --
 
-COPY public.incoming_items (incoming_id, item_id, quantity) FROM stdin;
+COPY public.incoming_items (transaction_id, item_id, quantity) FROM stdin;
 3	1	2
 3	2	1
 3	4	1
@@ -141,6 +142,7 @@ COPY public.incoming_items (incoming_id, item_id, quantity) FROM stdin;
 44	1	1
 45	1	1
 46	1	1
+47	2	500
 \.
 
 
@@ -149,6 +151,10 @@ COPY public.incoming_items (incoming_id, item_id, quantity) FROM stdin;
 --
 
 COPY public.outgoing_transactions (id, logger_id, created_at, expend_date, expender, remarks) FROM stdin;
+1	1	2026-05-26 10:15:13.244+08	2026-05-26	John	
+2	1	2026-05-26 10:33:20.33+08	2026-05-26	John	roof
+3	1	2026-05-26 10:44:57.394+08	2026-05-26	Mary	12312312
+4	1	2026-05-26 10:45:19.207+08	2026-05-26	Mary	12312312
 \.
 
 
@@ -156,7 +162,9 @@ COPY public.outgoing_transactions (id, logger_id, created_at, expend_date, expen
 -- Data for Name: outgoing_items; Type: TABLE DATA; Schema: public; Owner: inventory_user
 --
 
-COPY public.outgoing_items (outgoing_id, item_id, quantity) FROM stdin;
+COPY public.outgoing_items (transaction_id, item_id, quantity) FROM stdin;
+2	1	5
+4	2	5
 \.
 
 
@@ -166,6 +174,7 @@ COPY public.outgoing_items (outgoing_id, item_id, quantity) FROM stdin;
 
 COPY public.sessions (id, secret_hash, created_at, user_id) FROM stdin;
 m898b5wqedz4d9bdmgvxrrya	\\x7779bfee508b0f2cb819490f90d621d9f56fcac92f170b3b1fedd7c0c37e50bb	1779694205	1
+ebrqsfv325rmirbnytya32nk	\\x18e12b918342b5e47d2fc1ae0647714589f83b3c5cfdbc186f977239daa40a57	1779760734	1
 \.
 
 
@@ -180,7 +189,7 @@ SELECT pg_catalog.setval('public.categories_id_seq', 5, true);
 -- Name: incoming_transactions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: inventory_user
 --
 
-SELECT pg_catalog.setval('public.incoming_transactions_id_seq', 46, true);
+SELECT pg_catalog.setval('public.incoming_transactions_id_seq', 47, true);
 
 
 --
@@ -194,14 +203,14 @@ SELECT pg_catalog.setval('public.items_id_seq', 4, true);
 -- Name: outgoing_transactions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: inventory_user
 --
 
-SELECT pg_catalog.setval('public.outgoing_transactions_id_seq', 1, false);
+SELECT pg_catalog.setval('public.outgoing_transactions_id_seq', 4, true);
 
 
 --
 -- Name: suppliers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: inventory_user
 --
 
-SELECT pg_catalog.setval('public.suppliers_id_seq', 49, true);
+SELECT pg_catalog.setval('public.suppliers_id_seq', 50, true);
 
 
 --
@@ -215,5 +224,5 @@ SELECT pg_catalog.setval('public.users_id_seq', 1, true);
 -- PostgreSQL database dump complete
 --
 
-\unrestrict T71M9tKQNk7ysh39ViH3uWNaOUjEvgHxWZqxO3h9VXIgdawbxvV7eppefitSBs4
+\unrestrict 4a4rHgWRIV75hlTeB3wfUrssEMLducyTuWGCDpkKhxTWdtaECHH1cpeSgz7yhl8
 
