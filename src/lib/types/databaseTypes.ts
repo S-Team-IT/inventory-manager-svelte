@@ -34,42 +34,41 @@ export type DB_Stock = {
 	quantity: number;
 };
 
-export type GenericItem = {
+export type Item = {
 	id: string;
 	master: string;
 	name: string;
+	quantity: number;
 };
 
-export type DetailedItem = GenericItem & {
+export type DetailedItem = Item & {
 	category: string;
 	categoryID?: string;
 	supplier: string;
 	supplierID?: string;
 	thumbnail: string;
 	photos: { item: string }[] | [];
-	quantity: number;
 	lastStocked: Date;
 };
 
-export type ItemTransaction = GenericItem & {
-	quantity: number;
-};
-
-export type IncomingTransaction = {
+export type Transaction = {
 	id: string;
 	createdAt: Date;
-	deliveryDate: Date;
-	supplier: string;
-	deliveryID: string;
+	deliveryDate?: Date;
+	supplier?: string;
+	deliveryID?: string;
+	expendDate?: Date;
+	expender?: string;
+	remarks?: string;
 };
 
-export type IndividualIncomingTransaction = IncomingTransaction & {
+export type IndividualTransaction = Transaction & {
 	itemID: string;
 	master: string;
 	itemName: string;
 	quantity: number;
 };
 
-export type CompleteIncomingTransaction = IncomingTransaction & {
-	items: ItemTransaction[];
+export type CompleteTransaction = Transaction & {
+	items: Item[];
 };
