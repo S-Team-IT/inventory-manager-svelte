@@ -8,18 +8,4 @@ export type EnhanceParams = {
 	};
 };
 
-export type TransactionItem = {
-	id: string;
-	master: string;
-	name: string;
-	quantity: number;
-};
 
-export type CompleteIncomingTransaction = {
-	id: string;
-	createdAt: Date;
-	deliveryDate: Date;
-	supplier: string;
-	deliveryID: string;
-	items: TransactionItem[];
-};

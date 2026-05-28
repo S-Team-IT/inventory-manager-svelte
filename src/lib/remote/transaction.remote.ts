@@ -1,8 +1,12 @@
 import { form, getRequestEvent, query } from '$app/server';
 import { sql } from '$lib/server/postgres';
-import type { DB_Stock, IncomingTransaction } from '$lib/types/databaseTypes';
+import type {
+	CompleteIncomingTransaction,
+	DB_Stock,
+	IndividualIncomingTransaction,
+	ItemTransaction
+} from '$lib/types/databaseTypes';
 import { master, zNumber, zString } from '$lib/types/schemaTypes';
-import type { CompleteIncomingTransaction, TransactionItem } from '$lib/types/types';
 import { handleQueryErrors } from '$lib/utils/errorHandling';
 import { invalid } from '@sveltejs/kit';
 import { isBefore } from 'date-fns';
@@ -79,7 +83,6 @@ export const createOutgoingTransaction = form(
 					INSERT INTO outgoing_transactions(
 					logger_id, created_at, expend_date, expender, remarks)
 					VALUES(${locals.user.id}, ${new Date()}, ${date}, ${expender}, ${remarks}) RETURNING id`;
-
 				const items = generateDB_StockArray(ids, quantities, transactionResult.id);
 
 				await sql`INSERT INTO outgoing_items ${sql(items)}`;
@@ -94,7 +97,7 @@ export const createOutgoingTransaction = form(
 
 export const getIncomingTransactions = query(async () => {
 	try {
-		const result = await sql<IncomingTransaction[]>`
+		const result = await sql<IndividualIncomingTransaction[]>`
 		SELECT inc_t.id, 
 			inc_t.created_at AS "createdAt", 
 			inc_t.delivery_date AS "deliveryDate", 
