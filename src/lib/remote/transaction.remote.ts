@@ -110,7 +110,8 @@ export const getIncomingTransactions = query(async () => {
 		JOIN items i
 		ON inc_i.item_id = i.id
 		JOIN suppliers s
-		ON inc_t.supplier_id = s.id`;
+		ON inc_t.supplier_id = s.id
+		ORDER BY inc_t.created_at desc`;
 		const sortedTransactions = sortTransactions(result);
 		return sortedTransactions;
 	} catch (e) {
