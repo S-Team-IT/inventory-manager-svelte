@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import type { Item } from '$lib/types/databaseTypes.js';
+	import type { DetailedItem, Item } from '$lib/types/databaseTypes.js';
 	import { SvelteSet } from 'svelte/reactivity';
 	import ImageModal from '../../lib/components/imageModal.svelte';
 
@@ -19,7 +19,7 @@
 	let sortOption = $state<SortOption>('lastStocked');
 	let sortedItems = $derived.by(() => sortItems(data.items, sortOption));
 
-	function sortItems(list: Item[], sortOption: SortOption): Item[] {
+	function sortItems(list: DetailedItem[], sortOption: SortOption): DetailedItem[] {
 		if (sortOption === 'lastStocked') {
 			return list.toSorted((a, b) => b.lastStocked.getTime() - a.lastStocked.getTime());
 		}
@@ -93,7 +93,7 @@
 {/snippet}
 
 {#snippet ItemRow(
-	{ id, master, name, category, thumbnail, photos, quantity }: Item,
+	{ id, master, name, category, thumbnail, photos, quantity }: DetailedItem,
 	selectedItems: SvelteSet<string>
 )}
 	<tr class="hover:bg-base-300">
