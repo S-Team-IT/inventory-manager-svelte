@@ -4,6 +4,7 @@ import type { User } from '$lib/types/databaseTypes';
 import { email, password, zString } from '$lib/types/schemaTypes';
 import { handleQueryErrors } from '$lib/utils/errorHandling';
 import { hashPassword } from '$lib/utils/hash';
+import { capitalizeFirstLetter } from '$lib/utils/stringTransform';
 import { error, invalid } from '@sveltejs/kit';
 import z from 'zod';
 
@@ -28,7 +29,7 @@ export const createUser = form(
 		}),
 	async ({ email, name, password, role }, issue) => {
 		try {
-			name = name[0].toUpperCase() + name.slice(1);
+			name = capitalizeFirstLetter(name);
 			const passwordHash = await hashPassword(password);
 			const result =
 				await sql`INSERT INTO users (email, name, password_hash, role) VALUES(${email}, ${name}, ${passwordHash}, ${role})`;
