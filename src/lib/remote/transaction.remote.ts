@@ -135,30 +135,43 @@ function generateDB_StockArray(
 	return items;
 }
 
-function sortTransactions(transactions: IncomingTransaction[]): CompleteIncomingTransaction[] {
+function sortTransactions(
+	transactions: IndividualIncomingTransaction[]
+): CompleteIncomingTransaction[] {
 	if (transactions.length === 0) return [];
-	let newID = transactions[0].id;
-	const sortedList: CompleteIncomingTransaction[] = [];
-	const sortedTransactions: TransactionItem[] = [];
-	transactions.forEach(
-		({ id, createdAt, deliveryDate, supplier, deliveryID, itemID, master, itemName, quantity }) => {
-			if (id !== newID) {
-				sortedList.push({
-					id,
-					createdAt,
-					deliveryDate,
-					supplier,
-					deliveryID,
-					items: sortedTransactions.slice()
-				});
-				console.log(JSON.stringify(sortedList, null, 2));
-				sortedTransactions.length = 0;
-				newID = id;
-				console.log(JSON.stringify(sortedList, null, 2));
-			}
-			const newTransactionItem = { id: itemID, master, name: itemName, quantity };
-			sortedTransactions.push(newTransactionItem);
+	let count: number = -1; //So that it increments to 0 on the first item
+	let currentID: string = '';
+	const completeList: CompleteIncomingTransaction[] = [];
+
+	for (let i = 0; i < transactions.length; i++) {
+		const {
+			id,
+			createdAt,
+			deliveryDate,
+			supplier,
+			deliveryID,
+			itemID,
+			master,
+			itemName,
+			quantity
+		} = transactions[i];
+		const item: ItemTransaction = { id: itemID, master, name: itemName, quantity };
+
+		if (id !== currentID) {
+			count++;
+			currentID = id;
+			completeList[count] = {
+				id,
+				createdAt,
+				deliveryDate,
+				supplier,
+				deliveryID,
+				items: [item]
+			};
+		} else {
+			completeList[count].items.push(item);
 		}
-	);
-	return sortedList;
+	}
+
+	return completeList;
 }
