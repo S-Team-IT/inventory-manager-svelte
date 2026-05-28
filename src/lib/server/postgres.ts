@@ -6,5 +6,8 @@ export const sql = postgres({
 	port: Number(DB_PORT),
 	database: DB_DATABASE,
 	username: DB_USERNAME,
-	password: DB_PASSWORD
+	password: DB_PASSWORD,
+	connection: {
+		search_path: 'public'
+	}
 });
