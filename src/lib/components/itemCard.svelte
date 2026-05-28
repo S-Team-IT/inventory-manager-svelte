@@ -4,6 +4,7 @@
 	import ImageModal from '$lib/components/imageModal.svelte';
 	import { deleteItem } from '$lib/remote/item.remote';
 	import type { DetailedItem } from '$lib/types/databaseTypes';
+	import { truncateString } from '$lib/utils/stringTransform';
 	import { toast } from 'svelte-sonner';
 
 	let {
@@ -33,7 +34,7 @@
 	<ImageModal id={master} thumbnailSrc={thumbnail} gallerySrc={photos} />
 	<div class="card-body p-4 text-gray-800">
 		<h2 class="card-title flex-col items-start gap-0 text-2xl">
-			{name}
+			{truncateString(name, 15)}
 			<span class="text-lg">{category}</span>
 			<span class="text-sm">{supplier}</span>
 		</h2>
