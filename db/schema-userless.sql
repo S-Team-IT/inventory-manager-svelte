@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict Q8jLP2Y5zPbRcpHaIjrpPq2iaoRkXUaNsvFTnNaKql9jesiudBg9x8f94VMo5wK
+\restrict 72No7gvzhRrqJRO1Hv9nuBqBSoTxEvdwPRGtqPiG7Tgze9wdgzEcfCC1obNC1AH
 
 -- Dumped from database version 18.3
 -- Dumped by pg_dump version 18.3
@@ -27,14 +27,14 @@ CREATE EXTENSION IF NOT EXISTS citext WITH SCHEMA public;
 
 
 --
--- Name: EXTENSION citext; Type: COMMENT; Schema: -; Owner: 
+-- Name: EXTENSION citext; Type: COMMENT; Schema: -; Owner: -
 --
 
 COMMENT ON EXTENSION citext IS 'data type for case-insensitive character strings';
 
 
 --
--- Name: role; Type: TYPE; Schema: public; Owner: inventory_user
+-- Name: role; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public.role AS ENUM (
@@ -45,14 +45,12 @@ CREATE TYPE public.role AS ENUM (
 );
 
 
-ALTER TYPE public.role OWNER TO inventory_user;
-
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
 --
--- Name: categories; Type: TABLE; Schema: public; Owner: inventory_user
+-- Name: categories; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.categories (
@@ -61,10 +59,8 @@ CREATE TABLE public.categories (
 );
 
 
-ALTER TABLE public.categories OWNER TO inventory_user;
-
 --
--- Name: categories_id_seq; Type: SEQUENCE; Schema: public; Owner: inventory_user
+-- Name: categories_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 ALTER TABLE public.categories ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
@@ -78,7 +74,7 @@ ALTER TABLE public.categories ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
 
 
 --
--- Name: incoming_items; Type: TABLE; Schema: public; Owner: inventory_user
+-- Name: incoming_items; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.incoming_items (
@@ -89,10 +85,8 @@ CREATE TABLE public.incoming_items (
 );
 
 
-ALTER TABLE public.incoming_items OWNER TO inventory_user;
-
 --
--- Name: incoming_transactions; Type: TABLE; Schema: public; Owner: inventory_user
+-- Name: incoming_transactions; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.incoming_transactions (
@@ -105,10 +99,8 @@ CREATE TABLE public.incoming_transactions (
 );
 
 
-ALTER TABLE public.incoming_transactions OWNER TO inventory_user;
-
 --
--- Name: incoming_transactions_id_seq; Type: SEQUENCE; Schema: public; Owner: inventory_user
+-- Name: incoming_transactions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 ALTER TABLE public.incoming_transactions ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
@@ -122,7 +114,7 @@ ALTER TABLE public.incoming_transactions ALTER COLUMN id ADD GENERATED ALWAYS AS
 
 
 --
--- Name: items; Type: TABLE; Schema: public; Owner: inventory_user
+-- Name: items; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.items (
@@ -139,10 +131,8 @@ CREATE TABLE public.items (
 );
 
 
-ALTER TABLE public.items OWNER TO inventory_user;
-
 --
--- Name: items_id_seq; Type: SEQUENCE; Schema: public; Owner: inventory_user
+-- Name: items_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 ALTER TABLE public.items ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
@@ -156,7 +146,7 @@ ALTER TABLE public.items ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
 
 
 --
--- Name: outgoing_items; Type: TABLE; Schema: public; Owner: inventory_user
+-- Name: outgoing_items; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.outgoing_items (
@@ -167,10 +157,8 @@ CREATE TABLE public.outgoing_items (
 );
 
 
-ALTER TABLE public.outgoing_items OWNER TO inventory_user;
-
 --
--- Name: net_quantity; Type: VIEW; Schema: public; Owner: inventory_user
+-- Name: net_quantity; Type: VIEW; Schema: public; Owner: -
 --
 
 CREATE VIEW public.net_quantity AS
@@ -183,10 +171,8 @@ CREATE VIEW public.net_quantity AS
   GROUP BY COALESCE(i.item_id, o.item_id);
 
 
-ALTER VIEW public.net_quantity OWNER TO inventory_user;
-
 --
--- Name: outgoing_transactions; Type: TABLE; Schema: public; Owner: inventory_user
+-- Name: outgoing_transactions; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.outgoing_transactions (
@@ -199,10 +185,8 @@ CREATE TABLE public.outgoing_transactions (
 );
 
 
-ALTER TABLE public.outgoing_transactions OWNER TO inventory_user;
-
 --
--- Name: outgoing_transactions_id_seq; Type: SEQUENCE; Schema: public; Owner: inventory_user
+-- Name: outgoing_transactions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 ALTER TABLE public.outgoing_transactions ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
@@ -216,7 +200,7 @@ ALTER TABLE public.outgoing_transactions ALTER COLUMN id ADD GENERATED ALWAYS AS
 
 
 --
--- Name: sessions; Type: TABLE; Schema: public; Owner: inventory_user
+-- Name: sessions; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.sessions (
@@ -227,10 +211,8 @@ CREATE TABLE public.sessions (
 );
 
 
-ALTER TABLE public.sessions OWNER TO inventory_user;
-
 --
--- Name: suppliers; Type: TABLE; Schema: public; Owner: inventory_user
+-- Name: suppliers; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.suppliers (
@@ -239,10 +221,8 @@ CREATE TABLE public.suppliers (
 );
 
 
-ALTER TABLE public.suppliers OWNER TO inventory_user;
-
 --
--- Name: suppliers_id_seq; Type: SEQUENCE; Schema: public; Owner: inventory_user
+-- Name: suppliers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 ALTER TABLE public.suppliers ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
@@ -256,7 +236,7 @@ ALTER TABLE public.suppliers ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
 
 
 --
--- Name: users; Type: TABLE; Schema: public; Owner: inventory_user
+-- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.users (
@@ -269,10 +249,8 @@ CREATE TABLE public.users (
 );
 
 
-ALTER TABLE public.users OWNER TO inventory_user;
-
 --
--- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: inventory_user
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 ALTER TABLE public.users ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
@@ -286,7 +264,7 @@ ALTER TABLE public.users ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
 
 
 --
--- Name: categories categories_name_key; Type: CONSTRAINT; Schema: public; Owner: inventory_user
+-- Name: categories categories_name_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.categories
@@ -294,7 +272,7 @@ ALTER TABLE ONLY public.categories
 
 
 --
--- Name: categories categories_pkey; Type: CONSTRAINT; Schema: public; Owner: inventory_user
+-- Name: categories categories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.categories
@@ -302,7 +280,7 @@ ALTER TABLE ONLY public.categories
 
 
 --
--- Name: incoming_items incoming_items_pkey; Type: CONSTRAINT; Schema: public; Owner: inventory_user
+-- Name: incoming_items incoming_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.incoming_items
@@ -310,7 +288,7 @@ ALTER TABLE ONLY public.incoming_items
 
 
 --
--- Name: incoming_transactions incoming_transactions_pkey; Type: CONSTRAINT; Schema: public; Owner: inventory_user
+-- Name: incoming_transactions incoming_transactions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.incoming_transactions
@@ -318,7 +296,7 @@ ALTER TABLE ONLY public.incoming_transactions
 
 
 --
--- Name: incoming_transactions incoming_transactions_supplier_id_delivery_ref_key; Type: CONSTRAINT; Schema: public; Owner: inventory_user
+-- Name: incoming_transactions incoming_transactions_supplier_id_delivery_ref_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.incoming_transactions
@@ -326,7 +304,7 @@ ALTER TABLE ONLY public.incoming_transactions
 
 
 --
--- Name: items items_master_number_key; Type: CONSTRAINT; Schema: public; Owner: inventory_user
+-- Name: items items_master_number_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.items
@@ -334,7 +312,7 @@ ALTER TABLE ONLY public.items
 
 
 --
--- Name: items items_name_key; Type: CONSTRAINT; Schema: public; Owner: inventory_user
+-- Name: items items_name_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.items
@@ -342,7 +320,7 @@ ALTER TABLE ONLY public.items
 
 
 --
--- Name: items items_pkey; Type: CONSTRAINT; Schema: public; Owner: inventory_user
+-- Name: items items_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.items
@@ -350,7 +328,7 @@ ALTER TABLE ONLY public.items
 
 
 --
--- Name: outgoing_items outgoing_items_pkey; Type: CONSTRAINT; Schema: public; Owner: inventory_user
+-- Name: outgoing_items outgoing_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.outgoing_items
@@ -358,7 +336,7 @@ ALTER TABLE ONLY public.outgoing_items
 
 
 --
--- Name: outgoing_transactions outgoing_transactions_pkey; Type: CONSTRAINT; Schema: public; Owner: inventory_user
+-- Name: outgoing_transactions outgoing_transactions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.outgoing_transactions
@@ -366,7 +344,7 @@ ALTER TABLE ONLY public.outgoing_transactions
 
 
 --
--- Name: sessions sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: inventory_user
+-- Name: sessions sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.sessions
@@ -374,7 +352,7 @@ ALTER TABLE ONLY public.sessions
 
 
 --
--- Name: suppliers suppliers_name_key; Type: CONSTRAINT; Schema: public; Owner: inventory_user
+-- Name: suppliers suppliers_name_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.suppliers
@@ -382,7 +360,7 @@ ALTER TABLE ONLY public.suppliers
 
 
 --
--- Name: suppliers suppliers_pkey; Type: CONSTRAINT; Schema: public; Owner: inventory_user
+-- Name: suppliers suppliers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.suppliers
@@ -390,7 +368,7 @@ ALTER TABLE ONLY public.suppliers
 
 
 --
--- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: inventory_user
+-- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.users
@@ -398,7 +376,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: users users_name_key; Type: CONSTRAINT; Schema: public; Owner: inventory_user
+-- Name: users users_name_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.users
@@ -406,7 +384,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: inventory_user
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.users
@@ -414,7 +392,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: incoming_items incoming_items_incoming_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: inventory_user
+-- Name: incoming_items incoming_items_incoming_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.incoming_items
@@ -422,7 +400,7 @@ ALTER TABLE ONLY public.incoming_items
 
 
 --
--- Name: incoming_items incoming_items_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: inventory_user
+-- Name: incoming_items incoming_items_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.incoming_items
@@ -430,7 +408,7 @@ ALTER TABLE ONLY public.incoming_items
 
 
 --
--- Name: incoming_transactions incoming_transactions_logger_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: inventory_user
+-- Name: incoming_transactions incoming_transactions_logger_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.incoming_transactions
@@ -438,7 +416,7 @@ ALTER TABLE ONLY public.incoming_transactions
 
 
 --
--- Name: incoming_transactions incoming_transactions_supplier_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: inventory_user
+-- Name: incoming_transactions incoming_transactions_supplier_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.incoming_transactions
@@ -446,7 +424,7 @@ ALTER TABLE ONLY public.incoming_transactions
 
 
 --
--- Name: items items_category_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: inventory_user
+-- Name: items items_category_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.items
@@ -454,7 +432,7 @@ ALTER TABLE ONLY public.items
 
 
 --
--- Name: items items_supplier_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: inventory_user
+-- Name: items items_supplier_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.items
@@ -462,7 +440,7 @@ ALTER TABLE ONLY public.items
 
 
 --
--- Name: outgoing_items outgoing_items_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: inventory_user
+-- Name: outgoing_items outgoing_items_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.outgoing_items
@@ -470,7 +448,7 @@ ALTER TABLE ONLY public.outgoing_items
 
 
 --
--- Name: outgoing_items outgoing_items_outgoing_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: inventory_user
+-- Name: outgoing_items outgoing_items_outgoing_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.outgoing_items
@@ -478,7 +456,7 @@ ALTER TABLE ONLY public.outgoing_items
 
 
 --
--- Name: outgoing_transactions outgoing_transactions_logger_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: inventory_user
+-- Name: outgoing_transactions outgoing_transactions_logger_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.outgoing_transactions
@@ -486,7 +464,7 @@ ALTER TABLE ONLY public.outgoing_transactions
 
 
 --
--- Name: sessions sessions_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: inventory_user
+-- Name: sessions sessions_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.sessions
@@ -494,15 +472,8 @@ ALTER TABLE ONLY public.sessions
 
 
 --
--- Name: SCHEMA public; Type: ACL; Schema: -; Owner: pg_database_owner
---
-
-GRANT ALL ON SCHEMA public TO inventory_user;
-
-
---
 -- PostgreSQL database dump complete
 --
 
-\unrestrict Q8jLP2Y5zPbRcpHaIjrpPq2iaoRkXUaNsvFTnNaKql9jesiudBg9x8f94VMo5wK
+\unrestrict 72No7gvzhRrqJRO1Hv9nuBqBSoTxEvdwPRGtqPiG7Tgze9wdgzEcfCC1obNC1AH
 
