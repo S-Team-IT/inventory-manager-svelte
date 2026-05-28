@@ -172,6 +172,15 @@ function sortTransactions(transactions: IndividualTransaction[]): CompleteTransa
 					deliveryID,
 					items: [item]
 				};
+			} else {
+				completeList[count] = {
+					id,
+					createdAt,
+					expendDate,
+					expender,
+					remarks,
+					items: [item]
+				};
 			}
 		} else {
 			completeList[count].items.push(item);
