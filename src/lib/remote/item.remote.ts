@@ -119,8 +119,8 @@ export const createItem = form(
 					${supplierResult.id},
 					${quantity},
 					${thumbnailUrl},
-					${sql.json(galleryArray)}),
-					${isDisabled}
+					${sql.json(galleryArray)},
+					${isDisabled})
 					RETURNING *
 				)
 				SELECT i.master_number AS "master",
