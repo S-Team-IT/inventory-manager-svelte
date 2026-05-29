@@ -44,7 +44,7 @@ export const getItemsFullInfo = query(async () => {
 			FROM items i
 			JOIN categories c ON i.category_id = c.id
 			JOIN suppliers s ON i.supplier_id = s.id
-			JOIN net_quantity q ON i.id = q.item_id`;
+			LEFT OUTER JOIN net_quantity q ON i.id = q.item_id`;
 	} catch (e) {
 		handleQueryErrors(e);
 	}
