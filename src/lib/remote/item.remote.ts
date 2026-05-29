@@ -119,14 +119,14 @@ export const createItem = form(
 
 				const [itemResult] = await sql<DetailedItem[]>`
 				WITH i AS (
-					INSERT INTO items 
+					INSERT INTO items
 					(master_number, name, category_id, supplier_id, initial_quantity, thumbnail, photos)
 					VALUES(
-					${master}, 
-					${name}, 
-					${categoryResult.id}, 
-					${supplierResult.id}, 
-					${quantity}, 
+					${master},
+					${name},
+					${categoryResult.id},
+					${supplierResult.id},
+					${quantity},
 					${thumbnailUrl},
 					${sql.json(photosArray)})
 					RETURNING *
@@ -141,8 +141,8 @@ export const createItem = form(
 				i.initial_quantity AS "quantity",
 				i.thumbnail,
 				i.photos
-				FROM i 
-				JOIN categories c ON i.category_id = c.id 
+				FROM i
+				JOIN categories c ON i.category_id = c.id
 				JOIN suppliers s ON i.supplier_id = s.id;`;
 
 				return itemResult;
