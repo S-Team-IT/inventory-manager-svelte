@@ -6,7 +6,7 @@
 	import TransactionAccordion from '$lib/components/transactionAccordion.svelte';
 	import { getItemNameByMaster } from '$lib/remote/item.remote.js';
 	import { createIncomingTransaction } from '$lib/remote/transaction.remote.js';
-	import type { ItemTransaction } from '$lib/types/databaseTypes.js';
+	import type { Item } from '$lib/types/databaseTypes.js';
 	import { truncateString } from '$lib/utils/stringTransform.js';
 	import { toast } from 'svelte-sonner';
 
@@ -14,7 +14,7 @@
 
 	const { data } = $props();
 	let masterInput = $state<string>('');
-	let items = $state<ItemTransaction[]>([]);
+	let items = $state<Item[]>([]);
 </script>
 
 <div class="flex">
@@ -63,7 +63,7 @@
 							return;
 						}
 
-						const newItem = {
+						const newItem: Item = {
 							id: result.id,
 							master: masterInput,
 							name: result.name,
