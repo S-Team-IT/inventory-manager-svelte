@@ -1,6 +1,5 @@
 import { form, query } from '$app/server';
 import { sql } from '$lib/server/postgres';
-import { publicUrl, uploadFile } from '$lib/utils/supabase';
 import type { DetailedItem } from '$lib/types/databaseTypes';
 import { master, zBoolean, zImgFile, zNumber, zString } from '$lib/types/schemaTypes';
 import { handleQueryErrors } from '$lib/utils/errorHandling';
@@ -85,9 +84,10 @@ export const createItem = form(
 		quantity: zNumber,
 		thumbnail: zImgFile,
 		gallery: z.array(zImgFile),
+		thumbnailUrl: zString,
 		isDisabled: zBoolean
 	}),
-	async ({ master, name, category, supplier, quantity, thumbnail, isDisabled = false }) => {
+	async ({ master, name, category, supplier, quantity, thumbnailUrl, isDisabled = false }) => {
 		const galleryArray = [
 			{ item: 'http://dummyimage.com/108x100.png/ff4444/ffffff' },
 			{ item: 'http://dummyimage.com/116x100.png/dddddd/000000' },
@@ -96,11 +96,6 @@ export const createItem = form(
 			{ item: 'http://dummyimage.com/194x100.png/cc0000/ffffff' }
 		];
 		try {
-			const data = await uploadFile(thumbnail, `${name}_thumbnail`);
-			const thumbnailUrl = data
-				? await publicUrl(data.path)
-				: 'http://dummyimage.com/173x100.png/dddddd/000000';
-
 			const newItem = await sql.begin(async (sql) => {
 				const categoryResult = await getOrCreateCategory(category);
 				const supplierResult = await getOrCreateSupplier(supplier);
