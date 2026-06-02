@@ -34,8 +34,8 @@
 		if (!form) return;
 
 		const thumbnailFile = thumbnail.value();
-		if (!thumbnailFile) return;
-		thumbnailUrl.set(await getCompressedUrl(thumbnailFile, `thumbnail_${Date.now()}`));
+		if (thumbnailFile)
+			thumbnailUrl.set(await getCompressedUrl(thumbnailFile, `thumbnail_${Date.now()}`));
 
 		await tick();
 
@@ -54,13 +54,13 @@
 		if (!form) return;
 
 		const galleryFiles = gallery.value();
-		if (!galleryFiles) return;
-		for (const [i, file] of galleryFiles.entries()) {
-			if (!file) continue;
-			galleryUrlArray.push(await getCompressedUrl(file, `gallery${i}_${Date.now()}`));
+		if (galleryFiles) {
+			for (const [i, file] of galleryFiles.entries()) {
+				if (!file) continue;
+				galleryUrlArray.push(await getCompressedUrl(file, `gallery${i}_${Date.now()}`));
+			}
+			galleryUrls.set(galleryUrlArray);
 		}
-
-		galleryUrls.set(galleryUrlArray);
 
 		await tick();
 

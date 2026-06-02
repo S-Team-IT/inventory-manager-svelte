@@ -7,9 +7,9 @@
 	import ItemCard from '$lib/components/itemCard.svelte';
 	import { createItem } from '$lib/remote/item.remote.js';
 	import type { DetailedItem } from '$lib/types/databaseTypes.js';
-	import PhotoPreview from './photoPreview.svelte';
 	import { getCompressedUrl } from '$lib/utils/imageUploader.js';
 	import { tick } from 'svelte';
+	import PhotoPreview from './photoPreview.svelte';
 
 	const {
 		master,
@@ -42,17 +42,18 @@
 		if (!form) return;
 
 		const thumbnailFile = thumbnail.value();
-		if (!thumbnailFile) return;
-		thumbnailUrl.set(await getCompressedUrl(thumbnailFile, `thumbnail_${Date.now()}`));
-
-		const galleryFiles = gallery.value();
-		if (!galleryFiles) return;
-		for (const [i, file] of galleryFiles.entries()) {
-			if (!file) continue;
-			galleryUrlArray.push(await getCompressedUrl(file, `gallery${i}_${Date.now()}`));
+		if (thumbnailFile) {
+			thumbnailUrl.set(await getCompressedUrl(thumbnailFile, `thumbnail_${Date.now()}`));
 		}
 
-		galleryUrls.set(galleryUrlArray);
+		const galleryFiles = gallery.value();
+		if (galleryFiles) {
+			for (const [i, file] of galleryFiles.entries()) {
+				if (!file) continue;
+				galleryUrlArray.push(await getCompressedUrl(file, `gallery${i}_${Date.now()}`));
+			}
+			galleryUrls.set(galleryUrlArray);
+		}
 
 		await tick();
 
