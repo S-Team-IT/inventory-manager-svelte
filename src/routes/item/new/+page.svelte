@@ -4,12 +4,15 @@
 	import Input from '$lib/components/base/input.svelte';
 	import InputFile from '$lib/components/base/inputFile.svelte';
 	import InputIssues from '$lib/components/base/inputIssues.svelte';
+	import LoadingModal from '$lib/components/base/loadingModal.svelte';
 	import ItemCard from '$lib/components/itemCard.svelte';
 	import { createItem } from '$lib/remote/item.remote.js';
 	import type { DetailedItem } from '$lib/types/databaseTypes.js';
 	import { getCompressedUrl } from '$lib/utils/imageUploader.js';
 	import { tick } from 'svelte';
 	import PhotoPreview from './photoPreview.svelte';
+
+	let checked = $state<boolean>(false);
 
 	const {
 		master,
@@ -38,6 +41,7 @@
 		}
 	) {
 		e.preventDefault();
+		checked = true;
 		const form = e.currentTarget.form;
 		if (!form) return;
 
@@ -69,6 +73,7 @@
 		successMsg="Added new item"
 		classes="grow"
 		onSuccess={() => {
+			checked = false;
 			if (createItem.result?.item) addedItems.push(createItem.result.item);
 		}}
 	>
@@ -119,3 +124,4 @@
 		{/each}
 	</div>
 </div>
+<LoadingModal {checked} />
