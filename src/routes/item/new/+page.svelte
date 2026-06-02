@@ -8,9 +8,21 @@
 	import { createItem } from '$lib/remote/item.remote.js';
 	import type { DetailedItem } from '$lib/types/databaseTypes.js';
 	import PhotoPreview from './photoPreview.svelte';
+	import { getCompressedUrl } from '$lib/utils/imageUploader.js';
+	import { tick } from 'svelte';
 
-	const { master, name, category, supplier, quantity, thumbnail, photos, isDisabled } =
-		createItem.fields;
+	const {
+		master,
+		name,
+		category,
+		supplier,
+		quantity,
+		thumbnail,
+		gallery,
+		isDisabled,
+		thumbnailUrl,
+		galleryUrls
+	} = createItem.fields;
 
 	const { data } = $props();
 	let addedItems = $state<DetailedItem[]>([]);
@@ -18,6 +30,34 @@
 	let filteredItems = $derived.by(() => {
 		return addedItems.filter(({ master }) => !deletedItems.includes(master));
 	});
+	let galleryUrlArray = $state<string[]>([]);
+
+	async function handleFormSubmit(
+		e: MouseEvent & {
+			currentTarget: EventTarget & HTMLButtonElement;
+		}
+	) {
+		e.preventDefault();
+		const form = e.currentTarget.form;
+		if (!form) return;
+
+		const thumbnailFile = thumbnail.value();
+		if (!thumbnailFile) return;
+		thumbnailUrl.set(await getCompressedUrl(thumbnailFile, `thumbnail_${Date.now()}`));
+
+		const galleryFiles = gallery.value();
+		if (!galleryFiles) return;
+		for (const [i, file] of galleryFiles.entries()) {
+			if (!file) continue;
+			galleryUrlArray.push(await getCompressedUrl(file, `gallery${i}_${Date.now()}`));
+		}
+
+		galleryUrls.set(galleryUrlArray);
+
+		await tick();
+
+		form.requestSubmit();
+	}
 </script>
 
 <div class="flex">
@@ -31,6 +71,10 @@
 			if (createItem.result?.item) addedItems.push(createItem.result.item);
 		}}
 	>
+		<input {...thumbnailUrl.as('text')} class="hidden" />
+		{#each galleryUrlArray as url, i (i)}
+			<input {...galleryUrls[i].as('text', url)} class="hidden" />
+		{/each}
 		<Input label="Master" type="text" field={master} placeholder="Enter master number" />
 		<Input label="Name" type="text" field={name} placeholder="Enter item name" />
 		<Combobox
@@ -52,7 +96,7 @@
 		<InputFile
 			label="Pick additional photos"
 			type="file multiple"
-			field={photos}
+			field={gallery}
 			subtitle="Gallery photos"
 		/>
 		<div class="mb-2">
@@ -62,11 +106,11 @@
 			</label>
 			<InputIssues field={isDisabled} />
 		</div>
-		<button type="submit" class="btn btn-primary">Add</button>
+		<button type="submit" class="btn btn-primary" onclick={(e) => handleFormSubmit(e)}>Add</button>
 	</Form>
 
 	<div class="flex flex-col">
-		<PhotoPreview thumbnailFile={thumbnail.value()} galleryFiles={photos.value()} />
+		<PhotoPreview thumbnailFile={thumbnail.value()} galleryFiles={gallery.value()} />
 	</div>
 	<div>
 		{#each filteredItems as item (item.id)}

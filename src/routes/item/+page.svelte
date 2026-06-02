@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import type { Item } from '$lib/types/databaseTypes.js';
+	import type { DetailedItem, Item } from '$lib/types/databaseTypes.js';
 	import { SvelteSet } from 'svelte/reactivity';
 	import ImageModal from '../../lib/components/imageModal.svelte';
 
@@ -19,7 +19,7 @@
 	let sortOption = $state<SortOption>('lastStocked');
 	let sortedItems = $derived.by(() => sortItems(data.items, sortOption));
 
-	function sortItems(list: Item[], sortOption: SortOption): Item[] {
+	function sortItems(list: DetailedItem[], sortOption: SortOption): DetailedItem[] {
 		if (sortOption === 'lastStocked') {
 			return list.toSorted((a, b) => b.lastStocked.getTime() - a.lastStocked.getTime());
 		}
@@ -93,7 +93,7 @@
 {/snippet}
 
 {#snippet ItemRow(
-	{ id, master, name, category, thumbnail, photos, quantity }: Item,
+	{ id, master, name, category, thumbnail, gallery, quantity }: DetailedItem,
 	selectedItems: SvelteSet<string>
 )}
 	<tr class="hover:bg-base-300">
@@ -118,7 +118,7 @@
 		</th>
 		<th class="w-25 text-center text-2xl">{master}</th>
 		<th class="flex w-50 items-center justify-center">
-			<ImageModal id={master} thumbnailSrc={thumbnail} gallerySrc={photos} />
+			<ImageModal id={master} thumbnailSrc={thumbnail} gallerySrc={gallery} />
 		</th>
 		<th><a href={resolve('/item/[slug]', { slug: id })} class="underline">{name}</a></th>
 		<th>{category}</th>

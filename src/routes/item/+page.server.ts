@@ -1,8 +1,8 @@
 import { getItemsFullInfo } from '$lib/remote/item.remote';
-import type { Item } from '$lib/types/databaseTypes';
+import type { DetailedItem } from '$lib/types/databaseTypes';
 
 export async function load() {
-	const items: Item[] | undefined = await getItemsFullInfo();
+	const items: DetailedItem[] | undefined = await getItemsFullInfo();
 	if (!items) throw new Error('getItemsFullInfo returned undefined');
 	return {
 		items

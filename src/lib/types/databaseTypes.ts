@@ -47,7 +47,7 @@ export type DetailedItem = Item & {
 	supplier: string;
 	supplierID?: string;
 	thumbnail: string;
-	photos: { item: string }[] | [];
+	gallery: { item: string }[] | [];
 	lastStocked: Date;
 };
 

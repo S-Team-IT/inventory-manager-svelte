@@ -17,7 +17,7 @@ export const getItems = query(async () => {
 			category_id AS "categoryID",
 			supplier_id AS "supplierID",
 			thumbnail,
-			photos,
+			gallery,
 			initial_quantity AS "quantity",
 			last_stocked AS "lastStocked"
 			FROM items`;
@@ -37,13 +37,13 @@ export const getItemsFullInfo = query(async () => {
 			s.name AS "supplier",
 			i.supplier_id AS "supplierID",
 			i.thumbnail,
-			i.photos,
+			i.gallery,
 			q.net AS "quantity",
 			i.last_stocked AS "lastStocked"
 			FROM items i
 			JOIN categories c ON i.category_id = c.id
 			JOIN suppliers s ON i.supplier_id = s.id
-			JOIN net_quantity q ON i.id = q.item_id`;
+			LEFT OUTER JOIN net_quantity q ON i.id = q.item_id`;
 	} catch (e) {
 		handleQueryErrors(e);
 	}
@@ -60,13 +60,13 @@ export const getItemFullInfo = query(zString, async (id) => {
 			s.name AS "supplier",
 			i.supplier_id AS "supplierID",
 			i.thumbnail,
-			i.photos,
+			i.gallery,
 			q.net AS "quantity",
 			i.last_stocked AS "lastStocked"
 			FROM items i
 			JOIN categories c ON i.category_id = c.id
 			JOIN suppliers s ON i.supplier_id = s.id
-			JOIN net_quantity q ON i.id = q.item_id
+			LEFT OUTER JOIN net_quantity q ON i.id = q.item_id
 			WHERE i.id = ${id}`;
 		if (result.count !== 1) error(404, 'Item not found.');
 		return result[0];
@@ -83,7 +83,9 @@ export const createItem = form(
 		supplier: zString.min(1, 'Supplier cannot be empty.'),
 		quantity: zNumber,
 		thumbnail: zImgFile,
-		photos: z.array(zImgFile),
+		gallery: z.array(zImgFile),
+		thumbnailUrl: zString,
+		galleryUrls: z.array(zString),
 		isDisabled: zBoolean
 	}),
 	async ({
@@ -91,20 +93,16 @@ export const createItem = form(
 		name,
 		category,
 		supplier,
-		quantity
-		// thumbnail,
-		// photos,
-		// isDisabled = false
+		quantity,
+		thumbnailUrl,
+		galleryUrls,
+		isDisabled = false
 	}) => {
-		const thumbnailStr = 'http://dummyimage.com/173x100.png/dddddd/000000';
-		const photosArray = [
-			{ item: 'http://dummyimage.com/108x100.png/ff4444/ffffff' },
-			{ item: 'http://dummyimage.com/116x100.png/dddddd/000000' },
-			{ item: 'http://dummyimage.com/182x100.png/cc0000/ffffff' },
-			{ item: 'http://dummyimage.com/239x100.png/ff4444/ffffff' },
-			{ item: 'http://dummyimage.com/194x100.png/cc0000/ffffff' }
-		];
 		try {
+			const galleryUrlsObj = galleryUrls.map((url) => {
+				return { item: url };
+			});
+
 			const newItem = await sql.begin(async (sql) => {
 				const categoryResult = await getOrCreateCategory(category);
 				const supplierResult = await getOrCreateSupplier(supplier);
@@ -114,16 +112,17 @@ export const createItem = form(
 
 				const [itemResult] = await sql<DetailedItem[]>`
 				WITH i AS (
-					INSERT INTO items 
-					(master_number, name, category_id, supplier_id, initial_quantity, thumbnail, photos)
+					INSERT INTO items
+					(master_number, name, category_id, supplier_id, initial_quantity, thumbnail, gallery, disabled)
 					VALUES(
-					${master}, 
-					${name}, 
-					${categoryResult.id}, 
-					${supplierResult.id}, 
-					${quantity}, 
-					${thumbnailStr},
-					${sql.json(photosArray)})
+					${master},
+					${name},
+					${categoryResult.id},
+					${supplierResult.id},
+					${quantity},
+					${thumbnailUrl},
+					${sql.json(galleryUrlsObj)},
+					${isDisabled})
 					RETURNING *
 				)
 				SELECT i.master_number AS "master",
@@ -135,9 +134,9 @@ export const createItem = form(
 				s.id AS "supplierID",
 				i.initial_quantity AS "quantity",
 				i.thumbnail,
-				i.photos
-				FROM i 
-				JOIN categories c ON i.category_id = c.id 
+				i.gallery
+				FROM i
+				JOIN categories c ON i.category_id = c.id
 				JOIN suppliers s ON i.supplier_id = s.id;`;
 
 				return itemResult;
@@ -164,6 +163,7 @@ export const editMaster = form(z.object({ id: zString, master }), async ({ id, m
 	try {
 		const result = await sql`UPDATE items SET master_number = ${master} WHERE id = ${id}`;
 		if (result.count !== 1) invalid(issue.master('Failed to update.'));
+		return { success: true };
 	} catch (e) {
 		// Check if deletedItems is present
 		handleQueryErrors(e);
@@ -176,6 +176,7 @@ export const editName = form(
 		try {
 			const result = await sql`UPDATE items SET name = ${name} WHERE id = ${id}`;
 			if (result.count !== 1) invalid(issue.name('Failed to update.'));
+			return { success: true };
 		} catch (e) {
 			handleQueryErrors(e);
 		}
@@ -194,6 +195,7 @@ export const editCategory = form(
 			});
 
 			if (updatedItem.count !== 1) invalid(issue.category('Failed to update'));
+			return { success: true };
 		} catch (e) {
 			handleQueryErrors(e);
 		}
@@ -214,6 +216,37 @@ export const editSupplier = form(
 			});
 
 			if (updatedItem.count !== 1) invalid(issue.supplier('Failed to update'));
+			return { success: true };
+		} catch (e) {
+			handleQueryErrors(e);
+		}
+	}
+);
+
+export const editThumbnail = form(
+	z.object({ id: zString, thumbnail: zImgFile, thumbnailUrl: zString }),
+	async ({ id, thumbnailUrl }, issue) => {
+		try {
+			const result = await sql`UPDATE items SET thumbnail = ${thumbnailUrl} WHERE id = ${id}`;
+			if (result.count !== 1) invalid(issue.thumbnail('Failed to update'));
+			return { success: true };
+		} catch (e) {
+			handleQueryErrors(e);
+		}
+	}
+);
+
+export const editGallery = form(
+	z.object({ id: zString, gallery: z.array(zImgFile), galleryUrls: z.array(zString) }),
+	async ({ id, galleryUrls }, issue) => {
+		try {
+			const galleryUrlsObj = galleryUrls.map((url) => {
+				return { item: url };
+			});
+			const result =
+				await sql`UPDATE items SET gallery = ${sql.json(galleryUrlsObj)} WHERE id = ${id}`;
+			if (result.count !== 1) invalid(issue.gallery('Failed to update'));
+			return { success: true };
 		} catch (e) {
 			handleQueryErrors(e);
 		}
