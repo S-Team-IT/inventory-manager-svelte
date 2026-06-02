@@ -4,6 +4,7 @@
 	import Form from '$lib/components/base/form.svelte';
 	import Input from '$lib/components/base/input.svelte';
 	import InputFile from '$lib/components/base/inputFile.svelte';
+	import LoadingModal from '$lib/components/base/loadingModal.svelte';
 	import ItemCard from '$lib/components/itemCard.svelte';
 	import {
 		editCategory,
@@ -24,12 +25,15 @@
 	const { data } = $props();
 	let { id, master, name, category, supplier }: DetailedItem = $derived(data.item);
 
+	let checked = $state<boolean>(false);
+
 	async function handleThumbnailSubmit(
 		e: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
 		}
 	) {
 		e.preventDefault();
+		checked = true;
 		const form = e.currentTarget.form;
 		if (!form) return;
 
@@ -50,6 +54,7 @@
 		}
 	) {
 		e.preventDefault();
+		checked = true;
 		const form = e.currentTarget.form;
 		if (!form) return;
 
@@ -121,6 +126,7 @@
 				remoteForm={editThumbnail}
 				errorMsg="Failed to update thumbnail."
 				successMsg="Thumbnail has been updated."
+				afterSubmit={() => (checked = false)}
 			>
 				<input {...thumbnailID.as('hidden', id)} />
 				<input {...thumbnailUrl.as('text')} class="hidden" />
@@ -131,6 +137,7 @@
 				remoteForm={editGallery}
 				errorMsg="Failed to update gallery."
 				successMsg="Gallery has been updated."
+				afterSubmit={() => (checked = false)}
 			>
 				<input {...galleryID.as('hidden', id)} />
 				{#each galleryUrlArray as url, i (i)}
@@ -150,6 +157,7 @@
 			<ItemCard {...data.item} />
 		</div>
 	</div>
+	<LoadingModal {checked} />
 {/if}
 
 {#snippet editForm(
