@@ -5,10 +5,10 @@
 	import Input from '$lib/components/base/input.svelte';
 	import ItemCard from '$lib/components/itemCard.svelte';
 	import { editCategory, editMaster, editName, editSupplier } from '$lib/remote/item.remote';
-	import type { Generic, Item } from '$lib/types/databaseTypes.js';
+	import type { DetailedItem, Generic } from '$lib/types/databaseTypes.js';
 
 	const { data } = $props();
-	let { id, master, name, category, supplier }: Item = $derived(data.item);
+	let { id, master, name, category, supplier }: DetailedItem = $derived(data.item);
 </script>
 
 <div class="breadcrumbs text-sm">
