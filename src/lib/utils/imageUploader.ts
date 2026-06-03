@@ -2,14 +2,14 @@
 import { PUBLIC_SUPABASE_PUBLISHABLE_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public';
 import { createClient } from '@supabase/supabase-js';
 import { error as svelteError } from '@sveltejs/kit';
+import imageCompression from 'browser-image-compression';
+
 const supabaseUrl = PUBLIC_SUPABASE_URL;
 const supabaseKey = PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
-import imageCompression from 'browser-image-compression';
+const supabase = createClient(supabaseUrl, supabaseKey);
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
-
-export async function uploadFile(file: File, name: string) {
+async function uploadFile(file: File, name: string) {
 	const { data, error } = await supabase.storage
 		.from('item-photos')
 		.upload(`public/${name}.jpg`, file);
@@ -22,12 +22,12 @@ export async function uploadFile(file: File, name: string) {
 	}
 }
 
-export async function getPublicUrl(name: string) {
+async function getPublicUrl(name: string) {
 	const { data } = supabase.storage.from('item-photos').getPublicUrl(name);
 	return data.publicUrl;
 }
 
-export async function compressImage(file: File): Promise<File> {
+async function compressImage(file: File): Promise<File> {
 	const options = {
 		maxSizeMB: 0.1,
 		maxWidthOrHeight: 500,
@@ -48,7 +48,7 @@ export async function compressImage(file: File): Promise<File> {
 	}
 }
 
-export async function getCompressedUrl(file: File, name: string): Promise<string> {
+async function getCompressedUrl(file: File, name: string): Promise<string> {
 	const compressedFile = await compressImage(file);
 	const uploadData = await uploadFile(compressedFile, name);
 	const url = await getPublicUrl(uploadData.path);
