@@ -244,12 +244,7 @@ export const editGallery = form(
 	z.object({ id: zString, gallery: z.array(zImgFile) }),
 	async ({ id, gallery }, issue) => {
 		try {
-			const galleryUrls: { item: string }[] = [];
-			for (const [i, file] of gallery.entries()) {
-				const url = await uploadImage({ file, name: `gallery_${id}_${i}` });
-				if (!url) throw new Error('uploadImage did not return url but did not throw an error');
-				galleryUrls.push({ item: url });
-			}
+			const galleryUrls: Gallery = await uploadMultipleImages({ files: gallery, name: 'gallery' });
 
 			const result =
 				await sql`UPDATE items SET gallery = ${sql.json(galleryUrls)} WHERE id = ${id}`;
@@ -280,7 +275,7 @@ export const updateMultipleLastStocked = command(z.array(zString), async (ids) =
 	try {
 		const result = await sql`
 		UPDATE items i
-		SET last_stocked = ${Date.now()} 
+		SET last_stocked = ${Date.now()}
 		WHERE i.id = ANY(${ids}::int[])
 		`;
 		console.log(result);
