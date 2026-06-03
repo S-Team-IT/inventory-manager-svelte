@@ -93,7 +93,7 @@
 			subtitle="New suppliers can be added as needed"
 			placeholder="Enter supplier"
 		/>
-		<Input label="Quantity" type="number" field={quantity} placeholder="0" value="0" />
+		<Input label="Quantity" type="number" field={quantity} value="0" placeholder="Enter quantity" />
 		<InputFile label="Pick a thumbnail" type="file" field={thumbnail} subtitle="Main photo" />
 		<InputFile
 			label="Pick additional photos"
