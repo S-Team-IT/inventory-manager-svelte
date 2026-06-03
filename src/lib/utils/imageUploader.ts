@@ -54,3 +54,24 @@ async function getCompressedUrl(file: File, name: string): Promise<string> {
 	const url = await getPublicUrl(uploadData.path);
 	return url;
 }
+
+export async function getOneCompressedUrl(
+	file: File | undefined,
+	name: string = `thumbnail_${Date.now()}`
+): Promise<string> {
+	if (file) return await getCompressedUrl(file, name);
+	return '';
+}
+
+export async function getMultipleCompressedUrl(
+	files: (File | undefined)[],
+	name: string = `gallery_${Date.now()}`
+): Promise<string[]> {
+	const returnArray: string[] = [];
+	if (files) {
+		for (const [i, file] of files.entries()) {
+			if (file) returnArray.push(await getCompressedUrl(file, `${name}_${i}`));
+		}
+	}
+	return returnArray;
+}
