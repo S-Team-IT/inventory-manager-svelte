@@ -83,9 +83,9 @@ export const createItem = form(
 		supplier: zString.min(1, 'Supplier cannot be empty.'),
 		quantity: zNumber,
 		thumbnail: zImgFile,
-		gallery: z.array(zImgFile),
+		gallery: z.array(zImgFile).default([]),
 		thumbnailUrl: zString,
-		galleryUrls: z.array(zString),
+		galleryUrls: z.array(zString).default([]),
 		isDisabled: zBoolean
 	}),
 	async ({

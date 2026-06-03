@@ -122,6 +122,6 @@
 		</th>
 		<th><a href={resolve('/item/[slug]', { slug: id })} class="underline">{name}</a></th>
 		<th>{category}</th>
-		<th class="text-center">{quantity}</th>
+		<th class="text-center">{quantity ? quantity : 0}</th>
 	</tr>
 {/snippet}
