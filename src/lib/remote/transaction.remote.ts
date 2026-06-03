@@ -11,6 +11,7 @@ import { handleQueryErrors } from '$lib/utils/errorHandling';
 import { invalid } from '@sveltejs/kit';
 import { isBefore } from 'date-fns';
 import * as z from 'zod';
+import { updateMultipleLastStocked } from './item.remote';
 import { getOrCreateSupplier } from './supplier.remote';
 
 export const createIncomingTransaction = form(
@@ -40,6 +41,7 @@ export const createIncomingTransaction = form(
 					VALUES(${locals.user.id}, ${new Date()}, ${date}, ${supplierResult.id}, ${deliveryID}) RETURNING id`;
 
 				const items = generateDB_StockArray(ids, quantities, transactionResult.id);
+				await updateMultipleLastStocked(ids);
 
 				await sql`INSERT INTO incoming_items ${sql(items)}`;
 				return;
