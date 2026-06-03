@@ -74,9 +74,9 @@
 		successMsg="Added new item"
 		classes="grow"
 		onSuccess={() => {
-			checked = false;
 			if (createItem.result?.item) addedItems.push(createItem.result.item);
 		}}
+		afterSubmit={() => (checked = false)}
 	>
 		<input {...thumbnailUrl.as('text')} class="hidden" />
 		{#each galleryUrlArray as url, i (i)}
