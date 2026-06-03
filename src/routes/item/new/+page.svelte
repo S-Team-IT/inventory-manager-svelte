@@ -48,8 +48,13 @@
 
 		thumbnailUrl.set(await getOneCompressedUrl(thumbnail.value(), `thumbnail_${Date.now()}`));
 
-		galleryUrls.set(await getMultipleCompressedUrl(gallery.value(), `gallery_${Date.now()}`));
-
+		const galleryFiles = gallery.value();
+		if (galleryFiles) {
+			for (const [i, file] of galleryFiles.entries()) {
+				if (file) galleryUrlArray.push(await getCompressedUrl(file, `gallery_${Date.now()}_${i}`));
+			}
+			galleryUrls.set(galleryUrlArray);
+		}
 		await tick();
 
 		form.requestSubmit();

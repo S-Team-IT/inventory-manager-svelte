@@ -15,7 +15,7 @@
 		editThumbnail
 	} from '$lib/remote/item.remote';
 	import type { DetailedItem, Generic } from '$lib/types/databaseTypes.js';
-	import { getMultipleCompressedUrl, getOneCompressedUrl } from '$lib/utils/imageUploader';
+	import { getCompressedUrl, getOneCompressedUrl } from '$lib/utils/imageUploader';
 	import { tick } from 'svelte';
 	import PhotoPreview from '../new/photoPreview.svelte';
 
@@ -56,8 +56,14 @@
 		const form = e.currentTarget.form;
 		if (!form) return;
 
-		galleryUrls.set(await getMultipleCompressedUrl(gallery.value()));
-
+		const galleryFiles = gallery.value();
+		if (galleryFiles) {
+			for (const [i, file] of galleryFiles.entries()) {
+				if (file) galleryUrlArray.push(await getCompressedUrl(file, `gallery_${Date.now()}_${i}`));
+			}
+			galleryUrls.set(galleryUrlArray);
+		}
+		console.log(galleryUrls.value());
 		await tick();
 
 		form.requestSubmit();
