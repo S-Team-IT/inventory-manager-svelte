@@ -104,10 +104,10 @@ export const createOutgoingTransaction = form(
 export const getIncomingTransactions = query(async () => {
 	try {
 		const result = await sql<IndividualTransaction[]>`
-		SELECT inc_t.id, 
-			inc_t.created_at AS "createdAt", 
-			inc_t.delivery_date AS "deliveryDate", 
-			s.name AS "supplier", 
+		SELECT inc_t.id,
+			inc_t.created_at AS "createdAt",
+			inc_t.delivery_date AS "deliveryDate",
+			s.name AS "supplier",
 			inc_t.delivery_ref AS "deliveryID",
 			i.master_number AS master,
 			inc_i.item_id AS "itemID",

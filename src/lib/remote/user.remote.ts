@@ -23,7 +23,7 @@ export const getUser = query(zString, async (id) => {
 export const createUser = form(
 	z
 		.object({ email, name: zString, password, role: zString })
-		.refine(({ role }) => role === 'QS' || role === 'Procurement' || role === 'Project', {
+		.refine(({ role }) => ['QS', 'Procurement', 'Project'].includes(role), {
 			error: 'Role does not match any existing roles.',
 			path: ['role']
 		}),

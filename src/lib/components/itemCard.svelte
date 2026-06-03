@@ -39,7 +39,7 @@
 			<span class="text-sm">{supplier}</span>
 		</h2>
 		<p>
-			{quantity} in Inventory
+			{quantity | 0} in Inventory
 		</p>
 		<div class="card-actions justify-end">
 			<button
