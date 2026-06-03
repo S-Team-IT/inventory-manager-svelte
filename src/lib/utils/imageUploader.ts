@@ -29,7 +29,7 @@ async function getPublicUrl(name: string) {
 
 async function compressImage(file: File): Promise<File> {
 	const options = {
-		maxSizeMB: 0.1,
+		maxSizeMB: 0.2,
 		maxWidthOrHeight: 500,
 		useWebWorker: true
 	};
