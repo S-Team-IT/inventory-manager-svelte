@@ -33,7 +33,7 @@
 			<ul>
 				{#each items as item, i (i)}
 					<li class="ms-6 list-disc">
-						{item.id}
+						{item.master}
 						{truncateString(item.name, 30)}
 						{deliveryID ? '+' : '-'}{item.quantity}
 					</li>
