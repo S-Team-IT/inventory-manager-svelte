@@ -72,3 +72,5 @@ export type IndividualTransaction = Transaction & {
 export type CompleteTransaction = Transaction & {
 	items: Item[];
 };
+
+export type Gallery = { item: string }[];
