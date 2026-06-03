@@ -15,7 +15,7 @@
 		editThumbnail
 	} from '$lib/remote/item.remote';
 	import type { DetailedItem, Generic } from '$lib/types/databaseTypes.js';
-	import { getCompressedUrl } from '$lib/utils/imageUploader';
+	import { getMultipleCompressedUrl, getOneCompressedUrl } from '$lib/utils/imageUploader';
 	import { tick } from 'svelte';
 	import PhotoPreview from '../new/photoPreview.svelte';
 
@@ -37,9 +37,7 @@
 		const form = e.currentTarget.form;
 		if (!form) return;
 
-		const thumbnailFile = thumbnail.value();
-		if (thumbnailFile)
-			thumbnailUrl.set(await getCompressedUrl(thumbnailFile, `thumbnail_${Date.now()}`));
+		thumbnailUrl.set(await getOneCompressedUrl(thumbnail.value()));
 
 		await tick();
 
@@ -58,14 +56,7 @@
 		const form = e.currentTarget.form;
 		if (!form) return;
 
-		const galleryFiles = gallery.value();
-		if (galleryFiles) {
-			for (const [i, file] of galleryFiles.entries()) {
-				if (!file) continue;
-				galleryUrlArray.push(await getCompressedUrl(file, `gallery${i}_${Date.now()}`));
-			}
-			galleryUrls.set(galleryUrlArray);
-		}
+		galleryUrls.set(await getMultipleCompressedUrl(gallery.value()));
 
 		await tick();
 
