@@ -241,14 +241,18 @@ export const editThumbnail = form(
 );
 
 export const editGallery = form(
-	z.object({ id: zString, gallery: z.array(zImgFile), galleryUrls: z.array(zString) }),
-	async ({ id, galleryUrls }, issue) => {
+	z.object({ id: zString, gallery: z.array(zImgFile) }),
+	async ({ id, gallery }, issue) => {
 		try {
-			const galleryUrlsObj = galleryUrls.map((url) => {
-				return { item: url };
-			});
+			const galleryUrls: { item: string }[] = [];
+			for (const [i, file] of gallery.entries()) {
+				const url = await uploadImage({ file, name: `gallery_${id}_${i}` });
+				if (!url) throw new Error('uploadImage did not return url but did not throw an error');
+				galleryUrls.push({ item: url });
+			}
+
 			const result =
-				await sql`UPDATE items SET gallery = ${sql.json(galleryUrlsObj)} WHERE id = ${id}`;
+				await sql`UPDATE items SET gallery = ${sql.json(galleryUrls)} WHERE id = ${id}`;
 			if (result.count !== 1) invalid(issue.gallery('Failed to update'));
 			return { success: true };
 		} catch (e) {
