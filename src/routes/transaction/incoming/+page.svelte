@@ -5,11 +5,11 @@
 	import InputIssues from '$lib/components/base/inputIssues.svelte';
 	import TransactionAccordion from '$lib/components/transactionAccordion.svelte';
 	import TransactionItemForm from '$lib/components/transactionItemForm.svelte';
+	import TransactionItemTable from '$lib/components/transactionItemTable.svelte';
 	import { createIncomingTransaction } from '$lib/remote/transaction.remote.js';
 	import type { Item } from '$lib/types/databaseTypes.js';
-	import { truncateString } from '$lib/utils/stringTransform.js';
 
-	const { date, supplier, deliveryID, ids, quantities } = createIncomingTransaction.fields;
+	const { date, supplier, deliveryID, ids } = createIncomingTransaction.fields;
 
 	const { data } = $props();
 	let items = $state<Item[]>([]);
@@ -48,37 +48,7 @@
 		<fieldset class="mb-4">
 			<TransactionItemForm {items} />
 			<InputIssues field={ids} />
-			<table class="table table-zebra">
-				<thead>
-					<tr>
-						<th class="w-15">Master</th>
-						<th>Name</th>
-						<th class="w-10">Qty</th>
-					</tr>
-				</thead>
-				<tbody>
-					{#each items as { id, master, name, quantity }, i (i)}
-						<tr>
-							<th class="w-15">{master}</th>
-							<th>{truncateString(name, 20)}</th>
-							<th
-								><input
-									class="w-10 border ps-1"
-									type="number"
-									id={`input${i}`}
-									name={`input${i}`}
-									bind:value={items[i].quantity}
-									step="1"
-									min="1"
-								/>
-								<InputIssues field={quantities[i]} />
-								<input {...ids[i].as('hidden', id)} />
-								<input {...quantities[i].as('hidden', quantity)} />
-							</th>
-						</tr>
-					{/each}
-				</tbody>
-			</table>
+			<TransactionItemTable bind:items />
 		</fieldset>
 		<button class="btn btn-soft btn-primary">Add Delivery Order</button>
 	</Form>
