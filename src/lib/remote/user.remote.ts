@@ -11,7 +11,7 @@ import z from 'zod';
 export const getUser = query(zString, async (id) => {
 	try {
 		const [user] = await sql<User[]>`
-			SELECT id, email, name, password_hash AS "passwordHash", role FROM users 
+			SELECT id, email, name, password_hash AS "passwordHash", role FROM users
 			WHERE id = ${id}`;
 		if (!user) error(404, 'User not found.');
 		return user;
