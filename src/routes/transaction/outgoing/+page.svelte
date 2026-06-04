@@ -3,19 +3,16 @@
 	import Input from '$lib/components/base/input.svelte';
 	import InputIssues from '$lib/components/base/inputIssues.svelte';
 	import TransactionAccordion from '$lib/components/transactionAccordion.svelte';
-	import { getItemNameByMaster } from '$lib/remote/item.remote.js';
+	import TransactionItemForm from '$lib/components/transactionItemForm.svelte';
 	import { createOutgoingTransaction } from '$lib/remote/transaction.remote.js';
 	import type { Item } from '$lib/types/databaseTypes';
 	import { truncateString } from '$lib/utils/stringTransform.js';
-	import { toast } from 'svelte-sonner';
 
 	const { data } = $props();
 
 	const { date, expender, remarks, ids, quantities } = createOutgoingTransaction.fields;
 
-	let masterInput = $state<string>('');
 	let items = $state<Item[]>([]);
-	let isLoading = $state<boolean>(false);
 </script>
 
 <div class="flex">
@@ -26,7 +23,6 @@
 		successMsg="Successfully added"
 		onSuccess={() => {
 			items = [];
-			masterInput = '';
 		}}
 	>
 		<Input
@@ -39,39 +35,7 @@
 		<Input label="Remarks" field={remarks} type="text" placeholder="E.g. Area item was used at" />
 		<div class="divider mt-0"></div>
 		<fieldset class="mb-4">
-			<label class="input mb-2 w-full pr-0">
-				<span class="label">Add items:</span>
-				<input type="text" bind:value={masterInput} placeholder="Enter master number" />
-				<button
-					aria-label="add-item"
-					class="btn rounded-s-none btn-secondary"
-					type="button"
-					disabled={isLoading}
-					onclick={async () => {
-						isLoading = true;
-						if (items.some((item) => item.master === masterInput)) {
-							toast.error('Item already in table');
-							isLoading = false;
-							return;
-						}
-
-						const result = await getItemNameByMaster(masterInput.toLowerCase().trim()).run();
-						if (!result) {
-							toast.error(`Master number ${masterInput} not found.`);
-						} else {
-							const newItem = {
-								id: result.id,
-								master: masterInput,
-								name: result.name,
-								quantity: 1
-							};
-							items.push(newItem);
-						}
-						isLoading = false;
-					}}><span class="icon-[ic--baseline-plus]"></span></button
-				>
-			</label>
-			<p>{isLoading ? 'Loading...' : ''}</p>
+			<TransactionItemForm {items} />
 			<InputIssues field={ids} />
 			<table class="table table-zebra">
 				<thead>
