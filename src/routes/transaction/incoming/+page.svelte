@@ -58,10 +58,16 @@
 					class="btn rounded-s-none btn-secondary"
 					type="button"
 					onclick={async () => {
-						if (lastInput === masterInput) return;
+						if (lastInput === masterInput) {
+							toast.error('Item already in table');
+							return;
+						}
 						lastInput = masterInput;
 						let isDuplicate = items.some((item) => item.id === masterInput);
-						if (isDuplicate) return;
+						if (isDuplicate) {
+							toast.error('Item already in table');
+							return;
+						}
 						const result = await getItemNameByMaster(masterInput.toLowerCase().trim()).run();
 						if (!result) {
 							toast.error(`Master number ${masterInput} not found.`);
