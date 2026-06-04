@@ -44,8 +44,8 @@ export type Item = {
 export type DetailedItem = Item & {
 	category: string;
 	categoryID?: string;
-	supplier: string;
-	supplierID?: string;
+	// supplier: string;
+	// supplierID?: string;
 	thumbnail: string;
 	gallery: { item: string }[] | [];
 	lastStocked: Date;

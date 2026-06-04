@@ -8,8 +8,16 @@
 	import { createItem } from '$lib/remote/item.remote.js';
 	import type { DetailedItem } from '$lib/types/databaseTypes.js';
 
-	const { master, name, category, supplier, quantity, thumbnail, gallery, isDisabled } =
-		createItem.fields;
+	const {
+		master,
+		name,
+		category,
+		// supplier,
+		quantity,
+		thumbnail,
+		gallery,
+		isDisabled
+	} = createItem.fields;
 
 	const { data } = $props();
 	let addedItems = $state<DetailedItem[]>([]);
@@ -39,13 +47,13 @@
 			subtitle="New categories can be added as needed"
 			placeholder="Enter category"
 		/>
-		<Combobox
+		<!-- <Combobox
 			label="Supplier"
 			field={supplier}
 			list={data.suppliers}
 			subtitle="New suppliers can be added as needed"
 			placeholder="Enter supplier"
-		/>
+		/> -->
 		<Input label="Quantity" type="number" field={quantity} value="0" placeholder="Enter quantity" />
 		<InputFile label="Pick a thumbnail" type="file" field={thumbnail} subtitle="Main photo" />
 		<InputFile

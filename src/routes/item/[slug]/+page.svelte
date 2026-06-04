@@ -10,7 +10,7 @@
 		editGallery,
 		editMaster,
 		editName,
-		editSupplier,
+		// editSupplier,
 		editThumbnail
 	} from '$lib/remote/item.remote';
 	import type { DetailedItem, Generic } from '$lib/types/databaseTypes.js';
@@ -72,7 +72,7 @@
 					placeholder: category,
 					list: data.categories
 				})}
-				{@render editComboboxForm({
+				<!-- {@render editComboboxForm({
 					remoteForm: editSupplier,
 					errorMsg: 'Failed to update supplier.',
 					successMsg: 'Successfully updated supplier.',
@@ -80,7 +80,7 @@
 					field: editSupplier.fields.supplier,
 					placeholder: supplier,
 					list: data.suppliers
-				})}
+				})} -->
 			</div>
 			<div>
 				{@render editInputFileForm({

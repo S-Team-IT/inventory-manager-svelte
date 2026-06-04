@@ -12,7 +12,7 @@
 		master,
 		name,
 		category,
-		supplier,
+		// supplier,
 		quantity,
 		thumbnail,
 		gallery,
@@ -36,7 +36,7 @@
 		<h2 class="card-title flex-col items-start gap-0 text-2xl">
 			<span> {master}|{truncateString(name, 15)}</span>
 			<span class="text-lg">{category}</span>
-			<span class="text-sm">{supplier}</span>
+			<!-- <span class="text-sm">{supplier}</span> -->
 		</h2>
 		<p>
 			{quantity | 0} in Inventory

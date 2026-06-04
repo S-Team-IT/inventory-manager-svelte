@@ -1,6 +1,6 @@
-import { getItems } from '$lib/remote/item.remote';
 import { getCategories } from '$lib/remote/category.remote';
-import { getSuppliers } from '$lib/remote/supplier.remote';
+import { getItems } from '$lib/remote/item.remote';
+// import { getSuppliers } from '$lib/remote/supplier.remote';
 import { error } from '@sveltejs/kit';
 
 export async function load({ locals }) {
@@ -8,7 +8,7 @@ export async function load({ locals }) {
 
 	return {
 		items: await getItems(),
-		categories: await getCategories(),
-		suppliers: await getSuppliers()
+		categories: await getCategories()
+		// suppliers: await getSuppliers()
 	};
 }

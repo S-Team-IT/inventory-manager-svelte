@@ -6,7 +6,7 @@ import { handleQueryErrors } from '$lib/utils/errorHandling';
 import { error, invalid } from '@sveltejs/kit';
 import * as z from 'zod';
 import { getOrCreateCategory } from './category.remote';
-import { getOrCreateSupplier } from './supplier.remote';
+// import { getOrCreateSupplier } from './supplier.remote';
 import { uploadImage, uploadMultipleImages } from './upload.remote';
 
 export const getItems = query(async () => {
@@ -16,7 +16,6 @@ export const getItems = query(async () => {
 			master_number AS "master",
 			name,
 			category_id AS "categoryID",
-			supplier_id AS "supplierID",
 			thumbnail,
 			gallery,
 			initial_quantity AS "quantity",
@@ -35,8 +34,6 @@ export const getItemsFullInfo = query(async () => {
 			i.name,
 			c.name AS "category",
 			i.category_id AS "categoryID",
-			s.name AS "supplier",
-			i.supplier_id AS "supplierID",
 			i.thumbnail,
 			i.gallery,
 			q.net AS "quantity",
@@ -44,7 +41,6 @@ export const getItemsFullInfo = query(async () => {
 			i.minimum_quantity AS "minimumQuantity"
 			FROM items i
 			JOIN categories c ON i.category_id = c.id
-			JOIN suppliers s ON i.supplier_id = s.id
 			LEFT OUTER JOIN net_quantity q ON i.id = q.item_id`;
 	} catch (e) {
 		handleQueryErrors(e);
@@ -59,15 +55,12 @@ export const getItemFullInfo = query(zString, async (id) => {
 			i.name,
 			c.name AS "category",
 			i.category_id AS "categoryID",
-			s.name AS "supplier",
-			i.supplier_id AS "supplierID",
 			i.thumbnail,
 			i.gallery,
 			q.net AS "quantity",
 			i.last_stocked AS "lastStocked"
 			FROM items i
 			JOIN categories c ON i.category_id = c.id
-			JOIN suppliers s ON i.supplier_id = s.id
 			LEFT OUTER JOIN net_quantity q ON i.id = q.item_id
 			WHERE i.id = ${id}`;
 		if (result.count !== 1) error(404, 'Item not found.');
@@ -82,7 +75,7 @@ export const createItem = form(
 		master,
 		name: zString.min(1, 'Name cannot be empty.'),
 		category: zString.min(1, 'Category cannot be empty.'),
-		supplier: zString.min(1, 'Supplier cannot be empty.'),
+		// supplier: zString.min(1, 'Supplier cannot be empty.'),
 		quantity: zNumber,
 		thumbnail: zImgFile,
 		gallery: z.array(zImgFile).optional(),
@@ -92,7 +85,7 @@ export const createItem = form(
 		master,
 		name,
 		category,
-		supplier,
+		// supplier,
 		quantity,
 		thumbnail,
 		gallery,
@@ -113,20 +106,19 @@ export const createItem = form(
 
 			const newItem = await sql.begin(async (sql) => {
 				const categoryResult = await getOrCreateCategory(category);
-				const supplierResult = await getOrCreateSupplier(supplier);
+				// const supplierResult = await getOrCreateSupplier(supplier);
 
-				if (!categoryResult || !supplierResult)
+				if (!categoryResult)
 					throw new Error('Create Item: Category or Supplier result is undefined');
 
 				const [itemResult] = await sql<DetailedItem[]>`
 				WITH i AS (
 					INSERT INTO items
-					(master_number, name, category_id, supplier_id, initial_quantity, thumbnail, gallery, disabled)
+					(master_number, name, category_id, initial_quantity, thumbnail, gallery, disabled)
 					VALUES(
 					${master},
 					${name},
 					${categoryResult.id},
-					${supplierResult.id},
 					${quantity},
 					${thumbnailUrl},
 					${sql.json(galleryUrls)},
@@ -138,14 +130,11 @@ export const createItem = form(
 				i.name,
 				c.name AS "category",
 				c.id AS "categoryID",
-				s.name AS "supplier",
-				s.id AS "supplierID",
 				i.initial_quantity AS "quantity",
 				i.thumbnail,
 				i.gallery
 				FROM i
-				JOIN categories c ON i.category_id = c.id
-				JOIN suppliers s ON i.supplier_id = s.id;`;
+				JOIN categories c ON i.category_id = c.id`;
 
 				return itemResult;
 			});
@@ -197,6 +186,7 @@ export const editCategory = form(
 		try {
 			const updatedItem = await sql.begin(async (sql) => {
 				const categoryResult = await getOrCreateCategory(category);
+				// if (!categoryResult || !supplierResult)
 				if (!categoryResult) throw new Error('editCategory: Category result is unde');
 
 				return await sql`UPDATE items SET category_id = ${categoryResult.id} WHERE id = ${id}`;
@@ -210,26 +200,26 @@ export const editCategory = form(
 	}
 );
 
-export const editSupplier = form(
-	z.object({ id: zString, supplier: zString }),
-	async ({ id, supplier }, issue) => {
-		try {
-			const updatedItem = await sql.begin(async (sql) => {
-				const supplierResult = await getOrCreateSupplier(supplier);
-				if (!supplierResult) throw new Error('editSupplier: Supplier result is undefined');
-
-				const itemResult =
-					await sql`UPDATE items SET supplier_id = ${supplierResult.id} WHERE id = ${id}`;
-				return itemResult;
-			});
-
-			if (updatedItem.count !== 1) invalid(issue.supplier('Failed to update'));
-			return { success: true };
-		} catch (e) {
-			handleQueryErrors(e);
-		}
-	}
-);
+// export const editSupplier = form(
+// 	z.object({ id: zString, supplier: zString }),
+// 	async ({ id, supplier }, issue) => {
+// 		try {
+// 			const updatedItem = await sql.begin(async (sql) => {
+// 				const supplierResult = await getOrCreateSupplier(supplier);
+// 				if (!supplierResult) throw new Error('editSupplier: Supplier result is undefined');
+//
+// 				const itemResult =
+// 					await sql`UPDATE items SET supplier_id = ${supplierResult.id} WHERE id = ${id}`;
+// 				return itemResult;
+// 			});
+//
+// 			if (updatedItem.count !== 1) invalid(issue.supplier('Failed to update'));
+// 			return { success: true };
+// 		} catch (e) {
+// 			handleQueryErrors(e);
+// 		}
+// 	}
+// );
 
 export const editThumbnail = form(
 	z.object({ id: zString, thumbnail: zImgFile }),
