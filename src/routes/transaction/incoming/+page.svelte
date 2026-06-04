@@ -119,7 +119,7 @@
 		</fieldset>
 		<button class="btn btn-soft btn-primary">Add Delivery Order</button>
 	</Form>
-	<div>
+	<div class="ms-10 me-10 mt-5 w-full">
 		<TransactionAccordion transactions={data.transactions} />
 	</div>
 </div>
