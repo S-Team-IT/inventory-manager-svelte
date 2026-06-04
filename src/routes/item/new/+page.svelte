@@ -16,7 +16,8 @@
 		quantity,
 		thumbnail,
 		gallery,
-		isDisabled
+		isDisabled,
+		minimumQuantity
 	} = createItem.fields;
 
 	const { data } = $props();
@@ -55,6 +56,13 @@
 			placeholder="Enter supplier"
 		/> -->
 		<Input label="Quantity" type="number" field={quantity} value="0" placeholder="Enter quantity" />
+		<Input
+			label="Minimum Quantity"
+			type="number"
+			field={minimumQuantity}
+			value="0"
+			placeholder="Enter minimum quantity"
+		/>
 		<InputFile label="Pick a thumbnail" type="file" field={thumbnail} subtitle="Main photo" />
 		<InputFile
 			label="Pick additional photos"

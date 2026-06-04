@@ -79,7 +79,8 @@ export const createItem = form(
 		quantity: zNumber,
 		thumbnail: zImgFile,
 		gallery: z.array(zImgFile).optional(),
-		isDisabled: zBoolean
+		isDisabled: zBoolean,
+		minimumQuantity: zNumber
 	}),
 	async ({
 		master,
@@ -89,7 +90,8 @@ export const createItem = form(
 		quantity,
 		thumbnail,
 		gallery,
-		isDisabled = false
+		isDisabled = false,
+		minimumQuantity
 	}) => {
 		try {
 			const thumbnailUrl = await uploadImage({ file: thumbnail, name: `thumbnail` });
@@ -114,7 +116,7 @@ export const createItem = form(
 				const [itemResult] = await sql<DetailedItem[]>`
 				WITH i AS (
 					INSERT INTO items
-					(master_number, name, category_id, initial_quantity, thumbnail, gallery, disabled)
+					(master_number, name, category_id, initial_quantity, thumbnail, gallery, disabled, minimum_quantity)
 					VALUES(
 					${master},
 					${name},
@@ -122,7 +124,8 @@ export const createItem = form(
 					${quantity},
 					${thumbnailUrl},
 					${sql.json(galleryUrls)},
-					${isDisabled})
+					${isDisabled}),
+					${minimumQuantity}
 					RETURNING *
 				)
 				SELECT i.master_number AS "master",
