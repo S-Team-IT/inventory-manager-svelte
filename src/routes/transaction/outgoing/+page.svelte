@@ -15,6 +15,7 @@
 
 	let masterInput = $state<string>('');
 	let items = $state<Item[]>([]);
+	let isLoading = $state<boolean>(false);
 </script>
 
 <div class="flex">
@@ -45,23 +46,32 @@
 					aria-label="add-item"
 					class="btn rounded-s-none btn-secondary"
 					type="button"
+					disabled={isLoading}
 					onclick={async () => {
-						const result = await getItemNameByMaster(masterInput.toLowerCase().trim()).run();
-						if (!result) {
-							toast.error(`Master number ${masterInput} not found.`);
+						isLoading = true;
+						if (items.some((item) => item.master === masterInput)) {
+							toast.error('Item already in table');
+							isLoading = false;
 							return;
 						}
 
-						const newItem = {
-							id: result.id,
-							master: masterInput,
-							name: result.name,
-							quantity: 1
-						};
-						items.push(newItem);
+						const result = await getItemNameByMaster(masterInput.toLowerCase().trim()).run();
+						if (!result) {
+							toast.error(`Master number ${masterInput} not found.`);
+						} else {
+							const newItem = {
+								id: result.id,
+								master: masterInput,
+								name: result.name,
+								quantity: 1
+							};
+							items.push(newItem);
+						}
+						isLoading = false;
 					}}><span class="icon-[ic--baseline-plus]"></span></button
 				>
 			</label>
+			<p>{isLoading ? 'Loading...' : ''}</p>
 			<InputIssues field={ids} />
 			<table class="table table-zebra">
 				<thead>
@@ -97,7 +107,7 @@
 		</fieldset>
 		<button class="btn btn-soft btn-primary">Add Delivery Order</button>
 	</Form>
-	<div>
+	<div class="ms-10 me-10 mt-5 w-full">
 		<TransactionAccordion transactions={data.transactions} />
 	</div>
 </div>
