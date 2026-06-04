@@ -57,6 +57,8 @@
 					class="btn rounded-s-none btn-secondary"
 					type="button"
 					onclick={async () => {
+						let isDuplicate = items.some((item) => item.id === masterInput);
+						if (isDuplicate) return;
 						const result = await getItemNameByMaster(masterInput.toLowerCase().trim()).run();
 						if (!result) {
 							toast.error(`Master number ${masterInput} not found.`);
