@@ -1,12 +1,13 @@
 import { command, form, query } from '$app/server';
 import { sql } from '$lib/server/postgres';
-import type { DetailedItem } from '$lib/types/databaseTypes';
+import type { DetailedItem, Gallery } from '$lib/types/databaseTypes';
 import { master, zBoolean, zImgFile, zNumber, zString } from '$lib/types/schemaTypes';
 import { handleQueryErrors } from '$lib/utils/errorHandling';
 import { error, invalid } from '@sveltejs/kit';
 import * as z from 'zod';
 import { getOrCreateCategory } from './category.remote';
 import { getOrCreateSupplier } from './supplier.remote';
+import { uploadImage, uploadMultipleImages } from './upload.remote';
 
 export const getItems = query(async () => {
 	try {
@@ -83,9 +84,7 @@ export const createItem = form(
 		supplier: zString.min(1, 'Supplier cannot be empty.'),
 		quantity: zNumber,
 		thumbnail: zImgFile,
-		gallery: z.array(zImgFile).default([]),
-		thumbnailUrl: zString,
-		galleryUrls: z.array(zString).default([]),
+		gallery: z.array(zImgFile).optional(),
 		isDisabled: zBoolean
 	}),
 	async ({
@@ -94,14 +93,22 @@ export const createItem = form(
 		category,
 		supplier,
 		quantity,
-		thumbnailUrl,
-		galleryUrls,
+		thumbnail,
+		gallery,
 		isDisabled = false
 	}) => {
 		try {
-			const galleryUrlsObj = galleryUrls.map((url) => {
-				return { item: url };
-			});
+			const thumbnailUrl = await uploadImage({ file: thumbnail, name: `thumbnail` });
+			if (!thumbnailUrl)
+				throw new Error('uploadImage did not return url but did not throw an error');
+
+			let galleryUrls: Gallery = [];
+			if (gallery) {
+				galleryUrls = await uploadMultipleImages({
+					files: gallery,
+					name: 'gallery'
+				});
+			}
 
 			const newItem = await sql.begin(async (sql) => {
 				const categoryResult = await getOrCreateCategory(category);
@@ -121,7 +128,7 @@ export const createItem = form(
 					${supplierResult.id},
 					${quantity},
 					${thumbnailUrl},
-					${sql.json(galleryUrlsObj)},
+					${sql.json(galleryUrls)},
 					${isDisabled})
 					RETURNING *
 				)
@@ -224,10 +231,13 @@ export const editSupplier = form(
 );
 
 export const editThumbnail = form(
-	z.object({ id: zString, thumbnail: zImgFile, thumbnailUrl: zString }),
-	async ({ id, thumbnailUrl }, issue) => {
+	z.object({ id: zString, thumbnail: zImgFile }),
+	async ({ id, thumbnail }, issue) => {
 		try {
-			const result = await sql`UPDATE items SET thumbnail = ${thumbnailUrl} WHERE id = ${id}`;
+			const url = await uploadImage({ file: thumbnail, name: `thumbnail_${id}` });
+			if (!url) throw new Error('uploadImage did not return url but did not throw an error');
+
+			const result = await sql`UPDATE items SET thumbnail = ${url} WHERE id = ${id}`;
 			if (result.count !== 1) invalid(issue.thumbnail('Failed to update'));
 			return { success: true };
 		} catch (e) {
@@ -237,14 +247,13 @@ export const editThumbnail = form(
 );
 
 export const editGallery = form(
-	z.object({ id: zString, gallery: z.array(zImgFile), galleryUrls: z.array(zString) }),
-	async ({ id, galleryUrls }, issue) => {
+	z.object({ id: zString, gallery: z.array(zImgFile) }),
+	async ({ id, gallery }, issue) => {
 		try {
-			const galleryUrlsObj = galleryUrls.map((url) => {
-				return { item: url };
-			});
+			const galleryUrls: Gallery = await uploadMultipleImages({ files: gallery, name: 'gallery' });
+
 			const result =
-				await sql`UPDATE items SET gallery = ${sql.json(galleryUrlsObj)} WHERE id = ${id}`;
+				await sql`UPDATE items SET gallery = ${sql.json(galleryUrls)} WHERE id = ${id}`;
 			if (result.count !== 1) invalid(issue.gallery('Failed to update'));
 			return { success: true };
 		} catch (e) {
@@ -272,7 +281,7 @@ export const updateMultipleLastStocked = command(z.array(zString), async (ids) =
 	try {
 		const result = await sql`
 		UPDATE items i
-		SET last_stocked = ${Date.now()} 
+		SET last_stocked = ${Date.now()}
 		WHERE i.id = ANY(${ids}::int[])
 		`;
 		console.log(result);

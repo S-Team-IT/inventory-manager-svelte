@@ -4,28 +4,12 @@
 	import Input from '$lib/components/base/input.svelte';
 	import InputFile from '$lib/components/base/inputFile.svelte';
 	import InputIssues from '$lib/components/base/inputIssues.svelte';
-	import LoadingModal from '$lib/components/base/loadingModal.svelte';
 	import ItemCard from '$lib/components/itemCard.svelte';
 	import { createItem } from '$lib/remote/item.remote.js';
 	import type { DetailedItem } from '$lib/types/databaseTypes.js';
-	import { getOneCompressedUrl, getCompressedUrl } from '$lib/utils/imageUploader.js';
-	import { tick } from 'svelte';
-	import PhotoPreview from './photoPreview.svelte';
 
-	let checked = $state<boolean>(false);
-
-	const {
-		master,
-		name,
-		category,
-		supplier,
-		quantity,
-		thumbnail,
-		gallery,
-		isDisabled,
-		thumbnailUrl,
-		galleryUrls
-	} = createItem.fields;
+	const { master, name, category, supplier, quantity, thumbnail, gallery, isDisabled } =
+		createItem.fields;
 
 	const { data } = $props();
 	let addedItems = $state<DetailedItem[]>([]);
@@ -33,32 +17,6 @@
 	let filteredItems = $derived.by(() => {
 		return addedItems.filter(({ master }) => !deletedItems.includes(master));
 	});
-	let galleryUrlArray = $state<string[]>([]);
-
-	async function handleFormSubmit(
-		e: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		}
-	) {
-		e.preventDefault();
-		checked = true;
-		createItem.validate({ includeUntouched: true });
-		const form = e.currentTarget.form;
-		if (!form) return;
-
-		thumbnailUrl.set(await getOneCompressedUrl(thumbnail.value(), `thumbnail_${Date.now()}`));
-
-		const galleryFiles = gallery.value();
-		if (galleryFiles) {
-			for (const [i, file] of galleryFiles.entries()) {
-				if (file) galleryUrlArray.push(await getCompressedUrl(file, `gallery_${Date.now()}_${i}`));
-			}
-			galleryUrls.set(galleryUrlArray);
-		}
-		await tick();
-
-		form.requestSubmit();
-	}
 </script>
 
 <div class="flex">
@@ -71,12 +29,7 @@
 		onSuccess={() => {
 			if (createItem.result?.item) addedItems.push(createItem.result.item);
 		}}
-		afterSubmit={() => (checked = false)}
 	>
-		<input {...thumbnailUrl.as('text')} class="hidden" />
-		{#each galleryUrlArray as url, i (i)}
-			<input {...galleryUrls[i].as('text', url)} class="hidden" />
-		{/each}
 		<Input label="Master" type="text" field={master} placeholder="Enter master number" />
 		<Input label="Name" type="text" field={name} placeholder="Enter item name" />
 		<Combobox
@@ -93,7 +46,7 @@
 			subtitle="New suppliers can be added as needed"
 			placeholder="Enter supplier"
 		/>
-		<Input label="Quantity" type="number" field={quantity} placeholder="0" value="0" />
+		<Input label="Quantity" type="number" field={quantity} value="0" placeholder="Enter quantity" />
 		<InputFile label="Pick a thumbnail" type="file" field={thumbnail} subtitle="Main photo" />
 		<InputFile
 			label="Pick additional photos"
@@ -108,16 +61,11 @@
 			</label>
 			<InputIssues field={isDisabled} />
 		</div>
-		<button type="submit" class="btn btn-primary" onclick={(e) => handleFormSubmit(e)}>Add</button>
+		<button type="submit" class="btn btn-primary">Add</button>
 	</Form>
-
-	<div class="flex flex-col">
-		<PhotoPreview thumbnailFile={thumbnail.value()} galleryFiles={gallery.value()} />
-	</div>
 	<div>
 		{#each filteredItems as item (item.id)}
 			<ItemCard {...item} {deletedItems} />
 		{/each}
 	</div>
 </div>
-<LoadingModal {checked} />

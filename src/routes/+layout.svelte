@@ -24,17 +24,17 @@
 				class="dropdown-content menu z-1 w-52 rounded-box bg-base-100 p-2 shadow-sm"
 			>
 				<li><a href={resolve('/item')}>Item List</a></li>
-				{#if data.user?.role === 'QS' || data.user?.role === 'Admin'}
+				{#if ['Admin', 'QS'].includes(data.user?.role ?? '')}
 					<div class="divider m-0.5">QS</div>
 					<li><a href={resolve('/item/new')}>Add Item</a></li>
 				{/if}
-				{#if data.user?.role === `Procurement` || data.user?.role === 'Admin'}
+				{#if ['Admin', 'Procurement'].includes(data.user?.role ?? '')}
 					<div class="divider m-0.5">Procurement</div>
 					<li><a href={resolve('/transaction/incoming')}>Add Delivery Order</a></li>
 				{/if}
-				{#if data.user?.role === 'Project' || data.user?.role === 'Admin'}
+				{#if ['Admin', 'Project'].includes(data.user?.role ?? '')}
 					<div class="divider m-0.5">Project</div>
-					<li><a href={resolve('/transaction/outgoing')}>Remove Quantity</a></li>
+					<li><a href={resolve('/transaction/outgoing')}>Expenditure</a></li>
 				{/if}
 			</ul>
 		</div>

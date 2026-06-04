@@ -25,12 +25,13 @@
 		beforeSubmit(data);
 
 		if (await submit()) {
-			if (remoteForm.result.success) {
+			const { success, msg } = remoteForm.result;
+			if (success) {
 				toast.success(successMsg);
 				onSuccess(data);
 				form.reset();
 			} else {
-				toast.error(errorMsg);
+				toast.error(msg || errorMsg);
 			}
 		}
 		afterSubmit(data);

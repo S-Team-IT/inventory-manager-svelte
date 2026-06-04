@@ -15,11 +15,7 @@
 		<summary class="collapse-title font-semibold">
 			<div class="flex items-center justify-between gap-10">
 				<span
-					>{supplier ? supplier : expender}{deliveryID
-						? ` ${deliveryID}`
-						: remarks
-							? `, ${remarks}`
-							: ''}
+					>{supplier || expender}{deliveryID ? ` ${deliveryID}` : remarks ? `, ${remarks}` : ''}
 				</span>
 				<span>
 					{formatRelativeCustom(createdAt)}

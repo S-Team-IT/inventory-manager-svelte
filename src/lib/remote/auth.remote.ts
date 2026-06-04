@@ -5,18 +5,18 @@ import type { User } from '$lib/types/databaseTypes';
 import { email, password, zString } from '$lib/types/schemaTypes';
 import { handleQueryErrors } from '$lib/utils/errorHandling';
 import { comparePasswordHash } from '$lib/utils/hash';
-import { redirect } from '@sveltejs/kit';
+import { redirect, invalid } from '@sveltejs/kit';
 import * as z from 'zod';
 
-export const signIn = form(z.object({ email, password }), async ({ email, password }) => {
+export const signIn = form(z.object({ email, password }), async ({ email, password }, issue) => {
 	try {
 		const [user] = await sql<
 			User[]
 		>`SELECT id, email, name, password_hash AS "passwordHash", role FROM users WHERE email = ${email}`;
-		if (!user || !(await comparePasswordHash(password, user.passwordHash))) {
-			console.error(`UNEXPECTED ERROR SIGNING IN ${email}, ${password}`);
-			return { success: false };
-		}
+		if (!user) invalid(issue.password('User not found.'));
+		if (!(await comparePasswordHash(password, user.passwordHash)))
+			invalid(issue.password('Invalid credentials'));
+
 		const newSessionWithToken = await createSession(user.id);
 		setTokenCookie(newSessionWithToken.token);
 		redirect(303, '/?loggedIn=true');

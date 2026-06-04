@@ -4,7 +4,6 @@
 	import Form from '$lib/components/base/form.svelte';
 	import Input from '$lib/components/base/input.svelte';
 	import InputFile from '$lib/components/base/inputFile.svelte';
-	import LoadingModal from '$lib/components/base/loadingModal.svelte';
 	import ItemCard from '$lib/components/itemCard.svelte';
 	import {
 		editCategory,
@@ -15,59 +14,23 @@
 		editThumbnail
 	} from '$lib/remote/item.remote';
 	import type { DetailedItem, Generic } from '$lib/types/databaseTypes.js';
-	import { getCompressedUrl, getOneCompressedUrl } from '$lib/utils/imageUploader';
-	import { tick } from 'svelte';
-	import PhotoPreview from '../new/photoPreview.svelte';
-
-	const { id: thumbnailID, thumbnail, thumbnailUrl } = editThumbnail.fields;
-	const { id: galleryID, gallery, galleryUrls } = editGallery.fields;
 
 	const { data } = $props();
 	let { id, master, name, category, supplier }: DetailedItem = $derived(data.item);
 
-	let checked = $state<boolean>(false);
-
-	async function handleThumbnailSubmit(
-		e: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		}
-	) {
-		e.preventDefault();
-		checked = true;
-		const form = e.currentTarget.form;
-		if (!form) return;
-
-		thumbnailUrl.set(await getOneCompressedUrl(thumbnail.value()));
-
-		await tick();
-
-		form.requestSubmit();
-	}
-
-	let galleryUrlArray = $state<string[]>([]);
-
-	async function handleGallerySubmit(
-		e: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		}
-	) {
-		e.preventDefault();
-		checked = true;
-		const form = e.currentTarget.form;
-		if (!form) return;
-
-		const galleryFiles = gallery.value();
-		if (galleryFiles) {
-			for (const [i, file] of galleryFiles.entries()) {
-				if (file) galleryUrlArray.push(await getCompressedUrl(file, `gallery_${Date.now()}_${i}`));
-			}
-			galleryUrls.set(galleryUrlArray);
-		}
-		console.log(galleryUrls.value());
-		await tick();
-
-		form.requestSubmit();
-	}
+	type SnippetArgs = {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		remoteForm: any;
+		errorMsg: string;
+		successMsg: string;
+		label: string;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		field: any;
+		type?: string;
+		placeholder?: string;
+		subtitle?: string;
+		list?: Generic[];
+	};
 </script>
 
 <div class="breadcrumbs text-sm">
@@ -84,108 +47,102 @@
 	<div class="flex">
 		{#if data.user?.role === 'Admin' || data.user?.role === 'QS'}
 			<div class="max-w-75">
-				{@render editForm(
-					editMaster,
-					editMaster.fields.master,
-					master,
-					'Master',
-					'Failed to update master number.',
-					'Successfully updated master number.'
-				)}
-				{@render editForm(
-					editName,
-					editName.fields.name,
-					name,
-					'Name',
-					'Failed to update name.',
-					'Successfully updated name.'
-				)}
-				{@render editComboboxForm(
-					editCategory,
-					editCategory.fields.category,
-					data.categories,
-					'Category',
-					'Failed to update category.',
-					'Successfully updated category.',
-					category
-				)}
-				{@render editComboboxForm(
-					editSupplier,
-					editSupplier.fields.supplier,
-					data.suppliers,
-					'Supplier',
-					'Failed to update supplier.',
-					'Successfully updated supplier.',
-					supplier
-				)}
+				{@render editForm({
+					remoteForm: editMaster,
+					errorMsg: 'Failed to update master number.',
+					successMsg: 'Successfully updated master number.',
+					label: 'Master',
+					field: editMaster.fields.master,
+					placeholder: master
+				})}
+				{@render editForm({
+					remoteForm: editName,
+					errorMsg: 'Failed to update name.',
+					successMsg: 'Successfully updated name.',
+					label: 'Name',
+					field: editName.fields.name,
+					placeholder: name
+				})}
+				{@render editComboboxForm({
+					remoteForm: editCategory,
+					errorMsg: 'Failed to update category.',
+					successMsg: 'Successfully updated category.',
+					label: 'Category',
+					field: editCategory.fields.category,
+					placeholder: category,
+					list: data.categories
+				})}
+				{@render editComboboxForm({
+					remoteForm: editSupplier,
+					errorMsg: 'Failed to update supplier.',
+					successMsg: 'Successfully updated supplier.',
+					label: 'Supplier',
+					field: editSupplier.fields.supplier,
+					placeholder: supplier,
+					list: data.suppliers
+				})}
 			</div>
 			<div>
-				<Form
-					remoteForm={editThumbnail}
-					errorMsg="Failed to update thumbnail."
-					successMsg="Thumbnail has been updated."
-					afterSubmit={() => (checked = false)}
-				>
-					<input {...thumbnailID.as('hidden', id)} />
-					<input {...thumbnailUrl.as('text')} class="hidden" />
-					<InputFile label="Thumbnail" type="file" field={thumbnail} subtitle="Main photo" />
-					<button class="btn btn-primary" onclick={(e) => handleThumbnailSubmit(e)}>Update</button>
-				</Form>
-				<Form
-					remoteForm={editGallery}
-					errorMsg="Failed to update gallery."
-					successMsg="Gallery has been updated."
-					afterSubmit={() => (checked = false)}
-				>
-					<input {...galleryID.as('hidden', id)} />
-					{#each galleryUrlArray as url, i (i)}
-						<input {...galleryUrls[i].as('text', url)} class="hidden" />
-					{/each}
-					<InputFile
-						label="Additional Photos"
-						type="file multiple"
-						field={gallery}
-						subtitle="Gallery photos"
-					/>
-					<button class="btn btn-primary" onclick={(e) => handleGallerySubmit(e)}>Update</button>
-				</Form>
+				{@render editInputFileForm({
+					remoteForm: editThumbnail,
+					errorMsg: 'Failed to update thumbnail.',
+					successMsg: 'Thumbnail has been updated.',
+					label: 'Thumbnail',
+					field: editThumbnail.fields.thumbnail,
+					type: 'file',
+					subtitle: 'Main photo'
+				})}
+				{@render editInputFileForm({
+					remoteForm: editGallery,
+					errorMsg: 'Failed to update gallery.',
+					successMsg: 'Gallery has been updated.',
+					label: 'Gallery',
+					field: editGallery.fields.gallery,
+					type: 'file multiple',
+					subtitle: 'Submitting with 0 files will clear the gallery photos.'
+				})}
 			</div>
-			<div><PhotoPreview thumbnailFile={thumbnail.value()} galleryFiles={gallery.value()} /></div>
 		{/if}
 		<div>
 			<ItemCard {...data.item} />
 		</div>
 	</div>
-	<LoadingModal {checked} />
 {/if}
 
-{#snippet editForm(
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	remoteForm: any,
-	field: unknown,
-	value: string,
-	label: string,
-	errorMsg: string,
-	successMsg: string
-)}
+{#snippet editForm({ remoteForm, errorMsg, successMsg, label, field, placeholder }: SnippetArgs)}
 	<Form {remoteForm} {errorMsg} {successMsg}>
 		<input {...remoteForm.fields.id.as('hidden', id)} />
-		<Input {field} type="text" placeholder={value} {label} rightButton="Edit" />
+		<Input {field} type="text" {placeholder} {label} rightButton="Edit" />
 	</Form>
 {/snippet}
 
-{#snippet editComboboxForm(
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	remoteForm: any,
-	field: unknown,
-	list: Generic[],
-	label: string,
-	errorMsg: string,
-	successMsg: string,
-	placeholder: string
-)}
+{#snippet editComboboxForm({
+	remoteForm,
+	errorMsg,
+	successMsg,
+	label,
+	field,
+	placeholder,
+	list
+}: SnippetArgs)}
 	<Form {remoteForm} {errorMsg} {successMsg}>
 		<input {...remoteForm.fields.id.as('hidden', id)} />
 		<Combobox {label} {field} {list} rightButton="Edit" {placeholder} />
+	</Form>
+{/snippet}
+
+{#snippet editInputFileForm({
+	remoteForm,
+	errorMsg,
+	successMsg,
+	label,
+	field,
+	type,
+	subtitle
+}: SnippetArgs)}
+	<Form {remoteForm} {errorMsg} {successMsg}>
+		<input {...remoteForm.fields.id.as('hidden', id)} />
+		<InputFile {label} {type} {field} {subtitle} />
+		<button class="btn btn-primary">Update</button>
 	</Form>
 {/snippet}

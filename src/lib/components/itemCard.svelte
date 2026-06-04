@@ -34,12 +34,12 @@
 	<ImageModal id={master} thumbnailSrc={thumbnail} gallerySrc={gallery} />
 	<div class="card-body p-4 text-gray-800">
 		<h2 class="card-title flex-col items-start gap-0 text-2xl">
-			{truncateString(name, 15)}
+			<span> {master}|{truncateString(name, 15)}</span>
 			<span class="text-lg">{category}</span>
 			<span class="text-sm">{supplier}</span>
 		</h2>
 		<p>
-			{quantity} in Inventory
+			{quantity | 0} in Inventory
 		</p>
 		<div class="card-actions justify-end">
 			<button

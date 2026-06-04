@@ -13,6 +13,7 @@ import { isBefore } from 'date-fns';
 import * as z from 'zod';
 import { updateMultipleLastStocked } from './item.remote';
 import { getOrCreateSupplier } from './supplier.remote';
+import { error } from '@sveltejs/kit';
 
 export const createIncomingTransaction = form(
 	z
@@ -29,6 +30,8 @@ export const createIncomingTransaction = form(
 		}),
 	async ({ date, supplier, deliveryID, ids, quantities }, issue) => {
 		const { locals } = getRequestEvent();
+		if (!locals.user) error(403, 'Forbidden');
+
 		try {
 			await sql.begin(async () => {
 				const supplierResult = await getOrCreateSupplier(supplier);
@@ -38,7 +41,7 @@ export const createIncomingTransaction = form(
 				const [transactionResult] = await sql<{ id: string }[]>`
 					INSERT INTO incoming_transactions(
 					logger_id, created_at, delivery_date, supplier_id, delivery_ref)
-					VALUES(${locals.user.id}, ${new Date()}, ${date}, ${supplierResult.id}, ${deliveryID}) RETURNING id`;
+					VALUES(${locals.user!.id}, ${new Date()}, ${date}, ${supplierResult.id}, ${deliveryID}) RETURNING id`;
 
 				const items = generateDB_StockArray(ids, quantities, transactionResult.id);
 				await updateMultipleLastStocked(ids);
@@ -79,12 +82,13 @@ export const createOutgoingTransaction = form(
 		}),
 	async ({ date, expender, remarks, ids, quantities }) => {
 		const { locals } = getRequestEvent();
+		if (!locals.user) error(403, 'Forbidden');
 		try {
 			await sql.begin(async () => {
 				const [transactionResult] = await sql<{ id: string }[]>`
 					INSERT INTO outgoing_transactions(
 					logger_id, created_at, expend_date, expender, remarks)
-					VALUES(${locals.user.id}, ${new Date()}, ${date}, ${expender}, ${remarks}) RETURNING id`;
+					VALUES(${locals.user!.id}, ${new Date()}, ${date}, ${expender}, ${remarks}) RETURNING id`;
 				const items = generateDB_StockArray(ids, quantities, transactionResult.id);
 
 				await sql`INSERT INTO outgoing_items ${sql(items)}`;
@@ -100,10 +104,10 @@ export const createOutgoingTransaction = form(
 export const getIncomingTransactions = query(async () => {
 	try {
 		const result = await sql<IndividualTransaction[]>`
-		SELECT inc_t.id, 
-			inc_t.created_at AS "createdAt", 
-			inc_t.delivery_date AS "deliveryDate", 
-			s.name AS "supplier", 
+		SELECT inc_t.id,
+			inc_t.created_at AS "createdAt",
+			inc_t.delivery_date AS "deliveryDate",
+			s.name AS "supplier",
 			inc_t.delivery_ref AS "deliveryID",
 			i.master_number AS master,
 			inc_i.item_id AS "itemID",

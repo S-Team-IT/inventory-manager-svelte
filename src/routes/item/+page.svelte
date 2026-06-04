@@ -109,7 +109,7 @@
 							element.parentElement?.parentElement?.parentElement?.classList.add('bg-base-300');
 							selectedItems.add(master);
 						} else {
-							element.parentElement?.parentElement?.classList.remove('bg-base-300');
+							element.parentElement?.parentElement?.parentElement?.classList.remove('bg-base-300');
 							selectedItems.delete(master);
 						}
 					}}
@@ -122,6 +122,6 @@
 		</th>
 		<th><a href={resolve('/item/[slug]', { slug: id })} class="underline">{name}</a></th>
 		<th>{category}</th>
-		<th class="text-center">{quantity ? quantity : 0}</th>
+		<th class="text-center">{quantity || 0}</th>
 	</tr>
 {/snippet}
