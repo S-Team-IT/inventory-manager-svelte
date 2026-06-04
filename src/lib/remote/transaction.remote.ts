@@ -8,12 +8,11 @@ import type {
 } from '$lib/types/databaseTypes';
 import { master, zNumber, zString } from '$lib/types/schemaTypes';
 import { handleQueryErrors } from '$lib/utils/errorHandling';
-import { invalid } from '@sveltejs/kit';
+import { error, invalid } from '@sveltejs/kit';
 import { isBefore } from 'date-fns';
 import * as z from 'zod';
 import { updateMultipleLastStocked } from './item.remote';
 import { getOrCreateSupplier } from './supplier.remote';
-import { error } from '@sveltejs/kit';
 
 export const createIncomingTransaction = form(
 	z
@@ -146,6 +145,55 @@ export const getOutgoingTransactions = query(async () => {
 		ON out_i.item_id = i.id
 		ORDER BY out_t.created_at desc;`;
 		return sortTransactions(result);
+	} catch (e) {
+		handleQueryErrors(e);
+	}
+});
+
+export const getAllTransactions = query(async () => {
+	try {
+		const result = await sql`
+	SELECT
+       inc_t.id,
+       u.name              AS "logger",
+       inc_t.created_at    AS "createdAt",
+       inc_t.delivery_date AS "date",
+       true                AS incoming,
+       s.name              AS supplier,
+       null                AS expender,
+       inc_t.delivery_ref  AS "deliveryRef",
+       null                AS remarks,
+       inc_i.item_id       AS "itemID",
+       i.name              AS "itemName",
+       inc_i.quantity
+     FROM incoming_transactions inc_t
+     JOIN incoming_items        inc_i ON inc_t.id = inc_i.transaction_id
+     JOIN suppliers             s     ON inc_t.supplier_id = s.id
+     JOIN users                 u     ON inc_t.logger_id = u.id
+     JOIN items                 i     ON inc_i.item_id = i.id
+
+     UNION ALL
+
+     SELECT
+         out_t.id,
+         u.name,
+         out_t.created_at,
+         out_t.expend_date,
+         false,
+         null,
+         out_t.expender,
+         null,
+         out_t.remarks,
+         out_i.item_id,
+         i.name,
+         out_i.quantity
+     FROM outgoing_transactions out_t
+     JOIN outgoing_items        out_i ON out_t.id = out_i.transaction_id
+     JOIN users                 u     ON out_t.logger_id = u.id
+     JOIN items                 i     ON out_i.item_id = i.id
+
+     ORDER BY "createdAt" DESC;`;
+		return result;
 	} catch (e) {
 		handleQueryErrors(e);
 	}
