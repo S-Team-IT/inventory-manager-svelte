@@ -1,9 +1,9 @@
-import { error, isHttpError, isRedirect } from '@sveltejs/kit';
+import { error, isHttpError, isRedirect, type ValidationError } from '@sveltejs/kit';
 import type { PostgresError } from 'postgres';
 
 export const handleQueryErrors = (e: unknown, customPsqlHandler?: (e: PostgresError) => void) => {
 	console.error(e);
-	if (isHttpError(e) || isRedirect(e)) throw e;
+	if (isHttpError(e) || isRedirect(e) || isValidationError(e)) throw e;
 	if (isPostgresError(e)) {
 		const psqlError = e as PostgresError;
 
@@ -19,4 +19,8 @@ const isPostgresError = (e: unknown): boolean => {
 	// "instanceof cannot be used here because PostgresError cannot be used a value"
 	// do you genuinely think you deserve to live
 	return (e as PostgresError).code !== undefined;
+};
+
+const isValidationError = (e: unknown): boolean => {
+	return (e as ValidationError).issues !== undefined;
 };
