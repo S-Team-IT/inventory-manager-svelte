@@ -1,9 +1,9 @@
-import { form, query } from '$app/server';
+import { form, getRequestEvent, query } from '$app/server';
 import { sql } from '$lib/server/postgres';
 import type { User } from '$lib/types/databaseTypes';
 import { email, password, zString } from '$lib/types/schemaTypes';
 import { handleQueryErrors } from '$lib/utils/errorHandling';
-import { hashPassword } from '$lib/utils/hash';
+import { comparePasswordHash, hashPassword } from '$lib/utils/hash';
 import { capitalizeFirstLetter } from '$lib/utils/stringTransform';
 import { error, invalid } from '@sveltejs/kit';
 import z from 'zod';
@@ -49,6 +49,26 @@ export const createUser = form(
 					}
 				}
 			});
+		}
+	}
+);
+
+export const editPassword = form(
+	z.object({ oldPassword: password, newPassword: password }),
+	async ({ oldPassword, newPassword }, issue) => {
+		const { locals } = getRequestEvent();
+		if (!locals.user) error(403, 'Forbidden');
+		const { id, passwordHash } = locals.user;
+		const isValid = await comparePasswordHash(oldPassword, passwordHash);
+		if (!isValid) invalid(issue.oldPassword('Current password is wrong.'));
+		const newPasswordHash = await hashPassword(newPassword);
+
+		try {
+			const result =
+				await sql`UPDATE users SET password_hash = ${newPasswordHash} WHERE id = ${id}`;
+			if (result.count != 1) return { success: false, message: '404 Not found' };
+		} catch (e) {
+			handleQueryErrors(e);
 		}
 	}
 );
