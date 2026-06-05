@@ -134,7 +134,7 @@
 				/>
 			</label>
 		</th>
-		<th class="w-25 text-center text-2xl">{master}</th>
+		<th class="w-25 text-center text-4xl">#{master}</th>
 		<th class="flex w-50 items-center justify-center">
 			<ImageModal id={master} thumbnailSrc={thumbnail} gallerySrc={gallery} />
 		</th>

@@ -28,7 +28,7 @@
 			<ul>
 				{#each items as item, i (i)}
 					<li class="ms-6 list-disc">
-						{item.master}
+						#{item.master}
 						{item.name}
 						{deliveryID ? '+' : '-'}{item.quantity}
 					</li>
