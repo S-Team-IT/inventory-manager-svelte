@@ -115,10 +115,18 @@
 	</div>
 {/if}
 
-{#snippet editForm({ remoteForm, errorMsg, successMsg, label, field, placeholder }: SnippetArgs)}
+{#snippet editForm({
+	remoteForm,
+	errorMsg,
+	successMsg,
+	label,
+	field,
+	placeholder,
+	type = 'text'
+}: SnippetArgs)}
 	<Form {remoteForm} {errorMsg} {successMsg}>
 		<input {...remoteForm.fields.id.as('hidden', id)} />
-		<Input {field} type="text" {placeholder} {label} rightButton="Edit" />
+		<Input {field} {type} {placeholder} {label} rightButton="Edit" />
 	</Form>
 {/snippet}
 
