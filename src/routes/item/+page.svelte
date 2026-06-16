@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import type { DetailedItem, Item } from '$lib/types/databaseTypes.js';
+	import { format } from 'date-fns';
 	import { SvelteSet } from 'svelte/reactivity';
 	import ImageModal from '../../lib/components/imageModal.svelte';
 
@@ -54,12 +55,7 @@
 	}
 
 	let selectedItems = new SvelteSet<string>();
-
-	// function calculateFullfilment(quantity: number, minimumQuantity: number): string | null {
-	// 	const percentage: number = (quantity / minimumQuantity) * 100;
-	// 	if (!isFinite(percentage)) return '-';
-	// 	return percentage.toFixed(2) + '%';
-	// }
+	$inspect(data.quantityTrends);
 </script>
 
 <svelte:head>
@@ -118,7 +114,7 @@
 	selectedItems: SvelteSet<string>
 )}
 	<tr class="hover:bg-base-300">
-		<th>
+		<td>
 			<!-- svelte-ignore a11y_click_events_have_key_events -->
 			<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 			<label class="p-2" onclick={(e) => e.stopPropagation()}>
@@ -136,14 +132,21 @@
 					}}
 				/>
 			</label>
-		</th>
-		<th class="w-25 text-center text-4xl">#{master}</th>
-		<th class="flex w-50 items-center justify-center">
+		</td>
+		<td class="w-25 text-center text-4xl">#{master}</td>
+		<td class="flex w-50 items-center justify-center">
 			<ImageModal id={master} thumbnailSrc={thumbnail} gallerySrc={gallery} />
-		</th>
-		<th><a href={resolve('/item/[slug]', { slug: id })} class="underline">{name}</a></th>
-		<th>{category}</th>
-		<th class="text-center">{quantity || 0} </th>
-		<th>{quantity | 0} / {minimumQuantity}</th>
+		</td>
+		<td class="max-w-50 wrap-break-word">
+			<a href={resolve('/item/[slug]', { slug: id })} class="underline">{name}</a>
+		</td>
+		<td>{category}</td>
+		<td class="text-center">{quantity || 0} </td>
+		<td>{quantity | 0} / {minimumQuantity}</td>
+		<td
+			>{#each data.quantityTrends?.get(id) as { week, netQuantity }, i (i)}
+				{format(week, 'MM/dd/yyyy')} | {netQuantity} <br />
+			{/each}</td
+		>
 	</tr>
 {/snippet}
