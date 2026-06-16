@@ -10,7 +10,6 @@
 </script>
 
 <svelte:head>
-	<title>Webi Wabo 3</title>
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
