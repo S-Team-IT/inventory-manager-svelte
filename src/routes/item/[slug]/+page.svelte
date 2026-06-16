@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
 	import Combobox from '$lib/components/base/combobox.svelte';
 	import Form from '$lib/components/base/form.svelte';
 	import Input from '$lib/components/base/input.svelte';
@@ -44,14 +43,6 @@
 <svelte:head>
 	<title>Editing {master}</title>
 </svelte:head>
-
-<div class="breadcrumbs text-sm">
-	<ul>
-		<li><a href={resolve('/')} class="underline">Home</a></li>
-		<li><a href={resolve('/item')} class="underline">Item List</a></li>
-		<li>Add Item</li>
-	</ul>
-</div>
 
 {#if !data.item}
 	404 not found
