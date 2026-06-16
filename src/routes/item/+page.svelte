@@ -15,7 +15,8 @@
 		| 'quantity'
 		| 'quantityReverse'
 		| 'lastStocked'
-		| 'minimumQuantity';
+		| 'minimumQuantity'
+		| 'minimumQuantityReverse';
 
 	let sortOption = $state<SortOption>('lastStocked');
 	let sortedItems = $derived.by(() => sortItems(data.items, sortOption));
@@ -26,6 +27,10 @@
 		} else if (sortOption === 'minimumQuantity') {
 			return list.toSorted(
 				(a, b) => a.quantity / a.minimumQuantity - b.quantity / b.minimumQuantity
+			);
+		} else if (sortOption === 'minimumQuantityReverse') {
+			return list.toSorted(
+				(a, b) => b.quantity / b.minimumQuantity - a.quantity / a.minimumQuantity
 			);
 		}
 
@@ -50,11 +55,11 @@
 
 	let selectedItems = new SvelteSet<string>();
 
-	function calculateFullfilment(quantity: number, minimumQuantity: number): string | null {
-		const percentage: number = (quantity / minimumQuantity) * 100;
-		if (!isFinite(percentage)) return '-';
-		return percentage.toFixed(2) + '%';
-	}
+	// function calculateFullfilment(quantity: number, minimumQuantity: number): string | null {
+	// 	const percentage: number = (quantity / minimumQuantity) * 100;
+	// 	if (!isFinite(percentage)) return '-';
+	// 	return percentage.toFixed(2) + '%';
+	// }
 </script>
 
 <svelte:head>
@@ -66,12 +71,6 @@
 	onclick={() => {
 		sortOption = 'lastStocked';
 	}}>Last Stocked</button
->
-<button
-	class="btn {sortOption === 'minimumQuantity' ? '' : 'btn-soft'} ms-4 btn-primary"
-	onclick={() => {
-		sortOption = 'minimumQuantity';
-	}}>Fulfillment</button
 >
 
 <table class="table max-w-200">
@@ -87,7 +86,7 @@
 			</th>
 			<th>{@render sortingHeader('category', 'categoryReverse', 'Category')}</th>
 			<th class="text-center">{@render sortingHeader('quantity', 'quantityReverse', 'Qty')}</th>
-			<th>Fullfilment</th>
+			<th>{@render sortingHeader('minimumQuantity', 'minimumQuantityReverse', 'Fullfilment')}</th>
 		</tr>
 	</thead>
 	<tbody>
