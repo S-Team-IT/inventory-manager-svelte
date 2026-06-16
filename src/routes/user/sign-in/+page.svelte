@@ -6,6 +6,10 @@
 	const { email, password } = signIn.fields;
 </script>
 
+<svelte:head>
+	<title>Sign In</title>
+</svelte:head>
+
 <Form legend="Sign in" remoteForm={signIn} errorMsg="Invalid credentials" successMsg="Signed in">
 	<Input label="Email" type="email" field={email} placeholder="example@domain.com" />
 	<Input

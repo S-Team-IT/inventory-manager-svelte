@@ -6,6 +6,10 @@
 	const { email, password, role, name } = createUser.fields;
 </script>
 
+<svelte:head>
+	<title>New User</title>
+</svelte:head>
+
 <Form
 	legend="Create new user"
 	remoteForm={createUser}

@@ -57,6 +57,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>Master List</title>
+</svelte:head>
+
 <button
 	class="btn {sortOption === 'lastStocked' ? '' : 'btn-soft'} ms-4 btn-primary"
 	onclick={() => {

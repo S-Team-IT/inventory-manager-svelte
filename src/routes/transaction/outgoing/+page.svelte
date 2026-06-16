@@ -8,6 +8,10 @@
 	const { date, expender, remarks } = createOutgoingTransaction.fields;
 </script>
 
+<svelte:head>
+	<title>Outgoing Transactions</title>
+</svelte:head>
+
 <TransactionForm
 	remoteForm={createOutgoingTransaction}
 	legend="Enter Expenditure"

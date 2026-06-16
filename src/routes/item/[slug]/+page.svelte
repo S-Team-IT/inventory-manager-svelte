@@ -41,6 +41,10 @@
 	};
 </script>
 
+<svelte:head>
+	<title>Editing {master}</title>
+</svelte:head>
+
 <div class="breadcrumbs text-sm">
 	<ul>
 		<li><a href={resolve('/')} class="underline">Home</a></li>

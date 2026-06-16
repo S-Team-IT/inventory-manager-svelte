@@ -28,6 +28,10 @@
 	});
 </script>
 
+<svelte:head>
+	<title>Add item</title>
+</svelte:head>
+
 <div class="flex">
 	<Form
 		remoteForm={createItem}
