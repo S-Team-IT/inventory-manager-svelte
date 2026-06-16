@@ -145,6 +145,6 @@
 		<th><a href={resolve('/item/[slug]', { slug: id })} class="underline">{name}</a></th>
 		<th>{category}</th>
 		<th class="text-center">{quantity || 0} </th>
-		<th>{calculateFullfilment(quantity, minimumQuantity)}</th>
+		<th>{quantity | 0} / {minimumQuantity}</th>
 	</tr>
 {/snippet}
