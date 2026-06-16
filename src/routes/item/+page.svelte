@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import QuantityChart from '$lib/components/quantityChart.svelte';
 	import type { DetailedItem, Item } from '$lib/types/databaseTypes.js';
-	import { format } from 'date-fns';
 	import { SvelteSet } from 'svelte/reactivity';
 	import ImageModal from '../../lib/components/imageModal.svelte';
 
@@ -143,10 +143,9 @@
 		<td>{category}</td>
 		<td class="text-center">{quantity || 0} </td>
 		<td>{quantity | 0} / {minimumQuantity}</td>
-		<td
-			>{#each data.quantityTrends?.get(id) as { week, netQuantity }, i (i)}
-				{format(week, 'MM/dd/yyyy')} | {netQuantity} <br />
-			{/each}</td
-		>
+		<td>
+			<div><canvas id={`chart${id}`}></canvas></div>
+			<QuantityChart chartData={data.quantityTrends?.get(id)} targetElementID={`chart${id}`} />
+		</td>
 	</tr>
 {/snippet}
