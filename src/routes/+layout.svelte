@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { invalidateAll } from '$app/navigation';
+	import { beforeNavigate, invalidateAll } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import favicon from '$lib/assets/favicon.ico';
 	import { signOut } from '$lib/remote/auth.remote';
@@ -7,6 +7,12 @@
 	import './layout.css';
 
 	let { children, data } = $props();
+
+	beforeNavigate((navigate) => {
+		toast.promise(navigate.complete, {
+			loading: 'Loading...'
+		});
+	});
 </script>
 
 <svelte:head>
