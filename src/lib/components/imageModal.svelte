@@ -13,20 +13,13 @@
 		e.stopPropagation();
 		const dialog = document.querySelector(`#img-modal${id}`);
 		(dialog as HTMLDialogElement).showModal();
-	}}
-	><img
-		src={thumbnailSrc}
-		alt="thumbnail"
-		loading="lazy"
-		class="h-37.5 w-50 object-cover"
-	/></button
+	}}><img src={thumbnailSrc} alt="thumbnail" loading="lazy" class="" /></button
 >
 <dialog id={`img-modal${id}`} class="modal">
 	<div class="modal-box min-w-[70vw]">
 		<form method="dialog">
 			<button class="btn absolute top-2 right-2 btn-circle btn-ghost btn-sm">✕</button>
 		</form>
-		<!-- <h3 class="text-lg font-bold">{name} gallery</h3> -->
 		<div class="grid grid-cols-3 gap-2">
 			<img src={thumbnailSrc} alt="thumbnail" loading="lazy" class="min-h-37.5" />
 			{#each gallerySrc as { item }, i (i)}

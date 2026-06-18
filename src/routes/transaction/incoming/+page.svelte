@@ -9,6 +9,10 @@
 	const { data } = $props();
 </script>
 
+<svelte:head>
+	<title>Add Delivery Order</title>
+</svelte:head>
+
 <TransactionForm
 	remoteForm={createIncomingTransaction}
 	legend="Enter Delivery Order"

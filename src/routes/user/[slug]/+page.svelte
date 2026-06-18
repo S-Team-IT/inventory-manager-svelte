@@ -6,6 +6,10 @@
 	const { oldPassword, newPassword } = editPassword.fields;
 </script>
 
+<svelte:head>
+	<title>User</title>
+</svelte:head>
+
 <Form
 	remoteForm={editPassword}
 	errorMsg="Failed to update password."

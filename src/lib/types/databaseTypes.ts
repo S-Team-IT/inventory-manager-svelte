@@ -75,3 +75,11 @@ export type CompleteTransaction = Transaction & {
 };
 
 export type Gallery = { item: string }[];
+
+export type WeeklyNetQuantity = {
+	itemID: string;
+	week: Date;
+	netQuantity: number;
+};
+
+export type Trends = Map<string, { week: Date; netQuantity: number }[]>;

@@ -4,7 +4,6 @@
 	import ImageModal from '$lib/components/imageModal.svelte';
 	import { deleteItem } from '$lib/remote/item.remote';
 	import type { DetailedItem } from '$lib/types/databaseTypes';
-	import { truncateString } from '$lib/utils/stringTransform';
 	import { toast } from 'svelte-sonner';
 
 	let {
@@ -16,7 +15,8 @@
 		quantity,
 		thumbnail,
 		gallery,
-		deletedItems = undefined
+		deletedItems = undefined,
+		minimumQuantity
 	}: DetailedItem & { deletedItems?: string[] | undefined } = $props();
 
 	function openDeleteConfirmation() {
@@ -30,18 +30,10 @@
 	}
 </script>
 
-<div class="card max-w-50 bg-accent shadow-sm">
-	<ImageModal id={master} thumbnailSrc={thumbnail} gallerySrc={gallery} />
-	<div class="card-body p-4 text-gray-800">
-		<h2 class="card-title flex-col items-start gap-0 text-2xl">
-			<span> {master}|{truncateString(name, 15)}</span>
-			<span class="text-lg">{category}</span>
-			<!-- <span class="text-sm">{supplier}</span> -->
-		</h2>
-		<p>
-			{quantity | 0} in Inventory
-		</p>
-		<div class="card-actions justify-end">
+<details class="collapse border border-base-300 bg-base-100" name="my-accordion-det-1" open>
+	<summary class="collapse-title font-semibold">
+		<div class="flex items-center justify-between gap-10">
+			#{master} | {name}
 			<button
 				class="btn size-12.5 btn-soft btn-error"
 				aria-label="delete"
@@ -49,19 +41,21 @@
 			>
 				<span class="icon-[tabler--trash]"></span>
 			</button>
-			<button
-				class="btn h-12.5 w-12.5 btn-soft btn-primary"
-				aria-label="edit"
-				onclick={() => goto(resolve('/item/[slug]', { slug: id }))}
-				><span class="icon-[boxicons--edit]"></span></button
-			>
 		</div>
+	</summary>
+	<div class="collapse-content text-sm">
+		<ImageModal id={master} thumbnailSrc={thumbnail} gallerySrc={gallery} /> <br />
+		{category} <br />
+		{quantity | 0} in inventory <br />
+		{minimumQuantity | 0} minimum
 	</div>
-</div>
+</details>
 
 <dialog id={`confirm-modal${master}`} class="modal">
 	<div class="modal-box">
-		<h2 class="text-lg">Are you sure you want to delete {name}?</h2>
+		<h2 class="text-lg">
+			Are you sure you want to delete {name}?
+		</h2>
 		<div class="modal-action">
 			<form method="dialog">
 				<button class="btn btn-soft btn-secondary">Cancel</button>
@@ -73,6 +67,7 @@
 						toast.success('Item deleted');
 						if (deletedItems) deletedItems.push(master);
 						closeDeleteConfirmation();
+						goto(resolve('/item'));
 					} else {
 						toast.error('Failed to delete item');
 					}

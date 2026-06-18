@@ -1,6 +1,6 @@
 import { command, form, query } from '$app/server';
 import { sql } from '$lib/server/postgres';
-import type { DetailedItem, Gallery } from '$lib/types/databaseTypes';
+import type { DetailedItem, Gallery, WeeklyNetQuantity } from '$lib/types/databaseTypes';
 import { master, zBoolean, zImgFile, zNumber, zString } from '$lib/types/schemaTypes';
 import { handleQueryErrors } from '$lib/utils/errorHandling';
 import { error, invalid } from '@sveltejs/kit';
@@ -83,17 +83,20 @@ export const createItem = form(
 		isDisabled: zBoolean,
 		minimumQuantity: zNumber
 	}),
-	async ({
-		master,
-		name,
-		category,
-		// supplier,
-		quantity,
-		thumbnail,
-		gallery,
-		isDisabled = false,
-		minimumQuantity
-	}) => {
+	async (
+		{
+			master,
+			name,
+			category,
+			// supplier,
+			quantity,
+			thumbnail,
+			gallery,
+			isDisabled = false,
+			minimumQuantity
+		},
+		issue
+	) => {
 		try {
 			const thumbnailUrl = await uploadImage({ file: thumbnail, name: `thumbnail` });
 			if (!thumbnailUrl)
@@ -145,7 +148,16 @@ export const createItem = form(
 
 			return { success: true, item: newItem };
 		} catch (e) {
-			handleQueryErrors(e);
+			handleQueryErrors(e, (psqlError) => {
+				if (psqlError.code === '23505') {
+					switch (psqlError.constraint_name) {
+						case 'items_master_number_key':
+							throw invalid(issue.master('Master number is already in use.'));
+						case 'items_name_key':
+							throw invalid(issue.name('Name is already in use.'));
+					}
+				}
+			});
 		}
 	}
 );
@@ -298,3 +310,35 @@ export const updateMultipleLastStocked = command(z.array(zString), async (ids) =
 		handleQueryErrors(e);
 	}
 });
+
+export const getQuantityTrend = query(async () => {
+	try {
+		const result = await sql<WeeklyNetQuantity[]>`
+		SELECT 
+			item_id AS "itemID", 
+			week_starting AS week, 
+			net_quantity AS "netQuantity" 
+		FROM quantity_trend`;
+		return sortWeeklyNetQuantity(result);
+	} catch (e) {
+		handleQueryErrors(e);
+	}
+});
+
+function sortWeeklyNetQuantity(list: WeeklyNetQuantity[]) {
+	if (list.length === 0) return;
+	let currentItemID: string = '';
+	const trends = new Map();
+
+	for (let i = 0; i < list.length; i++) {
+		const { itemID, week, netQuantity } = list[i];
+		if (currentItemID !== itemID) {
+			currentItemID = itemID;
+			trends.set(itemID, [{ week, netQuantity }]);
+		} else {
+			const temp = trends.get(itemID);
+			trends.set(itemID, [...temp, { week, netQuantity }]);
+		}
+	}
+	return trends;
+}

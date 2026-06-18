@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import QuantityChart from '$lib/components/quantityChart.svelte';
 	import type { DetailedItem, Item } from '$lib/types/databaseTypes.js';
-	import { SvelteSet } from 'svelte/reactivity';
 	import ImageModal from '../../lib/components/imageModal.svelte';
 
 	const { data } = $props();
@@ -15,7 +15,8 @@
 		| 'quantity'
 		| 'quantityReverse'
 		| 'lastStocked'
-		| 'minimumQuantity';
+		| 'minimumQuantity'
+		| 'minimumQuantityReverse';
 
 	let sortOption = $state<SortOption>('lastStocked');
 	let sortedItems = $derived.by(() => sortItems(data.items, sortOption));
@@ -26,6 +27,10 @@
 		} else if (sortOption === 'minimumQuantity') {
 			return list.toSorted(
 				(a, b) => a.quantity / a.minimumQuantity - b.quantity / b.minimumQuantity
+			);
+		} else if (sortOption === 'minimumQuantityReverse') {
+			return list.toSorted(
+				(a, b) => b.quantity / b.minimumQuantity - a.quantity / a.minimumQuantity
 			);
 		}
 
@@ -48,14 +53,12 @@
 		}
 	}
 
-	let selectedItems = new SvelteSet<string>();
-
-	function calculateFullfilment(quantity: number, minimumQuantity: number): string | null {
-		const percentage: number = (quantity / minimumQuantity) * 100;
-		if (!isFinite(percentage)) return '-';
-		return percentage.toFixed(2) + '%';
-	}
+	// let selectedItems = new SvelteSet<string>();
 </script>
+
+<svelte:head>
+	<title>Master List</title>
+</svelte:head>
 
 <button
 	class="btn {sortOption === 'lastStocked' ? '' : 'btn-soft'} ms-4 btn-primary"
@@ -63,17 +66,11 @@
 		sortOption = 'lastStocked';
 	}}>Last Stocked</button
 >
-<button
-	class="btn {sortOption === 'minimumQuantity' ? '' : 'btn-soft'} ms-4 btn-primary"
-	onclick={() => {
-		sortOption = 'minimumQuantity';
-	}}>Fulfillment</button
->
 
 <table class="table max-w-200">
 	<thead>
 		<tr>
-			<th></th>
+			<!-- <th></th> -->
 			<th class="w-25 text-center">
 				{@render sortingHeader('master', 'masterReverse', 'Master')}
 			</th>
@@ -83,12 +80,12 @@
 			</th>
 			<th>{@render sortingHeader('category', 'categoryReverse', 'Category')}</th>
 			<th class="text-center">{@render sortingHeader('quantity', 'quantityReverse', 'Qty')}</th>
-			<th>Fullfilment</th>
+			<th>{@render sortingHeader('minimumQuantity', 'minimumQuantityReverse', 'Fullfilment')}</th>
 		</tr>
 	</thead>
 	<tbody>
 		{#each sortedItems as item (item.id)}
-			{@render ItemRow(item, selectedItems)}
+			{@render ItemRow(item)}
 		{/each}
 	</tbody>
 </table>
@@ -111,13 +108,13 @@
 {/snippet}
 
 {#snippet ItemRow(
-	{ id, master, name, category, thumbnail, gallery, quantity, minimumQuantity }: DetailedItem,
-	selectedItems: SvelteSet<string>
+	{ id, master, name, category, thumbnail, gallery, quantity, minimumQuantity }: DetailedItem
+	// selectedItems: SvelteSet<string>
 )}
 	<tr class="hover:bg-base-300">
-		<th>
-			<!-- svelte-ignore a11y_click_events_have_key_events -->
-			<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+		<!-- <td>
+			svelte-ignore a11y_click_events_have_key_events
+			svelte-ignore a11y_no_noninteractive_element_interactions
 			<label class="p-2" onclick={(e) => e.stopPropagation()}>
 				<input
 					type="checkbox"
@@ -133,14 +130,22 @@
 					}}
 				/>
 			</label>
-		</th>
-		<th class="w-25 text-center text-4xl">#{master}</th>
-		<th class="flex w-50 items-center justify-center">
+		</td> -->
+		<td class="w-25 text-center text-4xl">#{master}</td>
+		<td class="flex w-50 items-center justify-center">
 			<ImageModal id={master} thumbnailSrc={thumbnail} gallerySrc={gallery} />
-		</th>
-		<th><a href={resolve('/item/[slug]', { slug: id })} class="underline">{name}</a></th>
-		<th>{category}</th>
-		<th class="text-center">{quantity || 0} </th>
-		<th>{calculateFullfilment(quantity, minimumQuantity)}</th>
+		</td>
+		<td class="max-w-50 wrap-break-word">
+			<a href={resolve('/item/[slug]', { slug: id })} class="underline">{name}</a>
+		</td>
+		<td>{category}</td>
+		<td class="text-center">{quantity || 0} </td>
+		<td>{quantity | 0} / {minimumQuantity}</td>
+		{#if data.quantityTrends?.get(id)}
+			<td>
+				<div><canvas id={`chart${id}`}></canvas></div>
+				<QuantityChart chartData={data.quantityTrends?.get(id)} targetElementID={`chart${id}`} />
+			</td>
+		{/if}
 	</tr>
 {/snippet}

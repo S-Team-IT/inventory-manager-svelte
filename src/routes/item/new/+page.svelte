@@ -4,7 +4,7 @@
 	import Input from '$lib/components/base/input.svelte';
 	import InputFile from '$lib/components/base/inputFile.svelte';
 	import InputIssues from '$lib/components/base/inputIssues.svelte';
-	import ItemCard from '$lib/components/itemCard.svelte';
+	import ItemAccordion from '$lib/components/itemAccordion.svelte';
 	import { createItem } from '$lib/remote/item.remote.js';
 	import type { DetailedItem } from '$lib/types/databaseTypes.js';
 
@@ -24,9 +24,13 @@
 	let addedItems = $state<DetailedItem[]>([]);
 	let deletedItems = $state<string[]>([]);
 	let filteredItems = $derived.by(() => {
-		return addedItems.filter(({ master }) => !deletedItems.includes(master));
+		return addedItems.filter(({ master }) => !deletedItems.includes(master)).reverse();
 	});
 </script>
+
+<svelte:head>
+	<title>Add item</title>
+</svelte:head>
 
 <div class="flex">
 	<Form
@@ -81,7 +85,7 @@
 	</Form>
 	<div>
 		{#each filteredItems as item (item.id)}
-			<ItemCard {...item} {deletedItems} />
+			<ItemAccordion {...item} {deletedItems} />
 		{/each}
 	</div>
 </div>

@@ -19,7 +19,7 @@
 		"@iconify/json": "^2.2.476",
 		"@iconify/tailwind4": "^1.2.3",
 		"@sveltejs/adapter-auto": "^7.0.1",
-		"@sveltejs/kit": "^2.57.0",
+		"@sveltejs/kit": "2.60.1",
 		"@sveltejs/vite-plugin-svelte": "^7.0.0",
 		"@tailwindcss/vite": "^4.2.2",
 		"@types/bcrypt": "^6.0.0",
@@ -43,8 +43,10 @@
 	},
 	"dependencies": {
 		"@supabase/supabase-js": "^2.106.2",
+		"chart.js": "^4.5.1",
 		"date-fns": "^4.3.0",
 		"sharp": "^0.34.5",
+		"svelte-chartjs": "^4.0.1",
 		"svelte-sonner": "^1.1.1",
 		"zod": "^4.4.3"
 	}

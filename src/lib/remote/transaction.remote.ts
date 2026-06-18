@@ -6,7 +6,7 @@ import type {
 	IndividualTransaction,
 	Item
 } from '$lib/types/databaseTypes';
-import { master, zNumber, zString } from '$lib/types/schemaTypes';
+import { master, zBoolean, zNumber, zString } from '$lib/types/schemaTypes';
 import { handleQueryErrors } from '$lib/utils/errorHandling';
 import { error, invalid } from '@sveltejs/kit';
 import { isBefore } from 'date-fns';
@@ -268,3 +268,23 @@ function sortTransactions(transactions: IndividualTransaction[]): CompleteTransa
 
 	return completeList;
 }
+
+export const deleteTransaction = form(
+	z.object({ id: zString, isIncoming: zBoolean }),
+	async ({ id, isIncoming }) => {
+		try {
+			let result;
+			if (isIncoming) {
+				result = await sql`DELETE FROM incoming_transactions WHERE id = ${id}`;
+			} else {
+				result = await sql`DELETE FROM outgoing_transactions WHERE id = ${id}`;
+			}
+			if (result.count !== 1) {
+				return { success: false, message: 'Transaction not found.' };
+			}
+			return { success: true };
+		} catch (e) {
+			handleQueryErrors(e);
+		}
+	}
+);

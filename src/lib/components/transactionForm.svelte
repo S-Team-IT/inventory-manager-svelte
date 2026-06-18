@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Form from '$lib/components/base/form.svelte';
 	import InputIssues from '$lib/components/base/inputIssues.svelte';
-	import TransactionAccordion from '$lib/components/transactionAccordion.svelte';
+	import TransactionAccordion from '$lib/components/transactionAccordionGroup.svelte';
 	import TransactionItemForm from '$lib/components/transactionItemForm.svelte';
 	import TransactionItemTable from '$lib/components/transactionItemTable.svelte';
 	import { createIncomingTransaction } from '$lib/remote/transaction.remote.js';
