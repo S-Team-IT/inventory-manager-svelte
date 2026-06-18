@@ -7,9 +7,11 @@
 
 	type Props = {
 		transaction: CompleteTransaction;
+		isIncoming: boolean;
+		uniqueID: string;
 	};
 
-	const { transaction }: Props = $props();
+	const { transaction, isIncoming, uniqueID }: Props = $props();
 	const {
 		id,
 		createdAt,
@@ -21,11 +23,6 @@
 		remarks,
 		items
 	} = $derived(transaction);
-	const isIncoming = $derived(!expendDate);
-	const modalID = $derived.by(() => {
-		return `confirm-modal${id}-${format(createdAt, 'yyyy-MM-dd')}`;
-	});
-	const uniqueForm = $derived(deleteTransaction.for(modalID));
 
 	function openDeleteConfirmation() {
 		const modal = document.querySelector(`#${modalID}`);
@@ -36,6 +33,7 @@
 		const modal = document.querySelector(`#${modalID}`);
 		(modal as HTMLDialogElement).close();
 	}
+	const uniqueForm = $derived(deleteTransaction.for(uniqueID));
 </script>
 
 <details class="collapse border border-base-300 bg-base-100" name="my-accordion-det-1">
@@ -79,7 +77,7 @@
 	</div>
 </details>
 
-<dialog id={modalID} class="modal">
+<dialog id={uniqueID} class="modal">
 	<div class="modal-box">
 		<h2 class="text-lg">Are you sure you want to delete this transaction?</h2>
 		<div class="modal-action">

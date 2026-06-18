@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { CompleteTransaction } from '$lib/types/databaseTypes';
+	import { format } from 'date-fns';
 	import TransactionAccordion from './transactionAccordion.svelte';
 
 	type Props = {
@@ -10,5 +11,7 @@
 </script>
 
 {#each transactions as transaction, i (i)}
-	<TransactionAccordion {transaction} />
+	{@const isIncoming = !transaction.expendDate}
+	{@const uniqueID = `confirm-modal${transaction.id}-${format(transaction.createdAt, 'yyyy-MM-dd')}`}
+	<TransactionAccordion {transaction} {isIncoming} {uniqueID} />
 {/each}
