@@ -33,6 +33,11 @@
 				]
 			},
 			options: {
+				plugins: {
+					legend: {
+						display: false
+					}
+				},
 				scales: {
 					y: {
 						ticks: { stepSize: 1 }
