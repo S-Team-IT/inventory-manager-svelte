@@ -141,9 +141,11 @@
 		<td>{category}</td>
 		<td class="text-center">{quantity || 0} </td>
 		<td>{quantity | 0} / {minimumQuantity}</td>
-		<td>
-			<div><canvas id={`chart${id}`}></canvas></div>
-			<QuantityChart chartData={data.quantityTrends?.get(id)} targetElementID={`chart${id}`} />
-		</td>
+		{#if data.quantityTrends?.get(id)}
+			<td>
+				<div><canvas id={`chart${id}`}></canvas></div>
+				<QuantityChart chartData={data.quantityTrends?.get(id)} targetElementID={`chart${id}`} />
+			</td>
+		{/if}
 	</tr>
 {/snippet}
