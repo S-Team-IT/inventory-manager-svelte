@@ -1,5 +1,5 @@
 <script lang="ts">
-	import TransactionAccordion from '$lib/components/transactionAccordionGroup.svelte';
+	import TransactionAccordionGroup from '$lib/components/transactionAccordionGroup.svelte';
 
 	const { data } = $props();
 </script>
@@ -8,4 +8,4 @@
 	<title>Transactions</title>
 </svelte:head>
 
-<div class="m-10"><TransactionAccordion transactions={data.transactions} /></div>
+<div class="m-10"><TransactionAccordionGroup transactions={data.transactions} /></div>
