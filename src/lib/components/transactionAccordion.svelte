@@ -25,12 +25,12 @@
 	} = $derived(transaction);
 
 	function openDeleteConfirmation() {
-		const modal = document.querySelector(`#${modalID}`);
+		const modal = document.querySelector(`#${uniqueID}`);
 		(modal as HTMLDialogElement).showModal();
 	}
 
 	function closeDeleteConfirmation() {
-		const modal = document.querySelector(`#${modalID}`);
+		const modal = document.querySelector(`#${uniqueID}`);
 		(modal as HTMLDialogElement).close();
 	}
 	const uniqueForm = $derived(deleteTransaction.for(uniqueID));
