@@ -365,12 +365,8 @@ function sortQuantityTrendTimeline(list: WeekCumulativeQuantity[]) {
 	const timeline: QuantityTimeline = {};
 	for (const { id, week, quantity } of list) {
 		const dateString = format(week, 'MM/dd');
-
-		if (!timeline[dateString]) {
-			timeline[dateString] = [];
-		}
-
-		timeline[dateString].push({ id, quantity });
+		if (!timeline[id]) timeline[id] = [];
+		timeline[id].push({ week: dateString, quantity });
 	}
 	return timeline;
 }

@@ -90,4 +90,5 @@ export type WeekCumulativeQuantity = {
 	quantity: number;
 };
 
-export type QuantityTimeline = Record<string, { id: string; quantity: number }[]>;
+//key is item ID
+export type QuantityTimeline = Record<string, { week: string; quantity: number }[]>;
