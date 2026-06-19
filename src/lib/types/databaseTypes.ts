@@ -83,3 +83,11 @@ export type WeeklyNetQuantity = {
 };
 
 export type Trends = Map<string, { week: Date; netQuantity: number }[]>;
+
+export type WeekCumulativeQuantity = {
+	id: string;
+	week: Date;
+	quantity: number;
+};
+
+export type QuantityTimeline = Record<string, { id: string; quantity: number }[]>;
