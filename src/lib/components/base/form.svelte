@@ -22,7 +22,11 @@
 		isLoading = true;
 		beforeSubmit(data);
 		if (await submit()) {
-			if (!remoteForm.result) return; //Handle form redirection, since that won't return result
+			//Handle form redirection, since that won't return result
+			if (!remoteForm.result) {
+				form.reset();
+				return;
+			}
 			const { success, msg } = remoteForm.result;
 			if (success) {
 				toast.success(successMsg);
