@@ -1,12 +1,19 @@
 import { command, form, query } from '$app/server';
 import { sql } from '$lib/server/postgres';
-import type { DetailedItem, Gallery, WeeklyNetQuantity } from '$lib/types/databaseTypes';
+import type {
+	DetailedItem,
+	Gallery,
+	QuantityTimeline,
+	WeekCumulativeQuantity,
+	WeeklyNetQuantity
+} from '$lib/types/databaseTypes';
 import { master, zBoolean, zImgFile, zNumber, zString } from '$lib/types/schemaTypes';
 import { handleQueryErrors } from '$lib/utils/errorHandling';
 import { error, invalid } from '@sveltejs/kit';
 import * as z from 'zod';
 import { getOrCreateCategory } from './category.remote';
 // import { getOrCreateSupplier } from './supplier.remote';
+import { format } from 'date-fns';
 import { uploadImage, uploadMultipleImages } from './upload.remote';
 
 export const getItems = query(async () => {
@@ -341,4 +348,29 @@ function sortWeeklyNetQuantity(list: WeeklyNetQuantity[]) {
 		}
 	}
 	return trends;
+}
+
+export const getQuantityTrendTimeline = query(async () => {
+	try {
+		const result: WeekCumulativeQuantity[] = await sql<
+			WeekCumulativeQuantity[]
+		>`SELECT id, week_starting AS week, cumulative_net_quantity AS quantity FROM quantity_trend_timeline`;
+		return sortQuantityTrendTimeline(result);
+	} catch (e) {
+		handleQueryErrors(e);
+	}
+});
+
+function sortQuantityTrendTimeline(list: WeekCumulativeQuantity[]) {
+	const timeline: QuantityTimeline = {};
+	for (const { id, week, quantity } of list) {
+		const dateString = format(week, 'MM/dd');
+
+		if (!timeline[dateString]) {
+			timeline[dateString] = [];
+		}
+
+		timeline[dateString].push({ id, quantity });
+	}
+	return timeline;
 }
