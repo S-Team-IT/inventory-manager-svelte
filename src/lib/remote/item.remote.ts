@@ -315,9 +315,9 @@ export const getQuantityTrend = query(async () => {
 	try {
 		const result = await sql<WeeklyNetQuantity[]>`
 		SELECT 
-			item_id AS "itemID", 
+			id AS "itemID", 
 			week_starting AS week, 
-			net_quantity AS "netQuantity" 
+			cumulative_net_quantity AS "netQuantity" 
 		FROM quantity_trend`;
 		return sortWeeklyNetQuantity(result);
 	} catch (e) {
