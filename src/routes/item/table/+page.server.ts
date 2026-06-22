@@ -1,4 +1,4 @@
-import { getQuantityTrendTimeline } from '$lib/remote/item.remote';
+import { getQuantityTrendTimeline } from '$lib/remote/transaction.remote';
 
 export async function load() {
 	const trendTimeline = await getQuantityTrendTimeline();

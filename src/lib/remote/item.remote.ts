@@ -1,19 +1,11 @@
 import { command, form, query } from '$app/server';
 import { sql } from '$lib/server/postgres';
-import type {
-	DetailedItem,
-	Gallery,
-	QuantityTimeline,
-	WeekCumulativeQuantity,
-	WeeklyNetQuantity
-} from '$lib/types/databaseTypes';
+import type { DetailedItem, Gallery } from '$lib/types/databaseTypes';
 import { master, zBoolean, zImgFile, zNumber, zString } from '$lib/types/schemaTypes';
 import { handleQueryErrors } from '$lib/utils/errorHandling';
 import { error, invalid } from '@sveltejs/kit';
 import * as z from 'zod';
 import { getOrCreateCategory } from './category.remote';
-// import { getOrCreateSupplier } from './supplier.remote';
-import { format } from 'date-fns';
 import { uploadImage, uploadMultipleImages } from './upload.remote';
 
 export const getItems = query(async () => {
@@ -317,56 +309,3 @@ export const updateMultipleLastStocked = command(z.array(zString), async (ids) =
 		handleQueryErrors(e);
 	}
 });
-
-export const getQuantityTrend = query(async () => {
-	try {
-		const result = await sql<WeeklyNetQuantity[]>`
-		SELECT 
-			id AS "itemID", 
-			week_starting AS week, 
-			cumulative_net_quantity AS "netQuantity" 
-		FROM quantity_trend`;
-		return sortWeeklyNetQuantity(result);
-	} catch (e) {
-		handleQueryErrors(e);
-	}
-});
-
-function sortWeeklyNetQuantity(list: WeeklyNetQuantity[]) {
-	if (list.length === 0) return;
-	let currentItemID: string = '';
-	const trends = new Map();
-
-	for (let i = 0; i < list.length; i++) {
-		const { itemID, week, netQuantity } = list[i];
-		if (currentItemID !== itemID) {
-			currentItemID = itemID;
-			trends.set(itemID, [{ week, netQuantity }]);
-		} else {
-			const temp = trends.get(itemID);
-			trends.set(itemID, [...temp, { week, netQuantity }]);
-		}
-	}
-	return trends;
-}
-
-export const getQuantityTrendTimeline = query(async () => {
-	try {
-		const result: WeekCumulativeQuantity[] = await sql<
-			WeekCumulativeQuantity[]
-		>`SELECT id, week_starting AS week, cumulative_net_quantity AS quantity FROM quantity_trend_timeline`;
-		return sortQuantityTrendTimeline(result);
-	} catch (e) {
-		handleQueryErrors(e);
-	}
-});
-
-function sortQuantityTrendTimeline(list: WeekCumulativeQuantity[]) {
-	const timeline: QuantityTimeline = {};
-	for (const { id, week, quantity } of list) {
-		const dateString = format(week, 'MM/dd');
-		if (!timeline[id]) timeline[id] = [];
-		timeline[id].push({ week: dateString, quantity });
-	}
-	return timeline;
-}
