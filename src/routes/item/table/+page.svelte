@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { toast } from 'svelte-sonner';
-
 	const { data } = $props();
 	const dates = $derived.by(() => {
 		const itemIDs = Object.keys(data.timeline);
@@ -31,17 +29,19 @@
 <table class="table">
 	<thead>
 		<tr>
-			<th></th>
+			<th>Master</th>
+			<th>Name</th>
 			{#each dates as { week } (week)}
 				<th scope="col">{week}</th>
 			{/each}
 		</tr>
 	</thead>
 	<tbody>
-		{#each Object.entries(data.timeline) as [id, dateQuant], i (i)}
+		{#each Object.entries(data.timeline) as [id, nameDateQuant], i (i)}
 			<tr>
 				<th>{id}</th>
-				{#each dateQuant as { quantity }, i (i)}
+				<td>{nameDateQuant[0].name}</td>
+				{#each nameDateQuant as { quantity }, i (i)}
 					<td>{quantity}</td>
 				{/each}
 			</tr>

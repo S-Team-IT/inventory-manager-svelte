@@ -328,7 +328,7 @@ export const getQuantityTrendTimeline = query(async () => {
 	try {
 		const result: WeekCumulativeQuantity[] = await sql<
 			WeekCumulativeQuantity[]
-		>`SELECT id, week_starting AS week, cumulative_net_quantity AS quantity FROM quantity_trend_timeline`;
+		>`SELECT id, name, week_starting AS week, cumulative_net_quantity AS quantity FROM quantity_trend_timeline`;
 		return sortQuantityTrendTimeline(result);
 	} catch (e) {
 		handleQueryErrors(e);
@@ -337,10 +337,10 @@ export const getQuantityTrendTimeline = query(async () => {
 
 function sortQuantityTrendTimeline(list: WeekCumulativeQuantity[]) {
 	const timeline: QuantityTimeline = {};
-	for (const { id, week, quantity } of list) {
+	for (const { id, name, week, quantity } of list) {
 		const dateString = format(week, 'MM/dd');
 		if (!timeline[id]) timeline[id] = [];
-		timeline[id].push({ week: dateString, quantity });
+		timeline[id].push({ name, week: dateString, quantity });
 	}
 	return timeline;
 }
