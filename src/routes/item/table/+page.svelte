@@ -1,4 +1,6 @@
 <script lang="ts">
+	import XLSX from 'xlsx';
+
 	const { data } = $props();
 	const dates = $derived.by(() => {
 		const itemIDs = Object.keys(data.timeline);
@@ -7,25 +9,18 @@
 	});
 
 	function onclick() {
-		let csvData: string[] = [];
-
-		let rows = document.getElementsByTagName('tr');
-		for (let i = 0; i < rows.length; i++) {
-			let cols = rows[i].querySelectorAll('td,th');
-
-			let csvrow = [];
-			for (let j = 0; j < cols.length; j++) {
-				csvrow.push(cols[j].innerHTML);
-			}
-
-			csvData.push(csvrow.join(','));
+		var tables = document.getElementsByTagName('table');
+		var wb = XLSX.utils.book_new();
+		for (var i = 0; i < tables.length; ++i) {
+			var ws = XLSX.utils.table_to_sheet(tables[i], { raw: true });
+			XLSX.utils.book_append_sheet(wb, ws, 'Table' + i);
 		}
-		console.log(csvData.join('\n'));
-		console.log(csvData);
+
+		XLSX.writeFile(wb, 'export.xlsx');
 	}
 </script>
 
-<button {onclick}>Copy</button>
+<button {onclick} class="btn btn-primary">Export table</button>
 <table class="table">
 	<thead>
 		<tr>
