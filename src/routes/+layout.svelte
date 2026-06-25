@@ -32,6 +32,9 @@
 				{#if ['Admin', 'QS'].includes(data.user?.role ?? '')}
 					<li><a href={resolve('/item/new')}>Add Item</a></li>
 				{/if}
+				{#if ['Admin', 'QS'].includes(data.user?.role ?? '')}
+					<li><a href={resolve('/item/timeline')}>Weekly Balance</a></li>
+				{/if}
 			</ul>
 		</div>
 		<div class="dropdown">
@@ -42,11 +45,9 @@
 			>
 				<li><a class="" href={resolve('/transaction')}>Transaction List</a></li>
 				{#if ['Admin', 'Procurement'].includes(data.user?.role ?? '')}
-					<!-- <div class="divider m-0.5">Procurement</div> -->
 					<li><a href={resolve('/transaction/incoming')}>Add Delivery Order</a></li>
 				{/if}
 				{#if ['Admin', 'Project'].includes(data.user?.role ?? '')}
-					<!-- <div class="divider m-0.5">Project</div> -->
 					<li><a href={resolve('/transaction/outgoing')}>Expenditure</a></li>
 				{/if}
 			</ul>

@@ -1,4 +1,5 @@
-import { getItemsFullInfo, getQuantityTrend } from '$lib/remote/item.remote';
+import { getItemsFullInfo } from '$lib/remote/item.remote';
+import { getQuantityTrend } from '$lib/remote/transaction.remote';
 import type { DetailedItem, Trends } from '$lib/types/databaseTypes';
 
 export async function load() {

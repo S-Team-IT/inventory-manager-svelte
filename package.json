@@ -48,6 +48,7 @@
 		"sharp": "^0.34.5",
 		"svelte-chartjs": "^4.0.1",
 		"svelte-sonner": "^1.1.1",
+		"xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
 		"zod": "^4.4.3"
 	}
 }
