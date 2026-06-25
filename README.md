@@ -1,12 +1,15 @@
 # https://steaminventorymanager.netlify.app/
 
-# Sections
+# Content
 
 - [Tech Stack](#tech-stack)
   - [Code](#code)
   - [Packages](#npm-packages)
 - [Folder Structure](#folder-structure)
 - [Database](#database)
+- [Additional Notes](#additional-notes)
+- [Missing implementation](#missing-implementationimprovements)
+- [Troubleshooting](#troubleshooting)
 
 # Inventory Manager made in Sveltekit
 
@@ -80,37 +83,28 @@ You can preview the production build with `npm run preview`.
 -db (Database schema & data files)
 ```
 
-### Additional Notes
-
-- Sveltekit's experimental Remote Functions feature is used for the majority of client-server communication.
-- In their June 2026 changelog, breaking changes were introduced for enhancing forms. As such, Sveltekit has been locked to a previous version.
-  Supabase is only used in `./lib/remote/upload.remote.ts` for hosting images.
-- Initial loading speed of pages after deployment will take a little long.
-
-### Not implemented
-
-- Account creation is very simple and there is no admin interface. If a new Admin account needs to be added, it has to be done by inserting directly into the database or by manually editing the role of a user. Email confirmation was planned, but never done. Instead, new accounts are created with `12345678`. The password can be changed once the user signs in.
-- Password input validation lacks regex.
-- There is no inactivity timeout implemented for sessions.
-
 ## Database
 
 ### Schema Design
 
-It is suggested to view this in a psql GUI. \
+It is recommended to view it inside a postgres GUI instead.
 
-## Table `categories`
+### Table `items`
 
-### Columns
+| Name | Type | Constraints | Remarks |
+| :--- | :--- | :--- | :--- |
+| `id` | `int8` | Primary Identity | |
+| `name` | `citext` | Unique | |
+| `category_id` | `int8` | | |
+| `thumbnail` | `text` | | main photo URL |
+| `gallery` | `jsonb` | Nullable | secondary photo URLs |
+| `master_number` | `text` | Unique | |
+| `initial_quantity` | `int8` | | quantity before any transactions |
+| `last_stocked` | `timestamptz` | | update when transactions happen|
+| `disabled` | `bool` | | |
+| `minimum_quantity` | `int8` | | minimum quantity that should be in stock at all times |
 
-| Name   | Type     | Constraints      |
-| ------ | -------- | ---------------- |
-| `id`   | `int8`   | Primary Identity |
-| `name` | `citext` | Unique           |
-
-## Table `incoming_items`
-
-### Columns
+### Table `incoming_items`
 
 | Name             | Type   | Constraints |
 | ---------------- | ------ | ----------- |
@@ -118,9 +112,7 @@ It is suggested to view this in a psql GUI. \
 | `item_id`        | `int8` | Primary     |
 | `quantity`       | `int8` |             |
 
-## Table `incoming_transactions`
-
-### Columns
+### Table `incoming_transactions`
 
 | Name            | Type          | Constraints      |
 | --------------- | ------------- | ---------------- |
@@ -131,26 +123,7 @@ It is suggested to view this in a psql GUI. \
 | `supplier_id`   | `int8`        |                  |
 | `delivery_ref`  | `citext`      |                  |
 
-## Table `items`
-
-### Columns
-
-| Name               | Type          | Constraints      |
-| ------------------ | ------------- | ---------------- |
-| `id`               | `int8`        | Primary Identity |
-| `name`             | `citext`      | Unique           |
-| `category_id`      | `int8`        |                  |
-| `thumbnail`        | `text`        |                  |
-| `gallery`          | `jsonb`       | Nullable         |
-| `master_number`    | `text`        | Unique           |
-| `initial_quantity` | `int8`        |                  |
-| `last_stocked`     | `timestamptz` |                  |
-| `disabled`         | `bool`        |                  |
-| `minimum_quantity` | `int8`        |                  |
-
-## Table `outgoing_items`
-
-### Columns
+### Table `outgoing_items`
 
 | Name             | Type   | Constraints |
 | ---------------- | ------ | ----------- |
@@ -158,9 +131,7 @@ It is suggested to view this in a psql GUI. \
 | `item_id`        | `int8` | Primary     |
 | `quantity`       | `int8` |             |
 
-## Table `outgoing_transactions`
-
-### Columns
+### Table `outgoing_transactions`
 
 | Name          | Type          | Constraints      |
 | ------------- | ------------- | ---------------- |
@@ -171,9 +142,17 @@ It is suggested to view this in a psql GUI. \
 | `expender`    | `text`        |                  |
 | `remarks`     | `text`        | Nullable         |
 
-## Table `sessions`
+### Table `users`
 
-### Columns
+| Name               | Type     | Constraints      |
+| ------------------ | -------- | ---------------- |
+| `id`               | `int8`   | Primary Identity |
+| `email`            | `citext` | Unique           |
+| `name`             | `citext` | Unique           |
+| `password_hash`    | `text`   |                  |
+| `role`             | `role`   | Admin, QS, Procurement, Project                 |
+
+### Table `sessions`
 
 | Name          | Type    | Constraints |
 | ------------- | ------- | ----------- |
@@ -182,24 +161,34 @@ It is suggested to view this in a psql GUI. \
 | `created_at`  | `int4`  |             |
 | `user_id`     | `int8`  |             |
 
-## Table `suppliers`
-
-### Columns
+### Table `categories`
 
 | Name   | Type     | Constraints      |
 | ------ | -------- | ---------------- |
 | `id`   | `int8`   | Primary Identity |
 | `name` | `citext` | Unique           |
 
-## Table `users`
+### Table `suppliers`
 
-### Columns
+| Name   | Type     | Constraints      |
+| ------ | -------- | ---------------- |
+| `id`   | `int8`   | Primary Identity |
+| `name` | `citext` | Unique           |
 
-| Name               | Type     | Constraints      |
-| ------------------ | -------- | ---------------- |
-| `id`               | `int8`   | Primary Identity |
-| `email`            | `citext` | Unique           |
-| `name`             | `citext` | Unique           |
-| `password_hash`    | `text`   |                  |
-| `role`             | `role`   |                  |
-| `initial_quantity` | `int8`   |                  |
+### Additional Notes
+
+- Sveltekit's experimental Remote Functions feature is used for the majority of client-server communication.
+- In their June 2026 changelog, breaking changes were introduced for enhancing forms. As such, Sveltekit has been locked to a previous version.
+  Supabase is only used in `./lib/remote/upload.remote.ts` for hosting images.
+- Initial loading speed of pages after deployment will take a little long.
+- Svelte 
+
+### Missing Implementation/Improvements
+
+- Account creation is very simple and there is no admin interface. If a new Admin account needs to be added, it has to be done by inserting directly into the database or by manually editing the role of a user. Email confirmation was planned, but never done. Instead, new accounts are created with `12345678`. The password can be changed once the user signs in.
+- Password input validation lacks regex.
+- There is no inactivity timeout implemented for sessions.
+
+### Troubleshooting
+#### An impossible situation occured
+This occurs when attempting to import a server-side function/file into a frontend file.
