@@ -31,9 +31,9 @@
 		</tr>
 	</thead>
 	<tbody>
-		{#each Object.entries(data.timeline) as [id, nameDateQuant], i (i)}
+		{#each Object.entries(data.timeline) as [, nameDateQuant], i (i)}
 			<tr>
-				<th>{id}</th>
+				<th>{nameDateQuant[0].master}</th>
 				<td>{nameDateQuant[0].name}</td>
 				{#each nameDateQuant as { quantity }, i (i)}
 					<td>{quantity}</td>
