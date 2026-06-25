@@ -4,6 +4,9 @@
 
 	const { data } = $props();
 	const dates = $derived.by(() => {
+		if (Object.keys(data.timeline).length === 0) {
+			return {};
+		}
 		const itemIDs = Object.keys(data.timeline);
 		const firstID = itemIDs[0];
 		return data.timeline[firstID].map((week) => week);
