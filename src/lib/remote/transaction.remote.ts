@@ -60,7 +60,7 @@ export const createIncomingTransaction = form(
 						case 'incoming_transactions_supplier_id_delivery_ref_key':
 							invalid(
 								issue.deliveryID(
-									`This delivery order has already been logged. Verify it's the right supplier & DO, or you can edit the existing one.`
+									`This delivery order has already been logged. Verify it's the right supplier & DO.`
 								)
 							);
 					}
