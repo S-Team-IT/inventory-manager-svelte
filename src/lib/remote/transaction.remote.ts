@@ -124,7 +124,7 @@ export const getIncomingTransactions = query(async () => {
 		ON inc_i.item_id = i.id
 		JOIN suppliers s
 		ON inc_t.supplier_id = s.id
-		ORDER BY inc_t.created_at desc`;
+		ORDER BY inc_t.created_at DESC, i.id ASC`;
 		return sortTransactions(result);
 	} catch (e) {
 		handleQueryErrors(e);
