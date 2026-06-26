@@ -148,7 +148,7 @@ export const getOutgoingTransactions = query(async () => {
 		ON out_t.id = out_i.transaction_id
 		JOIN items i
 		ON out_i.item_id = i.id
-		ORDER BY out_t.created_at desc;`;
+		ORDER BY out_t.created_at DESC, i.id ASC`;
 		return sortTransactions(result);
 	} catch (e) {
 		handleQueryErrors(e);
