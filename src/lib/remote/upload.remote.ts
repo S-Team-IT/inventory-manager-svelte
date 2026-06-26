@@ -38,7 +38,7 @@ async function compressImageFile(file: File): Promise<Uint8Array> {
 	const arrayBuffer = await file.arrayBuffer();
 	const buffer = Buffer.from(arrayBuffer);
 	const optimizedBuffer = await sharp(buffer).resize(300).webp().toBuffer();
-	console.log(buffer.length, ' ', optimizedBuffer.length);
+	// console.log(buffer.length, ' ', optimizedBuffer.length);
 	return new Uint8Array(optimizedBuffer);
 }
 

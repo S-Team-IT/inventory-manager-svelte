@@ -34,7 +34,6 @@ export const createUser = form(
 			const result =
 				await sql`INSERT INTO users (email, name, password_hash, role) VALUES(${email}, ${name}, ${passwordHash}, ${role})`;
 			if (result.count !== 1) {
-				console.error(`UNEXPECTED ERROR CREATING USER ${email}, ${name}, ${passwordHash}, ${role}`);
 				return { success: false };
 			}
 			return { success: true };
