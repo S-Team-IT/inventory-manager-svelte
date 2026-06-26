@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { deleteTransaction } from '$lib/remote/transaction.remote';
 	import type { CompleteTransaction } from '$lib/types/databaseTypes';
-	import { formatRelativeCustom } from '$lib/utils/dateTransform';
-	import { format } from 'date-fns';
+	import { formatRelativeCustom, formatYearMonthDay } from '$lib/utils/dateTransform';
 	import { toast } from 'svelte-sonner';
 
 	type Props = {
@@ -42,13 +41,13 @@
 			{#if isIncoming}
 				<span>
 					{supplier}
-					{format(deliveryDate!, 'yyyy/MM/dd')}
+					{formatYearMonthDay(deliveryDate!)}
 					{deliveryID}
 				</span>
 			{:else}
 				<span>
 					{expender}
-					{format(expendDate!, 'yyyy/MM/dd')}
+					{formatYearMonthDay(expendDate!)}
 					{remarks}
 				</span>
 			{/if}

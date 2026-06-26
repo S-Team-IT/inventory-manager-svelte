@@ -10,9 +10,10 @@ import type {
 	WeeklyNetQuantity
 } from '$lib/types/databaseTypes';
 import { master, zBoolean, zNumber, zString } from '$lib/types/schemaTypes';
+import { formatMonthDay } from '$lib/utils/dateTransform';
 import { handleQueryErrors } from '$lib/utils/errorHandling';
 import { error, invalid } from '@sveltejs/kit';
-import { format, isBefore } from 'date-fns';
+import { isBefore } from 'date-fns';
 import * as z from 'zod';
 import { updateMultipleLastStocked } from './item.remote';
 import { getOrCreateSupplier } from './supplier.remote';
@@ -338,7 +339,7 @@ export const getQuantityTrendTimeline = query(async () => {
 function sortQuantityTrendTimeline(list: WeekCumulativeQuantity[]) {
 	const timeline: QuantityTimeline = {};
 	for (const { id, master, name, week, quantity } of list) {
-		const dateString = format(week, 'MM/dd');
+		const dateString = formatMonthDay(week);
 		if (!timeline[id]) timeline[id] = [];
 		timeline[id].push({ master, name, week: dateString, quantity });
 	}
