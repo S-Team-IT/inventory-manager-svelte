@@ -2,6 +2,7 @@ import { DB_DATABASE, DB_HOST, DB_PASSWORD, DB_PORT, DB_USERNAME } from '$env/st
 import postgres from 'postgres';
 
 export const sql = postgres({
+	no_prepare: true,
 	host: DB_HOST,
 	port: Number(DB_PORT),
 	database: DB_DATABASE,
