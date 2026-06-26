@@ -3,16 +3,15 @@
 	import { toast } from 'svelte-sonner';
 
 	const { data } = $props();
+	//Iterates through the first item to retrieve each week's date.
 	const dates = $derived.by(() => {
-		if (Object.keys(data.timeline).length === 0) {
-			return undefined;
-		}
 		const itemIDs = Object.keys(data.timeline);
+		if (itemIDs.length === 0) return undefined;
 		const firstID = itemIDs[0];
 		return data.timeline[firstID].map((week) => week);
 	});
 
-	function onclick() {
+	function exportTable() {
 		const table = document.querySelector('#timeline-table');
 		if (!table) {
 			toast.error('No table found');
@@ -22,7 +21,7 @@
 	}
 </script>
 
-<button {onclick} class="btn btn-primary">Export table</button>
+<button onclick={exportTable} class="btn btn-primary">Export table</button>
 <table class="table" id="timeline-table">
 	<thead>
 		<tr>

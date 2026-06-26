@@ -39,22 +39,3 @@
 		<option value={name}></option>
 	{/each}
 </datalist>
-
-<!-- <label class="input w-full">
-	<span class="label">{label}:</span>
-	<input
-		list="combobox-list"
-		value={input}
-		oninput={(e) => (input = e.currentTarget.value.replace('Add', '').replaceAll(`"`, '').trim())}
-	/>
-</label>
-<span class="label">{subtitle}</span>
-
-<datalist id="combobox-list">
-	{#each filteredList as { id, name } (id)}
-		<option value={name}></option>
-	{/each}
-	{#if filteredList?.length !== suppliers?.length}
-		<option value={`Add "${input}"`}></option>
-	{/if}
-</datalist> -->

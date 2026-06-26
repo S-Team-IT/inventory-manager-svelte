@@ -22,6 +22,9 @@
 
 	const { data } = $props();
 	let addedItems = $state<DetailedItem[]>([]);
+	// Items that are deleted are added to deletedItems, 
+	// which filters them out of being displayed.
+	// There is most definitely a simpler way of doing this.
 	let deletedItems = $state<string[]>([]);
 	let filteredItems = $derived.by(() => {
 		return addedItems.filter(({ master }) => !deletedItems.includes(master)).reverse();

@@ -52,8 +52,6 @@
 			);
 		}
 	}
-
-	// let selectedItems = new SvelteSet<string>();
 </script>
 
 <svelte:head>
@@ -70,7 +68,6 @@
 <table class="table max-w-200">
 	<thead>
 		<tr>
-			<!-- <th></th> -->
 			<th class="w-25 text-center">
 				{@render sortingHeader('master', 'masterReverse', 'Master')}
 			</th>
@@ -93,8 +90,7 @@
 {#snippet sortingHeader(option: SortOption, optionReverse: SortOption, head: string)}
 	<button
 		onclick={() => {
-			if (sortOption === option) sortOption = optionReverse;
-			else sortOption = option;
+			sortOption = sortOption === option ? optionReverse : option;
 		}}
 		>{head}
 		<span class="text-white">
@@ -107,30 +103,17 @@
 	</button>
 {/snippet}
 
-{#snippet ItemRow(
-	{ id, master, name, category, thumbnail, gallery, quantity, minimumQuantity }: DetailedItem
-	// selectedItems: SvelteSet<string>
-)}
+{#snippet ItemRow({
+	id,
+	master,
+	name,
+	category,
+	thumbnail,
+	gallery,
+	quantity,
+	minimumQuantity
+}: DetailedItem)}
 	<tr class="hover:bg-base-300">
-		<!-- <td>
-			svelte-ignore a11y_click_events_have_key_events
-			svelte-ignore a11y_no_noninteractive_element_interactions
-			<label class="p-2" onclick={(e) => e.stopPropagation()}>
-				<input
-					type="checkbox"
-					onchange={(e) => {
-						const element = e.target as HTMLInputElement;
-						if (element.checked) {
-							element.parentElement?.parentElement?.parentElement?.classList.add('bg-base-300');
-							selectedItems.add(master);
-						} else {
-							element.parentElement?.parentElement?.parentElement?.classList.remove('bg-base-300');
-							selectedItems.delete(master);
-						}
-					}}
-				/>
-			</label>
-		</td> -->
 		<td class="w-25 text-center text-4xl">#{master}</td>
 		<td class="flex w-50 items-center justify-center">
 			<ImageModal id={master} thumbnailSrc={thumbnail} gallerySrc={gallery} />

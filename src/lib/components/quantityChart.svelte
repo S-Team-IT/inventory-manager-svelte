@@ -1,6 +1,6 @@
 <script lang="ts">
+	import { formatMonthDay } from '$lib/utils/dateTransform';
 	import Chart from 'chart.js/auto';
-	import { format } from 'date-fns';
 	import { onMount } from 'svelte';
 
 	type Props = {
@@ -24,7 +24,7 @@
 		new Chart(document.getElementById(targetElementID), {
 			type: 'line',
 			data: {
-				labels: chartData.map((row) => format(row.week, 'MM/dd')),
+				labels: chartData.map((row) => formatMonthDay(row.week)),
 				datasets: [
 					{
 						label: 'Weekly net quantity change',

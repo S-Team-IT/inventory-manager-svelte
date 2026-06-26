@@ -5,6 +5,8 @@ import { sql } from './postgres';
 
 const sessionExpiresInSeconds = 60 * 60 * 24 * 7; // A week
 
+// The code here is based on the https://lucia-auth.com/ tutorial.
+
 export async function createSession(userID: string): Promise<SessionWithToken> {
 	const now = new Date();
 

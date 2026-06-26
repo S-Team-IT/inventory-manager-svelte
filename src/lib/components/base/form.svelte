@@ -9,6 +9,9 @@
 		errorMsg,
 		successMsg,
 		classes = '',
+		//The following are callbacks to be called during various stages of form submission.
+		//Note that the submitted FormData cannot be modified here.
+		//Workarounds can be found on https://github.com/sveltejs/kit/issues/14477#issuecomment-3419974870.
 		beforeSubmit = async () => Promise<void>,
 		onSuccess = async () => Promise<void>,
 		afterSubmit = async () => Promise<void>
@@ -16,13 +19,17 @@
 
 	let isLoading = $state<boolean>(false);
 
+	//WARNING: Breaking changes happened to form enhance. 
+	//See: 
+	//https://svelte.dev/blog/whats-new-in-svelte-june-2026
+	//https://github.com/sveltejs/kit/pull/15657
 	async function enhanceCallback({ form, data, submit }: EnhanceParams) {
-		//this should never happen but ts is funky like that
+		// typescript gets angry
 		if (!form || !data || !submit) throw new Error('form enhance callback null variables');
 		isLoading = true;
 		beforeSubmit(data);
 		if (await submit()) {
-			//Handle form redirection, since that won't return result
+			//Handle form redirection, since that can't return remoteForm.result
 			if (!remoteForm.result) {
 				form.reset();
 				return;

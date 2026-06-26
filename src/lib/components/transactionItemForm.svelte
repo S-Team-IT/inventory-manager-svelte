@@ -10,6 +10,10 @@
 	const { items }: Props = $props();
 	let masterInput = $state<string>('');
 	let isLoading = $state<boolean>(false);
+
+	function isInTable(): boolean {
+		return items.some((item) => item.master === masterInput);
+	}
 </script>
 
 <label class="input mb-2 w-full pr-0">
@@ -22,9 +26,9 @@
 		disabled={isLoading}
 		onclick={async () => {
 			isLoading = true;
-			if (items.some((item) => item.master === masterInput)) {
-				toast.error('Item already in table');
+			if (isInTable()) {
 				isLoading = false;
+				toast.error('Item already added.');
 				return;
 			}
 			const result = await getItemNameByMaster(masterInput.toLowerCase().trim()).run();

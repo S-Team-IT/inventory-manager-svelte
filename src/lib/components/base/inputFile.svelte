@@ -3,7 +3,7 @@
 
 	const { label, type, field, subtitle } = $props();
 
-	function onclick() {
+	function clearInput() {
 		field.set(undefined);
 	}
 
@@ -24,7 +24,12 @@
 			>
 			<label for={`${label}-file-input`} class="input rounded-none">{fileCount} selected</label>
 			<input {...field.as(type)} class="hidden" id={`${label}-file-input`} />
-			<button class="btn rounded-s-none btn-secondary" aria-label="clear" type="button" {onclick}>
+			<button
+				class="btn rounded-s-none btn-secondary"
+				aria-label="clear"
+				type="button"
+				onclick={clearInput}
+			>
 				<span class="icon-[mdi--clear]"></span>
 			</button>
 		</div>

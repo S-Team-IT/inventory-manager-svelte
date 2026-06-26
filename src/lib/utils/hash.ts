@@ -1,5 +1,7 @@
 import bcrypt from 'bcrypt';
 
+// The code here is based on the https://lucia-auth.com/ tutorial.
+
 export function generateSecureRandomString(): string {
 	// Human readable alphabet (a-z, 0-9 without l, o, 0, 1 to avoid confusion)
 	const alphabet = 'abcdefghijkmnpqrstuvwxyz23456789';
