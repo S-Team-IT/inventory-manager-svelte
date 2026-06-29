@@ -59,7 +59,8 @@ export const getItemFullInfo = query(zString, async (id) => {
 			i.gallery,
 			q.net AS "quantity",
 			i.last_stocked AS "lastStocked",
-			i.minimum_quantity as "minimumQuantity"
+			i.minimum_quantity AS "minimumQuantity",
+			i.initial_quantity AS "initialQuantity"
 			FROM items i
 			JOIN categories c ON i.category_id = c.id
 			LEFT OUTER JOIN net_quantity q ON i.id = q.item_id
@@ -282,6 +283,19 @@ export const editMinimumQuantity = form(
 	}
 );
 
+export const editInitialQuantity = form(
+	z.object({ id: zString, quantity: zNumber }),
+	async ({ id, quantity }, issue) => {
+		try {
+			const result = await sql`UPDATE items SET initial_quantity = ${quantity} WHERE id = ${id};`;
+			if (result.count !== 1) invalid(issue.quantity('Failed to update'));
+			return { success: true };
+		} catch (e) {
+			handleQueryErrors(e);
+		}
+	}
+);
+
 export const getItemNameByMaster = query(zString, async (master) => {
 	try {
 		const result = await sql<
@@ -302,7 +316,7 @@ export const updateMultipleLastStocked = command(z.array(zString), async (ids) =
 		const result = await sql`
 		UPDATE items i
 		SET last_stocked = ${Date.now()}
-		WHERE i.id = ANY(${ids}::int[])
+		WHERE i.id = ANY(${ids}::z.int[])
 		`;
 		console.log(result);
 		return result;

@@ -50,6 +50,7 @@ export type DetailedItem = Item & {
 	gallery: { item: string }[] | [];
 	lastStocked: Date;
 	minimumQuantity: number;
+	initialQuantity: number;
 	disabled: boolean;
 };
 
