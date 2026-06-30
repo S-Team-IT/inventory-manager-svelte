@@ -36,7 +36,6 @@
 	function toggleNameColumn() {
 		isNameHidden = !isNameHidden;
 	}
-	$inspect(sortedTimeline);
 </script>
 
 <button onclick={exportTable} class="btn btn-primary">Export table</button>
