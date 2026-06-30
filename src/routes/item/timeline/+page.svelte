@@ -67,7 +67,7 @@
 	<tbody>
 		{#each sortedTimeline as [, nameDateQuant], i (i)}
 			<tr>
-				<th>{nameDateQuant[0].master}</th>
+				<th class="sticky left-0 z-10 bg-blue-500 text-white">{nameDateQuant[0].master}</th>
 				{#if !isNameHidden}
 					<td>{nameDateQuant[0].name}</td>
 				{/if}
