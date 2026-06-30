@@ -12,7 +12,10 @@
 		const itemIDs = Object.keys(data.timeline);
 		if (itemIDs.length === 0) return undefined;
 		const firstID = itemIDs[0];
-		return data.timeline[firstID].map((week) => week);
+		const dateList = data.timeline[firstID].map((week) => week);
+		//Database returns 1 extra week at the start, so gotta remove it
+		dateList.splice(0, 1);
+		return dateList;
 	});
 
 	const sortedTimeline = $derived.by(() => {
@@ -80,6 +83,12 @@
 	</thead>
 	<tbody>
 		{#each sortedTimeline as [, nameDateQuant], i (i)}
+			<!-- Database returns 1 extra week at the start, so gotta remove it -->
+			<!-- nameDateQuant2 doesn't do anything, but I need the  -->
+			<!-- @const functionality to call splice to mutate the original array -->
+			<!-- and remove the extra first week from the query -->
+			<!-- eslint-disable-next-line @typescript-eslint/no-unused-vars -->
+			{@const nameDateQuant2 = nameDateQuant.splice(0, 1)}
 			<tr>
 				<th class="sticky left-0 z-10 bg-red-800 text-white">{nameDateQuant[0].master}</th>
 				{#if !isNameHidden}
