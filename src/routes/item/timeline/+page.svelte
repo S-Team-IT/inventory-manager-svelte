@@ -48,18 +48,18 @@
 <table class="table" id="timeline-table">
 	<thead>
 		<tr>
-			<th>Master</th>
+			<th class="sticky top-0 z-20 bg-amber-500 text-black">Master</th>
 			{#if !isNameHidden}
-				<th>Name</th>
+				<th class="sticky top-0 z-20 bg-amber-500 text-black">Name</th>
 			{/if}
 
 			{#if isReverse}
 				{#each dates!.toReversed() as { week } (week)}
-					<th scope="col">{week}</th>
+					<th scope="col" class="sticky top-0 z-20 bg-amber-500 text-black">{week}</th>
 				{/each}
 			{:else}
 				{#each dates as { week } (week)}
-					<th scope="col">{week}</th>
+					<th scope="col" class="sticky top-0 z-20 bg-amber-500 text-black">{week}</th>
 				{/each}
 			{/if}
 		</tr>
