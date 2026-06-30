@@ -48,18 +48,18 @@
 <table class="table mt-5" id="timeline-table">
 	<thead>
 		<tr>
-			<th class="sticky top-0 z-20 bg-amber-500 text-black">Master</th>
+			<th class="sticky top-0 z-20 bg-amber-600 text-black">Master</th>
 			{#if !isNameHidden}
-				<th class="sticky top-0 z-20 bg-amber-500 text-black">Name</th>
+				<th class="sticky top-0 z-20 bg-amber-600 text-black">Name</th>
 			{/if}
 
 			{#if isReverse}
 				{#each dates!.toReversed() as { week } (week)}
-					<th scope="col" class="sticky top-0 z-20 bg-amber-500 text-black">{week}</th>
+					<th scope="col" class="sticky top-0 z-20 bg-amber-600 text-black">{week}</th>
 				{/each}
 			{:else}
 				{#each dates as { week } (week)}
-					<th scope="col" class="sticky top-0 z-20 bg-amber-500 text-black">{week}</th>
+					<th scope="col" class="sticky top-0 z-20 bg-amber-600 text-black">{week}</th>
 				{/each}
 			{/if}
 		</tr>
@@ -67,7 +67,7 @@
 	<tbody>
 		{#each sortedTimeline as [, nameDateQuant], i (i)}
 			<tr>
-				<th class="sticky left-0 z-10 bg-blue-500 text-white">{nameDateQuant[0].master}</th>
+				<th class="sticky left-0 z-10 bg-red-800 text-white">{nameDateQuant[0].master}</th>
 				{#if !isNameHidden}
 					<td>{nameDateQuant[0].name}</td>
 				{/if}
