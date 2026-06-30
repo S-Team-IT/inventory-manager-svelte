@@ -45,7 +45,7 @@
 <button onclick={toggleNameColumn} class="btn btn-primary"
 	>{isNameHidden ? 'Hide' : 'Show'} name</button
 >
-<table class="table" id="timeline-table">
+<table class="table mt-5" id="timeline-table">
 	<thead>
 		<tr>
 			<th class="sticky top-0 z-20 bg-amber-500 text-black">Master</th>
