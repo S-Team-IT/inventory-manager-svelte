@@ -41,10 +41,20 @@
 <div class="mt-5 ml-5 space-x-2">
 	<button onclick={exportTable} class="btn btn-primary">Export table</button>
 	<button onclick={toggleReverse} class="btn btn-primary">
-		Showing by {isReverse ? 'latest' : 'last'}
+		Date
+		{#if isReverse}
+			<span class="icon-[mdi--arrow-left]"></span>
+		{:else}
+			<span class="icon-[mdi--arrow-right]"></span>
+		{/if}
 	</button>
-	<button onclick={toggleNameColumn} class="btn btn-primary">
-		{isNameHidden ? 'Hide' : 'Show'} name
+	<button onclick={toggleNameColumn} class="btn btn-primary"
+		>Name
+		{#if isNameHidden}
+			<span class="icon-[mdi--hide]"></span>
+		{:else}
+			<span class="icon-[mdi--show]"></span>
+		{/if}
 	</button>
 </div>
 
