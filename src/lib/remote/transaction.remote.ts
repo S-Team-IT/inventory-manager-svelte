@@ -23,7 +23,7 @@ export const createIncomingTransaction = form(
 		.object({
 			date: z.iso.date(),
 			supplier: zString,
-			deliveryID: z.string().trim(),
+			deliveryID: zString,
 			ids: z.array(master, 'Please add an item.'),
 			quantities: z.array(zNumber.min(1, 'Quantity must be at least 1.'))
 		})

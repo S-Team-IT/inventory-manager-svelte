@@ -2,7 +2,6 @@
 	import { resolve } from '$app/paths';
 	import QuantityChart from '$lib/components/quantityChart.svelte';
 	import type { DetailedItem, Item } from '$lib/types/databaseTypes.js';
-	import { localeCompareSort } from '$lib/utils/arraySort.js';
 	import ImageModal from '../../lib/components/imageModal.svelte';
 
 	const { data } = $props();
@@ -37,10 +36,20 @@
 
 		if (sortOption.includes('Reverse')) {
 			const property = sortOption.slice(0, -7) as keyof Item;
-			return list.toSorted((a, b) => localeCompareSort(String(b[property]), String(a[property])));
+			return list.toSorted((a, b) =>
+				String(b[property]).localeCompare(String(a[property]), 'en', {
+					sensitivity: 'base',
+					numeric: true
+				})
+			);
 		} else {
 			const property = sortOption as keyof Item;
-			return list.toSorted((b, a) => localeCompareSort(String(b[property]), String(a[property])));
+			return list.toSorted((a, b) =>
+				String(a[property]).localeCompare(String(b[property]), 'en', {
+					sensitivity: 'base',
+					numeric: true
+				})
+			);
 		}
 	}
 </script>
