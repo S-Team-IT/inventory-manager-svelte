@@ -39,7 +39,6 @@
 </script>
 
 <div class="mt-5 ml-5 space-x-2">
-	<button onclick={exportTable} class="btn btn-primary">Export table</button>
 	<button onclick={toggleReverse} class="btn btn-primary">
 		Date
 		{#if isReverse}
@@ -56,6 +55,8 @@
 			<span class="icon-[mdi--show]"></span>
 		{/if}
 	</button>
+	<button onclick={exportTable} class="btn btn-secondary" aria-label="export"
+		><span class="icon-[uil--export]"></span></button>
 </div>
 
 <table class="table mt-5" id="timeline-table">
