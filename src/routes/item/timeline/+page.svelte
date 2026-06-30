@@ -38,7 +38,6 @@
 	}
 </script>
 
-<table class="table mt-5" id="timeline-table">
 <div class="mt-5 ml-5">
 	<button onclick={exportTable} class="btn btn-primary">Export table</button>
 	<button onclick={toggleReverse} class="btn btn-primary"
@@ -48,6 +47,7 @@
 		>{isNameHidden ? 'Hide' : 'Show'} name</button
 	>
 </div>
+<table class="table mt-5 ml-5" id="timeline-table">
 	<thead>
 		<tr>
 			<th class="sticky top-0 z-20 bg-amber-600 text-black">Master</th>
