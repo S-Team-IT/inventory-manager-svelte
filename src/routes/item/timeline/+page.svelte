@@ -87,7 +87,7 @@
 			<!-- Can't just mutate the original because then it keeps splicing more & more of itself -->
 			{@const nameDateQuant2 = nameDateQuant.toSpliced(0, 1)}
 			<tr>
-				<th class="sticky left-0 z-10 bg-[#246c64] text-2xl text-white"
+				<th class="sticky left-0 z-10 bg-[#246c64] text-end text-2xl text-white"
 					>#{nameDateQuant2[0].master}</th>
 				{#if !isNameHidden}
 					<td>{nameDateQuant2[0].name}</td>
