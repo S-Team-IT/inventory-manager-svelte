@@ -51,13 +51,18 @@
 					{remarks}
 				</span>
 			{/if}
-			<span>
-				{formatRelativeCustom(createdAt)}
+
+			<span class="flex items-center justify-center">
+				{#if expendDate}
+					<span class="text-center text-2xl text-red-500">OUTGOING</span>
+				{:else}
+					<span class="text-center text-2xl text-green-500">INCOMING</span>
+				{/if}
+				<span class="mr-5 ml-5">{formatRelativeCustom(createdAt)}</span>
 				<button
 					class="btn size-12.5 btn-soft btn-error"
 					aria-label="delete"
-					onclick={openDeleteConfirmation}
-				>
+					onclick={openDeleteConfirmation}>
 					<span class="icon-[tabler--trash]"></span>
 				</button>
 			</span>
@@ -94,8 +99,7 @@
 							toast.error(message || 'Failed to delete transaction.');
 						}
 					}
-				})}
-			>
+				})}>
 				<input {...uniqueForm.fields.id.as('hidden', id)} />
 				<input {...uniqueForm.fields.isIncoming.as('checkbox', isIncoming)} class="invisible" />
 				<button class="btn btn-primary">Confirm</button>
