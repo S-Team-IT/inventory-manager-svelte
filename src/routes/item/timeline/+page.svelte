@@ -38,7 +38,7 @@
 	}
 </script>
 
-<div class="mt-5 ml-5">
+<div class="mt-5 ml-5 space-x-2">
 	<button onclick={exportTable} class="btn btn-primary">Export table</button>
 	<button onclick={toggleReverse} class="btn btn-primary"
 		>Showing by {isReverse ? 'latest' : 'last'}</button
