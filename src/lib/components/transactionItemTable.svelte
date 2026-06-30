@@ -34,8 +34,7 @@
 							items.splice(i, 1);
 							await tick();
 						}}><span class="icon-[tabler--trash]"></span></button
-					></th
-				>
+					></th>
 				<th class="w-15">{master}</th>
 				<th>{truncateString(name, 20)}</th>
 				<th
@@ -46,8 +45,7 @@
 						name={`input${i}`}
 						bind:value={items[i].quantity}
 						step="1"
-						min="1"
-					/>
+						min="1" />
 					<InputIssues field={quantities[i]} />
 					<input {...ids[i].as('hidden', id)} />
 					<input {...quantities[i].as('hidden', quantity)} />

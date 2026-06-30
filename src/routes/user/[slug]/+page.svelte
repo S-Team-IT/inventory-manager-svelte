@@ -14,8 +14,7 @@
 	remoteForm={editPassword}
 	errorMsg="Failed to update password."
 	successMsg="Password updated."
-	legend="Change password"
->
+	legend="Change password">
 	<Input label="Current password" type="password" field={oldPassword} placeholder="*******" />
 	<Input label="New password" type="password" field={newPassword} placeholder="********" />
 	<button class="btn btn-soft btn-primary">Edit</button>

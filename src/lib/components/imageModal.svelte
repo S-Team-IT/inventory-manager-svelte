@@ -13,8 +13,7 @@
 		e.stopPropagation();
 		const dialog = document.querySelector(`#img-modal${id}`);
 		(dialog as HTMLDialogElement).showModal();
-	}}><img src={thumbnailSrc} alt="thumbnail" loading="lazy" class="" /></button
->
+	}}><img src={thumbnailSrc} alt="thumbnail" loading="lazy" class="" /></button>
 <dialog id={`img-modal${id}`} class="modal">
 	<div class="modal-box min-w-[70vw]">
 		<form method="dialog">

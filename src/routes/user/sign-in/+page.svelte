@@ -16,7 +16,6 @@
 		label="Password"
 		type="password"
 		field={password}
-		placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
-	/>
+		placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" />
 	<button type="submit" class="btn">Sign in</button>
 </Form>

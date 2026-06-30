@@ -12,7 +12,10 @@
 		const itemIDs = Object.keys(data.timeline);
 		if (itemIDs.length === 0) return undefined;
 		const firstID = itemIDs[0];
-		return data.timeline[firstID].map((week) => week);
+		const dateList = data.timeline[firstID].map((week) => week);
+		//Database returns 1 extra week at the start, so gotta remove it
+		dateList.splice(0, 1);
+		return dateList;
 	});
 
 	const sortedTimeline = $derived.by(() => {
@@ -38,14 +41,25 @@
 	}
 </script>
 
-<div class="mt-5 ml-5">
-	<button onclick={exportTable} class="btn btn-primary">Export table</button>
-	<button onclick={toggleReverse} class="btn btn-primary"
-		>Showing by {isReverse ? 'latest' : 'last'}</button
-	>
+<div class="mt-5 ml-5 space-x-2">
+	<button onclick={toggleReverse} class="btn btn-primary">
+		Date
+		{#if isReverse}
+			<span class="icon-[mdi--arrow-left]"></span>
+		{:else}
+			<span class="icon-[mdi--arrow-right]"></span>
+		{/if}
+	</button>
 	<button onclick={toggleNameColumn} class="btn btn-primary"
-		>{isNameHidden ? 'Hide' : 'Show'} name</button
-	>
+		>Name
+		{#if isNameHidden}
+			<span class="icon-[mdi--hide]"></span>
+		{:else}
+			<span class="icon-[mdi--show]"></span>
+		{/if}
+	</button>
+	<button onclick={exportTable} class="btn btn-secondary" aria-label="export"
+		><span class="icon-[uil--export]"></span></button>
 </div>
 
 <table class="table mt-5" id="timeline-table">
@@ -69,6 +83,12 @@
 	</thead>
 	<tbody>
 		{#each sortedTimeline as [, nameDateQuant], i (i)}
+			<!-- Database returns 1 extra week at the start, so gotta remove it -->
+			<!-- nameDateQuant2 doesn't do anything, but I need the  -->
+			<!-- @const functionality to call splice to mutate the original array -->
+			<!-- and remove the extra first week from the query -->
+			<!-- eslint-disable-next-line @typescript-eslint/no-unused-vars -->
+			{@const nameDateQuant2 = nameDateQuant.splice(0, 1)}
 			<tr>
 				<th class="sticky left-0 z-10 bg-red-800 text-white">{nameDateQuant[0].master}</th>
 				{#if !isNameHidden}

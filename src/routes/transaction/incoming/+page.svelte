@@ -18,25 +18,21 @@
 	legend="Enter Delivery Order"
 	errorMsg="Failed to submit DO"
 	successMsg="DO added"
-	transactions={data.transactions}
->
+	transactions={data.transactions}>
 	<Input
 		label="Delivery Date"
 		type="date"
 		field={date}
-		value={new Date().toISOString().split('T')[0]}
-	/>
+		value={new Date().toISOString().split('T')[0]} />
 	<Combobox
 		label="Supplier"
 		field={supplier}
 		list={data.suppliers}
 		subtitle="New suppliers can be added as needed"
-		placeholder="Enter supplier name"
-	/>
+		placeholder="Enter supplier name" />
 	<Input
 		label="DO Number"
 		field={deliveryID}
 		type="text"
-		placeholder="Enter delivery order number"
-	/>
+		placeholder="Enter delivery order number" />
 </TransactionForm>

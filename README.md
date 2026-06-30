@@ -93,18 +93,18 @@ It is recommended to view the schema inside a GUI.
 
 ### Table `items`
 
-| Name | Type | Constraints | Remarks |
-| :--- | :--- | :--- | :--- |
-| `id` | `int8` | Primary Identity | |
-| `name` | `citext` | Unique | |
-| `category_id` | `int8` | | |
-| `thumbnail` | `text` | | main photo URL |
-| `gallery` | `jsonb` | Nullable | secondary photo URLs |
-| `master_number` | `text` | Unique | |
-| `initial_quantity` | `int8` | | quantity before any transactions |
-| `last_stocked` | `timestamptz` | | update when transactions happen|
-| `disabled` | `bool` | | |
-| `minimum_quantity` | `int8` | | minimum quantity that should be in stock at all times |
+| Name               | Type          | Constraints      | Remarks                                               |
+| :----------------- | :------------ | :--------------- | :---------------------------------------------------- |
+| `id`               | `int8`        | Primary Identity |                                                       |
+| `name`             | `citext`      | Unique           |                                                       |
+| `category_id`      | `int8`        |                  |                                                       |
+| `thumbnail`        | `text`        |                  | main photo URL                                        |
+| `gallery`          | `jsonb`       | Nullable         | secondary photo URLs                                  |
+| `master_number`    | `text`        | Unique           |                                                       |
+| `initial_quantity` | `int8`        |                  | quantity before any transactions                      |
+| `last_stocked`     | `timestamptz` |                  | update when transactions happen                       |
+| `disabled`         | `bool`        |                  |                                                       |
+| `minimum_quantity` | `int8`        |                  | minimum quantity that should be in stock at all times |
 
 ### Table `incoming_items`
 
@@ -146,13 +146,13 @@ It is recommended to view the schema inside a GUI.
 
 ### Table `users`
 
-| Name               | Type     | Constraints      |
-| ------------------ | -------- | ---------------- |
-| `id`               | `int8`   | Primary Identity |
-| `email`            | `citext` | Unique           |
-| `name`             | `citext` | Unique           |
-| `password_hash`    | `text`   |                  |
-| `role`             | `role`   | Admin, QS, Procurement, Project                 |
+| Name            | Type     | Constraints                     |
+| --------------- | -------- | ------------------------------- |
+| `id`            | `int8`   | Primary Identity                |
+| `email`         | `citext` | Unique                          |
+| `name`          | `citext` | Unique                          |
+| `password_hash` | `text`   |                                 |
+| `role`          | `role`   | Admin, QS, Procurement, Project |
 
 ### Table `sessions`
 
@@ -196,8 +196,11 @@ It is recommended to view the schema inside a GUI.
 - The queries used for the Chart.js display should be replaced with the newer `/item/timeline` queries.
 
 ### Troubleshooting
+
 #### An impossible situation occured
+
 This happens rarely when attempting to import a `$lib/server` module in `./src/routes`
 
 #### PSQL Unhandled error: Prepared statement does not exist
-Not fully understood what causes this, appears to happen after querying a lot in a short amount of item(editing through the entire item list). This [commit](https://github.com/S-Team-IT/inventory-manager-svelte/commit/10241feacd5e2a90985c0de9976bf4bbf4121d9b) should fix it, but if not, a server restart will. 
+
+Not fully understood what causes this, appears to happen after querying a lot in a short amount of item(editing through the entire item list). This [commit](https://github.com/S-Team-IT/inventory-manager-svelte/commit/10241feacd5e2a90985c0de9976bf4bbf4121d9b) should fix it, but if not, a server restart will.

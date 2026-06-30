@@ -19,17 +19,15 @@
 	<fieldset class="fieldset gap-0 p-0">
 		<legend class="fieldset-legend pt-0">{label}</legend>
 		<div class="flex flex-row">
-			<label for={`${label}-file-input`} class="input label flex-1 rounded-e-none"
-				>Select file{type === 'file multiple' ? '(s)' : ''}</label
-			>
+			<label for={`${label}-file-input`} class="input label flex-1 rounded-e-none">
+				Select file{type === 'file multiple' ? '(s)' : ''}</label>
 			<label for={`${label}-file-input`} class="input rounded-none">{fileCount} selected</label>
 			<input {...field.as(type)} class="hidden" id={`${label}-file-input`} />
 			<button
 				class="btn rounded-s-none btn-secondary"
 				aria-label="clear"
 				type="button"
-				onclick={clearInput}
-			>
+				onclick={clearInput}>
 				<span class="icon-[mdi--clear]"></span>
 			</button>
 		</div>

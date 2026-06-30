@@ -19,7 +19,7 @@ export const signIn = form(z.object({ email, password }), async ({ email, passwo
 
 		const newSessionWithToken = await createSession(user.id);
 		setTokenCookie(newSessionWithToken.token);
-		// No idea why, but toasting here does not work. 
+		// No idea why, but toasting here does not work.
 		// Instead, a param flag is passed and the toast is handled
 		// at the endpoint's onMount().
 		redirect(303, '/?loggedIn=true');

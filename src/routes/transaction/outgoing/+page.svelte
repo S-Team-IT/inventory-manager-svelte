@@ -22,8 +22,7 @@
 		label="Use Date"
 		type="date"
 		field={date}
-		value={new Date().toISOString().split('T')[0]}
-	/>
+		value={new Date().toISOString().split('T')[0]} />
 	<Input label="User" type="text" field={expender} placeholder="John" subtitle="Who used it" />
 	<Input label="Remarks" field={remarks} type="text" placeholder="E.g. Area item was used at" />
 </TransactionForm>

@@ -30,8 +30,7 @@
 		class="max-w-50"
 		src={thumbnailUrl}
 		alt="thumbnail preview"
-		onload={() => URL.revokeObjectURL(thumbnailUrl)}
-	/>
+		onload={() => URL.revokeObjectURL(thumbnailUrl)} />
 {/if}
 {#if photoUrls.length !== 0}
 	<h2>Gallery</h2>
@@ -41,8 +40,7 @@
 				class="max-w-50"
 				src={url}
 				alt="Gallery img #{i}"
-				onload={() => URL.revokeObjectURL(url)}
-			/>
+				onload={() => URL.revokeObjectURL(url)} />
 		{/each}
 	</div>
 {/if}

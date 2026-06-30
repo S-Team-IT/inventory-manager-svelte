@@ -21,8 +21,7 @@
 		{successMsg}
 		onSuccess={() => {
 			items = [];
-		}}
-	>
+		}}>
 		{@render children()}
 		<div class="divider mt-0"></div>
 		<fieldset class="mb-4">

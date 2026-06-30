@@ -14,8 +14,7 @@
 	legend="Create new user"
 	remoteForm={createUser}
 	errorMsg="Something went wrong, please try again."
-	successMsg="User created."
->
+	successMsg="User created.">
 	<input {...password.as('hidden', '12345678')} />
 	<Input label="Email" type="email" field={email} placeholder="example@domain.com" />
 	<Input label="Name" type="text" field={name} placeholder="John" />

@@ -44,7 +44,6 @@
 				items.push(newItem);
 			}
 			isLoading = false;
-		}}><span class="icon-[ic--baseline-plus]"></span></button
-	>
+		}}><span class="icon-[ic--baseline-plus]"></span></button>
 </label>
 <p>{isLoading ? 'Loading...' : ''}</p>

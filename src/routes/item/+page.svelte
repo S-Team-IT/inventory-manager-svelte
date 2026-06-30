@@ -53,8 +53,7 @@
 	class="btn {sortOption === 'lastStocked' ? '' : 'btn-soft'} ms-4 btn-primary"
 	onclick={() => {
 		sortOption = 'lastStocked';
-	}}>Last Stocked</button
->
+	}}>Last Stocked</button>
 
 <table class="table max-w-200">
 	<thead>

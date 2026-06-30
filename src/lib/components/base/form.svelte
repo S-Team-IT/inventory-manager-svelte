@@ -19,8 +19,8 @@
 
 	let isLoading = $state<boolean>(false);
 
-	//WARNING: Breaking changes happened to form enhance. 
-	//See: 
+	//WARNING: Breaking changes happened to form enhance.
+	//See:
 	//https://svelte.dev/blog/whats-new-in-svelte-june-2026
 	//https://github.com/sveltejs/kit/pull/15657
 	async function enhanceCallback({ form, data, submit }: EnhanceParams) {
@@ -51,12 +51,10 @@
 <form
 	enctype="multipart/form-data"
 	class="w-full max-w-100 {classes}"
-	{...remoteForm.enhance(enhanceCallback)}
->
+	{...remoteForm.enhance(enhanceCallback)}>
 	<fieldset
 		class="fieldset gap-0 rounded-box border border-base-300 bg-base-200 p-4"
-		disabled={isLoading}
-	>
+		disabled={isLoading}>
 		<legend class="fieldset-legend text-xl">{legend}</legend>
 		{@render children()}
 		{#if isLoading}

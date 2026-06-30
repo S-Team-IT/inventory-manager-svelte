@@ -22,7 +22,7 @@
 
 	const { data } = $props();
 	let addedItems = $state<DetailedItem[]>([]);
-	// Items that are deleted are added to deletedItems, 
+	// Items that are deleted are added to deletedItems,
 	// which filters them out of being displayed.
 	// There is most definitely a simpler way of doing this.
 	let deletedItems = $state<string[]>([]);
@@ -44,8 +44,7 @@
 		classes="grow"
 		onSuccess={() => {
 			if (createItem.result?.item) addedItems.push(createItem.result.item);
-		}}
-	>
+		}}>
 		<Input label="Master" type="text" field={master} placeholder="Enter master number" />
 		<Input label="Name" type="text" field={name} placeholder="Enter item name" />
 		<Combobox
@@ -53,8 +52,7 @@
 			field={category}
 			list={data.categories}
 			subtitle="New categories can be added as needed"
-			placeholder="Enter category"
-		/>
+			placeholder="Enter category" />
 		<!-- <Combobox
 			label="Supplier"
 			field={supplier}
@@ -68,15 +66,13 @@
 			type="number"
 			field={minimumQuantity}
 			value="0"
-			placeholder="Enter minimum quantity"
-		/>
+			placeholder="Enter minimum quantity" />
 		<InputFile label="Pick a thumbnail" type="file" field={thumbnail} subtitle="Main photo" />
 		<InputFile
 			label="Pick additional photos"
 			type="file multiple"
 			field={gallery}
-			subtitle="Gallery photos"
-		/>
+			subtitle="Gallery photos" />
 		<div class="mb-2">
 			<label class="label">
 				<input {...isDisabled.as('checkbox')} class="checkbox checkbox-lg checkbox-secondary" />

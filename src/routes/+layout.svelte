@@ -26,8 +26,7 @@
 			<div tabindex="0" role="button" class="m-1 cursor-pointer text-2xl">Items</div>
 			<ul
 				tabindex="-1"
-				class="dropdown-content menu z-1 w-52 rounded-box bg-blue-500 p-2 text-white shadow-sm"
-			>
+				class="dropdown-content menu z-1 w-52 rounded-box bg-blue-500 p-2 text-white shadow-sm">
 				<li><a href={resolve('/item')}>Item List</a></li>
 				{#if ['Admin', 'QS'].includes(data.user?.role ?? '')}
 					<li><a href={resolve('/item/new')}>Add Item</a></li>
@@ -41,8 +40,7 @@
 			<div tabindex="0" role="button" class="m-1 cursor-pointer text-2xl">Transactions</div>
 			<ul
 				tabindex="-1"
-				class="dropdown-content menu z-1 w-52 rounded-box bg-blue-500 p-2 shadow-sm"
-			>
+				class="dropdown-content menu z-1 w-52 rounded-box bg-blue-500 p-2 shadow-sm">
 				<li><a class="" href={resolve('/transaction')}>Transaction List</a></li>
 				{#if ['Admin', 'Procurement'].includes(data.user?.role ?? '')}
 					<li><a href={resolve('/transaction/incoming')}>Add Delivery Order</a></li>
@@ -63,15 +61,13 @@
 				</div>
 				<ul
 					tabindex="-1"
-					class="dropdown-content menu z-1 w-52 rounded-box bg-base-100 p-2 shadow-sm"
-				>
+					class="dropdown-content menu z-1 w-52 rounded-box bg-base-100 p-2 shadow-sm">
 					<li>
 						<a
 							class="justify-between"
 							href={resolve('/user/[slug]', {
 								slug: '1'
-							})}
-						>
+							})}>
 							Profile
 						</a>
 						{#if data.user.role === 'Admin'}

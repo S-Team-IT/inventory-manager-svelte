@@ -37,8 +37,7 @@
 			<button
 				class="btn size-12.5 btn-soft btn-error"
 				aria-label="delete"
-				onclick={openDeleteConfirmation}
-			>
+				onclick={openDeleteConfirmation}>
 				<span class="icon-[tabler--trash]"></span>
 			</button>
 		</div>
@@ -71,8 +70,7 @@
 					} else {
 						toast.error('Failed to delete item');
 					}
-				})}
-			>
+				})}>
 				<input {...deleteItem.fields.master.as('hidden', master)} />
 				<button class="btn btn-primary">Confirm</button>
 			</form>
