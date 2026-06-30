@@ -316,7 +316,7 @@ export const updateMultipleLastStocked = command(z.array(zString), async (ids) =
 		const result = await sql`
 		UPDATE items i
 		SET last_stocked = ${Date.now()}
-		WHERE i.id = ANY(${ids}::z.int[])
+		WHERE i.id = ANY(${ids}::int[])
 		`;
 		console.log(result);
 		return result;
