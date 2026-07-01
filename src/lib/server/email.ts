@@ -1,12 +1,10 @@
+import { GOOGLE_APP_PASSWORD, GOOGLE_EMAIL } from '$env/static/private';
 import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({
-	service: 'gmail', // Shortcut for Gmail's SMTP settings - see Well-Known Services
+	service: 'gmail',
 	auth: {
-		type: 'OAuth2',
-		user: 'me@gmail.com',
-		clientId: process.env.GOOGLE_CLIENT_ID,
-		clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-		refreshToken: process.env.GOOGLE_REFRESH_TOKEN
+		user: GOOGLE_EMAIL,
+		pass: GOOGLE_APP_PASSWORD
 	}
 });
