@@ -22,15 +22,16 @@ export const getUser = query(zString, async (id) => {
 
 export const createUser = form(
 	z
-		.object({ email, name: zString, password, role: zString })
+		.object({ email, name: zString, role: zString })
 		.refine(({ role }) => ['QS', 'Procurement', 'Project'].includes(role), {
 			error: 'Role does not match any existing roles.',
 			path: ['role']
 		}),
-	async ({ email, name, password, role }, issue) => {
+	async ({ email, name, role }, issue) => {
 		try {
 			name = capitalizeFirstLetter(name);
-			const passwordHash = await hashPassword(password);
+			const tempPassword = generatePassword();
+			const passwordHash = await hashPassword(tempPassword);
 			const result =
 				await sql`INSERT INTO users (email, name, password_hash, role) VALUES(${email}, ${name}, ${passwordHash}, ${role})`;
 			if (result.count !== 1) {
