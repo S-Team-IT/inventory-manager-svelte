@@ -19,8 +19,8 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<div class="navbar bg-base-100 shadow-sm">
-	<div class="z-999 navbar-start space-x-2 text-xl">
+<div class="navbar z-999 bg-base-100 shadow-sm">
+	<div class="navbar-start space-x-2 text-xl">
 		<!-- <a class="btn text-2xl" href={resolve('/')}>Home</a> -->
 		<div class="dropdown">
 			<div tabindex="0" role="button" class="m-1 cursor-pointer text-2xl">Items</div>
