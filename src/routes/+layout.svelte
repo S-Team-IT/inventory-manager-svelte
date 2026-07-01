@@ -21,6 +21,7 @@
 
 <div class="navbar z-999 bg-base-100 shadow-sm">
 	<div class="navbar-start space-x-2 text-xl">
+		<img src="src/lib/assets/favicon2.ico" alt="" class="mt-2 h-auto w-20" />
 		<!-- <a class="btn text-2xl" href={resolve('/')}>Home</a> -->
 		<div class="dropdown">
 			<div tabindex="0" role="button" class="m-1 cursor-pointer text-2xl">Items</div>
