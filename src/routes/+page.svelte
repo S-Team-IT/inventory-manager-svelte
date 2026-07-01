@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
+	import mbsSrc from '$lib/assets/View_of_MBS_from_the_gardens_(8026531707).jpg';
 	import { onMount } from 'svelte';
 	import { toast } from 'svelte-sonner';
 
@@ -18,7 +19,4 @@
 	<title>Home</title>
 </svelte:head>
 
-<img
-	class="opacity-50"
-	src="src/lib/assets/View_of_MBS_from_the_gardens_(8026531707).jpg"
-	alt="MBS" />
+<img class="opacity-50" src={mbsSrc} alt="MBS" />
