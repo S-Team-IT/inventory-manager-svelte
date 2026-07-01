@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { formatMonthDay } from '$lib/utils/dateTransform';
-	import Chart from 'chart.js/auto';
+	import Chart, { type ChartItem } from 'chart.js/auto';
 	import { onMount } from 'svelte';
 
 	type Props = {
@@ -19,9 +19,7 @@
 			console.error('Props are missing');
 			return;
 		}
-		// @ts-expect-error dude it throws an error that Chart doesn't accept HTMLElement
-		// I can't win
-		new Chart(document.getElementById(targetElementID), {
+		new Chart(document.getElementById(targetElementID) as ChartItem, {
 			type: 'line',
 			data: {
 				labels: chartData.map((row) => formatMonthDay(row.week)),
