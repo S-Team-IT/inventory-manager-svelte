@@ -46,7 +46,6 @@
 		"@supabase/supabase-js": "^2.106.2",
 		"chart.js": "^4.5.1",
 		"date-fns": "^4.3.0",
-		"generate-password": "^1.7.1",
 		"nodemailer": "^9.0.3",
 		"sharp": "^0.34.5",
 		"svelte-chartjs": "^4.0.1",
