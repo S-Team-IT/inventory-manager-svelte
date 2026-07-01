@@ -104,7 +104,7 @@
 	minimumQuantity,
 	disabled
 }: DetailedItem)}
-	<tr class={disabled ? 'bg-red-950 line-through' : 'hover:bg-base-300 '}>
+	<tr class={disabled ? 'line-through opacity-50' : 'hover:bg-base-300 '}>
 		<td class="w-25 text-center text-4xl">#{master}</td>
 		<td>
 			<div class="flex w-50 items-center justify-center">

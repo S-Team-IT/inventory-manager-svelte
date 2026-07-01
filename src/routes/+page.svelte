@@ -7,8 +7,8 @@
 	const { data } = $props();
 
 	onMount(() => {
-		if (data.wasRedirected) {
-			toast.success('Logged in');
+		if (data.redirectMessage) {
+			toast.success(data.redirectMessage);
 			goto(resolve('/'));
 		}
 	});
@@ -18,5 +18,7 @@
 	<title>Home</title>
 </svelte:head>
 
-<h1>Welcome to the STeam Inventory Manager</h1>
-<p>Navigate using the navigation bar at the top</p>
+<img
+	class="opacity-50"
+	src="src/lib/assets/View_of_MBS_from_the_gardens_(8026531707).jpg"
+	alt="MBS" />

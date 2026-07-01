@@ -66,7 +66,7 @@
 						<a
 							class="justify-between"
 							href={resolve('/user/[slug]', {
-								slug: '1'
+								slug: data.user.id
 							})}>
 							Profile
 						</a>

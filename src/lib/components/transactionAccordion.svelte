@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { deleteTransaction } from '$lib/remote/transaction.remote';
 	import type { CompleteTransaction } from '$lib/types/databaseTypes';
+	import { localeCompareSort } from '$lib/utils/arraySort';
 	import { formatRelativeCustom, formatYearMonthDay } from '$lib/utils/dateTransform';
 	import { toast } from 'svelte-sonner';
 
@@ -22,6 +23,10 @@
 		remarks,
 		items
 	} = $derived(transaction);
+
+	const sortedItems = $derived.by(() =>
+		items.sort((a, b) => localeCompareSort(a.master, b.master))
+	);
 
 	function openDeleteConfirmation() {
 		const modal = document.getElementById(`${uniqueID}`);
@@ -70,7 +75,7 @@
 	</summary>
 	<div class="text-md collapse-content">
 		<ul>
-			{#each items as item, i (i)}
+			{#each sortedItems as item, i (i)}
 				<li class="mb-2 list-none">
 					<pre class="inline">#{item.master.padEnd(5, ' ')}</pre>
 					<pre class="inline">{isIncoming ? '+' : '-'}{String(item.quantity).padEnd(5, ' ')}</pre>

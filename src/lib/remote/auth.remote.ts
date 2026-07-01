@@ -5,7 +5,7 @@ import type { User } from '$lib/types/databaseTypes';
 import { email, password, zString } from '$lib/types/schemaTypes';
 import { handleQueryErrors } from '$lib/utils/errorHandling';
 import { comparePasswordHash } from '$lib/utils/hash';
-import { redirect, invalid } from '@sveltejs/kit';
+import { invalid, redirect } from '@sveltejs/kit';
 import * as z from 'zod';
 
 export const signIn = form(z.object({ email, password }), async ({ email, password }, issue) => {

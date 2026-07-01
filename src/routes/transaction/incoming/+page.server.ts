@@ -3,7 +3,7 @@ import { getIncomingTransactions } from '$lib/remote/transaction.remote';
 import { error } from '@sveltejs/kit';
 
 export async function load({ locals }) {
-	if (!locals.user || !['Admin', 'Project'].includes(locals.user.role)) error(403, 'Forbidden');
+	if (!locals.user || !['Admin', 'Procurement'].includes(locals.user.role)) error(403, 'Forbidden');
 
 	const suppliers = await getSuppliers();
 	if (!suppliers) throw new Error('getSuppliers returned undefined');

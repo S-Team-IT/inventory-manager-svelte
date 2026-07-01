@@ -3,7 +3,7 @@
 	import Input from '$lib/components/base/input.svelte';
 	import { createUser } from '$lib/remote/user.remote';
 
-	const { email, password, role, name } = createUser.fields;
+	const { email, role, name } = createUser.fields;
 </script>
 
 <svelte:head>
@@ -15,7 +15,6 @@
 	remoteForm={createUser}
 	errorMsg="Something went wrong, please try again."
 	successMsg="User created.">
-	<input {...password.as('hidden', '12345678')} />
 	<Input label="Email" type="email" field={email} placeholder="example@domain.com" />
 	<Input label="Name" type="text" field={name} placeholder="John" />
 	<div class="flex flex-col space-y-2">
