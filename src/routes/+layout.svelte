@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { beforeNavigate, invalidateAll } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import favicon from '$lib/assets/favicon.ico';
+	import faviconBlack from '$lib/assets/faviconBlack.ico';
+	import faviconWhite from '$lib/assets/faviconWhite.ico';
+	import logoBlack from '$lib/assets/logoBlack.webp';
+	import logoWhite from '$lib/assets/logoWhite.webp';
 	import { signOut } from '$lib/remote/auth.remote';
 	import { toast, Toaster } from 'svelte-sonner';
 	import './layout.css';
@@ -16,12 +19,12 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" href={favicon} />
+	<link rel="icon" href={faviconWhite} />
 </svelte:head>
 
 <div class="navbar z-999 bg-base-100 shadow-sm">
 	<div class="navbar-start space-x-2 text-xl">
-		<img src="src/lib/assets/favicon2.ico" alt="" class="mt-2 h-auto w-20" />
+		<img src={logoWhite} alt="" class="mt-2 h-auto w-20" />
 		<!-- <a class="btn text-2xl" href={resolve('/')}>Home</a> -->
 		<div class="dropdown">
 			<div tabindex="0" role="button" class="m-1 cursor-pointer text-2xl">Items</div>
