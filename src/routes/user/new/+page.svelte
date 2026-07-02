@@ -17,17 +17,17 @@
 	successMsg="User created.">
 	<Input label="Email" type="email" field={email} placeholder="example@domain.com" />
 	<Input label="Name" type="text" field={name} placeholder="John" />
-	<div class="flex flex-col space-y-2">
+	<div class="mb-4 flex flex-col space-y-2">
 		<label>
-			<input class="radio" {...role.as('radio', 'QS')} required />
+			<input class="radio mr-1" {...role.as('radio', 'QS')} required />
 			QS
 		</label>
 		<label>
-			<input class="radio" {...role.as('radio', 'Procurement')} />
+			<input class="radio mr-1" {...role.as('radio', 'Procurement')} />
 			Procurement
 		</label>
 		<label>
-			<input class="radio" {...role.as('radio', 'Project')} />
+			<input class="radio mr-1" {...role.as('radio', 'Project')} />
 			Project
 		</label>
 	</div>
