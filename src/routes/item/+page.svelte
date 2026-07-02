@@ -2,7 +2,7 @@
 	import { resolve } from '$app/paths';
 	import QuantityChart from '$lib/components/quantityChart.svelte';
 	import type { DetailedItem, Item } from '$lib/types/databaseTypes.js';
-	import { localeCompareSort } from '$lib/utils/arraySort.js';
+	import { genericSort, numberSort } from '$lib/utils/arraySort.js';
 	import ImageModal from '../../lib/components/imageModal.svelte';
 
 	const { data } = $props();
@@ -23,24 +23,28 @@
 	let sortedItems = $derived.by(() => sortItems(data.items, sortOption));
 
 	function sortItems(list: DetailedItem[], sortOption: SortOption): DetailedItem[] {
-		if (sortOption === 'lastStocked') {
-			return list.toSorted((a, b) => b.lastStocked.getTime() - a.lastStocked.getTime());
-		} else if (sortOption === 'minimumQuantity') {
-			return list.toSorted(
-				(a, b) => a.quantity / a.minimumQuantity - b.quantity / b.minimumQuantity
-			);
-		} else if (sortOption === 'minimumQuantityReverse') {
-			return list.toSorted(
-				(a, b) => b.quantity / b.minimumQuantity - a.quantity / a.minimumQuantity
-			);
+		switch (sortOption) {
+			case 'lastStocked':
+				return list.toSorted((a, b) =>
+					numberSort(b.lastStocked.getTime(), a.lastStocked.getTime())
+				);
+			default:
+				break;
 		}
 
+		let property: string = '';
 		if (sortOption.includes('Reverse')) {
-			const property = sortOption.slice(0, -7) as keyof Item;
-			return list.toSorted((a, b) => localeCompareSort(String(b[property]), String(a[property])));
+			property = sortOption.slice(0, -7) as keyof Item;
+			return list.toSorted((b, a) =>
+				// @ts-expect-error this works but it skips ts's checking
+				genericSort(a[property], b[property])
+			);
 		} else {
-			const property = sortOption as keyof Item;
-			return list.toSorted((b, a) => localeCompareSort(String(b[property]), String(a[property])));
+			property = sortOption as keyof Item;
+			return list.toSorted((a, b) =>
+				// @ts-expect-error this works but it skips ts's checking
+				genericSort(a[property], b[property])
+			);
 		}
 	}
 </script>
@@ -49,11 +53,15 @@
 	<title>Master List</title>
 </svelte:head>
 
-<button
-	class="btn {sortOption === 'lastStocked' ? '' : 'btn-soft'} ms-4 btn-primary"
-	onclick={() => {
-		sortOption = 'lastStocked';
-	}}>Last Stocked</button>
+<div class="table-filter-group">
+	<button
+		class="btn btn-primary {sortOption === 'lastStocked' ? '' : 'btn-soft'} "
+		onclick={() => {
+			sortOption = 'lastStocked';
+		}}
+		>Last Stocked
+	</button>
+</div>
 
 <table class="table max-w-200">
 	<thead>

@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { beforeNavigate, invalidateAll } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import favicon from '$lib/assets/favicon.ico';
+	import faviconBlack from '$lib/assets/faviconBlack.ico';
+	// import faviconWhite from '$lib/assets/faviconWhite.ico';
+	// import logoBlack from '$lib/assets/logoBlack.webp';
+	import logoWhite from '$lib/assets/logoWhite.webp';
 	import { signOut } from '$lib/remote/auth.remote';
 	import { toast, Toaster } from 'svelte-sonner';
 	import './layout.css';
@@ -16,12 +19,12 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" href={favicon} />
+	<link rel="icon" href={faviconBlack} />
 </svelte:head>
 
-<div class="navbar bg-base-100 shadow-sm">
-	<div class="z-999 navbar-start space-x-2 text-xl">
-		<!-- <a class="btn text-2xl" href={resolve('/')}>Home</a> -->
+<div class="navbar z-999 bg-base-100 shadow-sm">
+	<div class="navbar-start space-x-2 text-xl">
+		<a class="h-auto w-30 p-2" href={resolve('/')}><img src={logoWhite} alt="" class="" /></a>
 		<div class="dropdown">
 			<div tabindex="0" role="button" class="m-1 cursor-pointer text-2xl">Items</div>
 			<ul
@@ -55,13 +58,18 @@
 	<div class="me-2 navbar-end">
 		{#if data.user}
 			<div class="dropdown dropdown-end">
-				<span>{data.user.role}</span>
-				<div tabindex="0" role="button" class="btn avatar btn-circle btn-ghost">
-					<div class="w-10 rounded-full bg-green-600"></div>
+				<div class="flex flex-row">
+					<div class="mr-2 flex flex-col text-center">
+						<span class="align-middle text-xl">{data.user.name}</span>
+						<span class="text-sm">{data.user.role}</span>
+					</div>
+					<div tabindex="0" role="button" class="btn avatar btn-circle btn-ghost">
+						<span class="icon-[radix-icons--avatar] h-full w-full"></span>
+					</div>
 				</div>
 				<ul
 					tabindex="-1"
-					class="dropdown-content menu z-1 w-52 rounded-box bg-base-100 p-2 shadow-sm">
+					class="dropdown-content menu z-1 w-52 rounded-box bg-blue-500 p-2 shadow-sm">
 					<li>
 						<a
 							class="justify-between"

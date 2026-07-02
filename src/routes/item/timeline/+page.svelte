@@ -17,6 +17,8 @@
 		dateList.splice(0, 1);
 		return dateList;
 	});
+	const datesReversed = $derived(dates?.toReversed());
+	const datesToDisplay = $derived(isReverse ? datesReversed : dates);
 
 	const sortedTimeline = $derived.by(() => {
 		const list = Object.entries(data.timeline);
@@ -41,22 +43,14 @@
 	}
 </script>
 
-<div class="mt-5 ml-5 space-x-2">
+<div class="table-filter-group">
 	<button onclick={toggleReverse} class="btn btn-primary">
 		Date
-		{#if isReverse}
-			<span class="icon-[mdi--arrow-left]"></span>
-		{:else}
-			<span class="icon-[mdi--arrow-right]"></span>
-		{/if}
+		<span class={isReverse ? 'icon-[mdi--arrow-left]' : 'icon-[mdi--arrow-right]'}></span>
 	</button>
-	<button onclick={toggleNameColumn} class="btn btn-primary"
-		>Name
-		{#if isNameHidden}
-			<span class="icon-[mdi--hide]"></span>
-		{:else}
-			<span class="icon-[mdi--show]"></span>
-		{/if}
+	<button onclick={toggleNameColumn} class="btn btn-primary">
+		Name
+		<span class={isNameHidden ? 'icon-[mdi--hide]' : 'icon-[mdi--show]'}></span>
 	</button>
 	<button onclick={exportTable} class="btn btn-secondary" aria-label="export"
 		><span class="icon-[uil--export]"></span></button>
@@ -70,33 +64,27 @@
 				<th class="sticky top-0 z-20 bg-[#2a9d8f] text-white">Name</th>
 			{/if}
 
-			{#if isReverse}
-				{#each dates!.toReversed() as { week } (week)}
-					<th scope="col" class="sticky top-0 z-20 bg-[#2a9d8f] text-white">{week}</th>
-				{/each}
-			{:else}
-				{#each dates as { week } (week)}
-					<th scope="col" class="sticky top-0 z-20 bg-[#2a9d8f] text-white">{week}</th>
-				{/each}
-			{/if}
+			{#each datesToDisplay as { week } (week)}
+				<th scope="col" class="sticky top-0 z-20 bg-[#2a9d8f] text-white">{week}</th>
+			{/each}
 		</tr>
 	</thead>
 	<tbody>
 		{#each sortedTimeline as [, nameDateQuant], i (i)}
 			<!-- Database returns 1 extra week at the start, so gotta remove it -->
 			<!-- Can't just mutate the original because then it keeps splicing more & more of itself -->
-			{@const nameDateQuant2 = nameDateQuant.toSpliced(0, 1)}
+			{@const nameDateQuantSpliced = nameDateQuant.toSpliced(0, 1)}
 			<tr>
 				<th class="sticky left-0 z-10 bg-[#246c64] text-end text-2xl text-white"
-					>#{nameDateQuant2[0].master}</th>
+					>#{nameDateQuantSpliced[0].master}</th>
 				{#if !isNameHidden}
-					<td>{nameDateQuant2[0].name}</td>
+					<td>{nameDateQuantSpliced[0].name}</td>
 				{/if}
 				{#if isReverse}
-					{#each nameDateQuant2.toReversed() as { quantity }, i (i)}
+					{#each nameDateQuantSpliced.toReversed() as { quantity }, i (i)}
 						<td class="text-center">{quantity}</td>
 					{/each}{:else}
-					{#each nameDateQuant2 as { quantity }, i (i)}
+					{#each nameDateQuantSpliced as { quantity }, i (i)}
 						<td class="text-center">{quantity}</td>
 					{/each}
 				{/if}

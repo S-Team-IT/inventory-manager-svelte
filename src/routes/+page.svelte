@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import mbsSrc from '$lib/assets/View_of_MBS_from_the_gardens_(8026531707).jpg';
+	import mbsSrc from '$lib/assets/mbs.jpg';
 	import { onMount } from 'svelte';
 	import { toast } from 'svelte-sonner';
 

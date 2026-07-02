@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { CompleteTransaction } from '$lib/types/databaseTypes';
-	import { formatYearMonthDayDash } from '$lib/utils/dateTransform';
+	import { formatYearMonthDayDash } from '$lib/utils/dateFns';
 	import TransactionAccordion from './transactionAccordion.svelte';
 
 	type Props = {

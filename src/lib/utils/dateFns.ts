@@ -1,4 +1,4 @@
-import { format, formatRelative } from 'date-fns';
+import { format, formatRelative, isBefore } from 'date-fns';
 import { capitalizeFirstLetter } from './stringTransform';
 
 export function formatRelativeCustom(date: Date): string {
@@ -23,4 +23,8 @@ export function formatYearMonthDay(date: Date): string {
 
 export function formatYearMonthDayDash(date: Date): string {
 	return format(date, 'yyyy-MM-dd');
+}
+
+export function isBeforeToday(date: Date | string): boolean {
+	return isBefore(date, new Date());
 }

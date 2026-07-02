@@ -4,7 +4,7 @@ import type { DetailedItem, Gallery } from '$lib/types/databaseTypes';
 import { master, zBoolean, zImgFile, zNumber, zString } from '$lib/types/schemaTypes';
 import { handleQueryErrors } from '$lib/utils/errorHandling';
 import { error, invalid } from '@sveltejs/kit';
-import * as z from 'zod';
+import z from 'zod';
 import { getOrCreateCategory } from './category.remote';
 import { uploadImage, uploadMultipleImages } from './upload.remote';
 

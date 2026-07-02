@@ -2,7 +2,7 @@
 	import { deleteTransaction } from '$lib/remote/transaction.remote';
 	import type { CompleteTransaction } from '$lib/types/databaseTypes';
 	import { localeCompareSort } from '$lib/utils/arraySort';
-	import { formatRelativeCustom, formatYearMonthDay } from '$lib/utils/dateTransform';
+	import { formatRelativeCustom, formatYearMonthDay } from '$lib/utils/dateFns';
 	import { toast } from 'svelte-sonner';
 
 	type Props = {

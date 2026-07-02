@@ -10,11 +10,10 @@ import type {
 	WeeklyNetQuantity
 } from '$lib/types/databaseTypes';
 import { master, zBoolean, zNumber, zString } from '$lib/types/schemaTypes';
-import { formatMonthDay } from '$lib/utils/dateTransform';
+import { formatMonthDay, isBeforeToday } from '$lib/utils/dateFns';
 import { handleQueryErrors } from '$lib/utils/errorHandling';
 import { error, invalid } from '@sveltejs/kit';
-import { isBefore } from 'date-fns';
-import * as z from 'zod';
+import z from 'zod';
 import { updateMultipleLastStocked } from './item.remote';
 import { getOrCreateSupplier } from './supplier.remote';
 
@@ -27,7 +26,7 @@ export const createIncomingTransaction = form(
 			ids: z.array(master, 'Please add an item.'),
 			quantities: z.array(zNumber.min(1, 'Quantity must be at least 1.'))
 		})
-		.refine((obj) => isBefore(obj.date, new Date()), {
+		.refine((obj) => isBeforeToday(obj.date), {
 			error: 'Date cannot be in the future.',
 			path: ['date']
 		}),
@@ -79,7 +78,7 @@ export const createOutgoingTransaction = form(
 			ids: z.array(master, 'Please add an item.'),
 			quantities: z.array(zNumber.min(1, 'Quantity must be at least 1.'))
 		})
-		.refine((obj) => isBefore(obj.date, new Date()), {
+		.refine((obj) => isBeforeToday(obj.date), {
 			error: 'Date cannot be in the future.',
 			path: ['date']
 		}),

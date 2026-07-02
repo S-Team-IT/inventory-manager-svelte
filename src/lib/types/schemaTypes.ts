@@ -1,4 +1,4 @@
-import * as z from 'zod';
+import z from 'zod';
 
 export const zString = z.string().min(1, 'Please enter something.').trim();
 export const zNumber = z
