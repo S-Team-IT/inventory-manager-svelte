@@ -1,4 +1,6 @@
-# https://steaminventorymanager.netlify.app/
+# References
+Production: https://steaminventorymanager.netlify.app <br>
+Trello: https://trello.com/b/Wb73cPJ4/inventory-manager
 
 # Content
 
