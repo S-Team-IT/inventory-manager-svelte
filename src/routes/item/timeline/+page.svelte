@@ -43,7 +43,7 @@
 	}
 </script>
 
-<div class="mt-5 ml-5 space-x-2">
+<div class="table-filter-group">
 	<button onclick={toggleReverse} class="btn btn-primary">
 		Date
 		<span class={isReverse ? 'icon-[mdi--arrow-left]' : 'icon-[mdi--arrow-right]'}></span>

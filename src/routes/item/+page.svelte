@@ -49,11 +49,15 @@
 	<title>Master List</title>
 </svelte:head>
 
-<button
-	class="btn {sortOption === 'lastStocked' ? '' : 'btn-soft'} ms-4 btn-primary"
-	onclick={() => {
-		sortOption = 'lastStocked';
-	}}>Last Stocked</button>
+<div class="table-filter-group">
+	<button
+		class="btn btn-primary {sortOption === 'lastStocked' ? '' : 'btn-soft'} "
+		onclick={() => {
+			sortOption = 'lastStocked';
+		}}
+		>Last Stocked
+	</button>
+</div>
 
 <table class="table max-w-200">
 	<thead>
