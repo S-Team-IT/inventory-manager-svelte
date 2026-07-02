@@ -2,8 +2,8 @@
 	import { beforeNavigate, invalidateAll } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import faviconBlack from '$lib/assets/faviconBlack.ico';
-	import faviconWhite from '$lib/assets/faviconWhite.ico';
-	import logoBlack from '$lib/assets/logoBlack.webp';
+	// import faviconWhite from '$lib/assets/faviconWhite.ico';
+	// import logoBlack from '$lib/assets/logoBlack.webp';
 	import logoWhite from '$lib/assets/logoWhite.webp';
 	import { signOut } from '$lib/remote/auth.remote';
 	import { toast, Toaster } from 'svelte-sonner';
