@@ -13,7 +13,7 @@ import { master, zBoolean, zNumber, zString } from '$lib/types/schemaTypes';
 import { formatMonthDay, isBeforeToday } from '$lib/utils/dateFns';
 import { handleQueryErrors } from '$lib/utils/errorHandling';
 import { error, invalid } from '@sveltejs/kit';
-import * as z from 'zod';
+import z from 'zod';
 import { updateMultipleLastStocked } from './item.remote';
 import { getOrCreateSupplier } from './supplier.remote';
 
