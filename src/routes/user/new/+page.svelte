@@ -35,5 +35,5 @@
 	{#each role.issues() as issue, index (index)}
 		<p class="issue">{issue.message}</p>
 	{/each}
-	<button type="submit" class="btn mt-1">Create</button>
+	<button type="submit" class="btn mt-1 btn-primary">Create</button>
 </Form>
