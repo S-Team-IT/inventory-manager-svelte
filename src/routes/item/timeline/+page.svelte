@@ -77,18 +77,18 @@
 		{#each sortedTimeline as [, nameDateQuant], i (i)}
 			<!-- Database returns 1 extra week at the start, so gotta remove it -->
 			<!-- Can't just mutate the original because then it keeps splicing more & more of itself -->
-			{@const nameDateQuant2 = nameDateQuant.toSpliced(0, 1)}
+			{@const nameDateQuantSpliced = nameDateQuant.toSpliced(0, 1)}
 			<tr>
 				<th class="sticky left-0 z-10 bg-[#246c64] text-end text-2xl text-white"
-					>#{nameDateQuant2[0].master}</th>
+					>#{nameDateQuantSpliced[0].master}</th>
 				{#if !isNameHidden}
-					<td>{nameDateQuant2[0].name}</td>
+					<td>{nameDateQuantSpliced[0].name}</td>
 				{/if}
 				{#if isReverse}
-					{#each nameDateQuant2.toReversed() as { quantity }, i (i)}
+					{#each nameDateQuantSpliced.toReversed() as { quantity }, i (i)}
 						<td class="text-center">{quantity}</td>
 					{/each}{:else}
-					{#each nameDateQuant2 as { quantity }, i (i)}
+					{#each nameDateQuantSpliced as { quantity }, i (i)}
 						<td class="text-center">{quantity}</td>
 					{/each}
 				{/if}
