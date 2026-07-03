@@ -19,4 +19,4 @@
 	<title>Home</title>
 </svelte:head>
 
-<img class="opacity-50" src={mbsSrc} alt="MBS" />
+<img class="opacity-90" src={mbsSrc} alt="MBS" />
