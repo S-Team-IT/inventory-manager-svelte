@@ -1,5 +1,5 @@
 import { form, getRequestEvent, query } from '$app/server';
-import { sendAuthenticationEmail } from '$lib/server/email';
+import { sendAuthenticationEmail, sendForgetPasswordEmail } from '$lib/server/email';
 import { sql } from '$lib/server/postgres';
 import type { User } from '$lib/types/databaseTypes';
 import { email, password, zString } from '$lib/types/schemaTypes';
@@ -66,11 +66,11 @@ export const editPassword = form(
 		const { id, passwordHash } = locals.user;
 		const isValid = await comparePasswordHash(oldPassword, passwordHash);
 		if (!isValid) invalid(issue.oldPassword('Current password is wrong.'));
-		const newPasswordHash = await hashPassword(newPassword);
+		const newHashedPassword = await hashPassword(newPassword);
 
 		try {
 			const result =
-				await sql`UPDATE users SET password_hash = ${newPasswordHash} WHERE id = ${id}`;
+				await sql`UPDATE users SET password_hash = ${newHashedPassword} WHERE id = ${id}`;
 			if (result.count != 1) return { success: false, message: '404 Not found' };
 			return { success: true };
 		} catch (e) {
@@ -78,3 +78,23 @@ export const editPassword = form(
 		}
 	}
 );
+
+export const resetPassword = form(z.object({ email }), async ({ email }) => {
+	try {
+		const newPassword = generatePassword();
+		const newHashedPassword = await hashPassword(newPassword);
+		const result = await sql`
+			UPDATE users 
+			SET password_hash = ${newHashedPassword} 
+			WHERE email = ${email}`;
+
+		if (result.count !== 1)
+			return { success: false, message: 'Password was not reset. Please try again.' };
+
+		await sendForgetPasswordEmail(email, newPassword);
+
+		return { success: true };
+	} catch (e) {
+		handleQueryErrors(e);
+	}
+});

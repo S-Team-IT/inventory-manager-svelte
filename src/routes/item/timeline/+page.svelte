@@ -43,6 +43,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>Weekly Balance</title>
+</svelte:head>
+
 <div class="table-filter-group">
 	<button onclick={toggleReverse} class="btn btn-primary">
 		Date

@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-	<title>User</title>
+	<title>Profile</title>
 </svelte:head>
 
 <Form
