@@ -36,3 +36,18 @@ export async function sendAuthenticationEmail(email: string, password: string) {
 		console.error('Error while sending mail:', e);
 	}
 }
+async function sendEmail(email: string, subject: string, text: string, html: string) {
+	try {
+		const info = await transporter.sendMail({
+			from: '"Charlotte" <faethychan@gmail.com>',
+			to: email,
+			subject,
+			text,
+			html
+		});
+
+		console.log('Message sent: %s', info.messageId);
+	} catch (e) {
+		console.error('Error while sending mail:', e);
+	}
+}
