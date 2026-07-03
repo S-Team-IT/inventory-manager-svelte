@@ -22,7 +22,7 @@
 	<link rel="icon" href={faviconBlack} />
 </svelte:head>
 
-<div class="navbar z-999 bg-base-100 shadow-sm">
+<div class="navbar z-999 bg-gray-900 text-white shadow-sm">
 	<div class="navbar-start space-x-2 text-xl">
 		<a class="h-auto w-30 p-2" href={resolve('/')}><img src={logoWhite} alt="Logo" /></a>
 		<div class="dropdown">
@@ -93,7 +93,7 @@
 				</ul>
 			</div>
 		{:else}
-			<a class="btn" href={resolve('/user/sign-in')}>Sign in</a>
+			<a class="btn shadow-none btn-secondary" href={resolve('/user/sign-in')}>Sign in</a>
 		{/if}
 	</div>
 </div>
