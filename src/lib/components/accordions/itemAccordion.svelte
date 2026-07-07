@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
+	import { page } from '$app/state';
 	import ImageModal from '$lib/components/imageModal.svelte';
 	import { deleteItem } from '$lib/remote/item.remote';
 	import type { DetailedItem } from '$lib/types/databaseTypes';
@@ -54,6 +55,7 @@
 				toast.success('Item deleted');
 				if (deletedItems) deletedItems.push(master);
 				accordionRef.closeDeleteConfirmation();
+				if (page.url.pathname === '/item/new') return;
 				goto(resolve('/item'));
 			} else {
 				toast.error('Failed to delete item');
