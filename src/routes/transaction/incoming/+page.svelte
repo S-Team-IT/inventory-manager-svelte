@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Combobox from '$lib/components/base/combobox.svelte';
 	import Input from '$lib/components/base/input.svelte';
-	import TransactionForm from '$lib/components/transactionForm.svelte';
+	import TransactionForm from '$lib/components/transactionForm/transactionForm.svelte';
 	import { createIncomingTransaction } from '$lib/remote/transaction.remote.js';
 
 	const { date, supplier, deliveryRef, purchaseRef, invoiceRef } = createIncomingTransaction.fields;

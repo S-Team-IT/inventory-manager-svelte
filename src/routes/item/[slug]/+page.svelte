@@ -3,7 +3,7 @@
 	import Form from '$lib/components/base/form.svelte';
 	import Input from '$lib/components/base/input.svelte';
 	import InputFile from '$lib/components/base/inputFile.svelte';
-	import ItemAccordion from '$lib/components/itemAccordion.svelte';
+	import ItemAccordion from '$lib/components/accordions/itemAccordion.svelte';
 	import {
 		editCategory,
 		editGallery,

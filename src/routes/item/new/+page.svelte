@@ -4,7 +4,7 @@
 	import Input from '$lib/components/base/input.svelte';
 	import InputFile from '$lib/components/base/inputFile.svelte';
 	import InputIssues from '$lib/components/base/inputIssues.svelte';
-	import ItemAccordion from '$lib/components/itemAccordion.svelte';
+	import ItemAccordion from '$lib/components/accordions/itemAccordion.svelte';
 	import { createItem } from '$lib/remote/item.remote.js';
 	import type { DetailedItem } from '$lib/types/databaseTypes.js';
 
