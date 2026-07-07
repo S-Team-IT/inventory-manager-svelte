@@ -6,7 +6,7 @@
 	import { formatRelativeCustom, formatYearMonthDay } from '$lib/utils/dateFns';
 	import type { SvelteComponent } from 'svelte';
 	import { toast } from 'svelte-sonner';
-	import Accordion from './base/accordion.svelte';
+	import Accordion from './accordion.svelte';
 
 	type Props = {
 		transaction: CompleteTransaction;

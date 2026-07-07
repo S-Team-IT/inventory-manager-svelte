@@ -6,7 +6,7 @@
 	import type { DetailedItem } from '$lib/types/databaseTypes';
 	import type { SvelteComponent } from 'svelte';
 	import { toast } from 'svelte-sonner';
-	import Accordion from './base/accordion.svelte';
+	import Accordion from './accordion.svelte';
 
 	let {
 		// id,
