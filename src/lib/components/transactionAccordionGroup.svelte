@@ -12,6 +12,6 @@
 
 {#each transactions as transaction, i (i)}
 	{@const isIncoming = !transaction.expendDate}
-	{@const uniqueID = `confirm-modal${transaction.id}-${formatYearMonthDayDash(transaction.createdAt)}`}
-	<TransactionAccordion {transaction} {isIncoming} {uniqueID} />
+	{@const elementID = `confirm-modal${transaction.id}-${formatYearMonthDayDash(transaction.createdAt)}`}
+	<TransactionAccordion {transaction} {isIncoming} {elementID} />
 {/each}
