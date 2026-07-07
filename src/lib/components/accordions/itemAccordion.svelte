@@ -20,7 +20,7 @@
 		minimumQuantity
 	}: DetailedItem & { deletedItems?: string[] | undefined } = $props();
 
-	let elementID = $derived(`confirm-modal${master}`);
+	let elementID = $derived(`confirm-modal${master}-${Date.now()}`);
 	let uniqueForm = $derived(deleteItem.for(elementID));
 
 	let accordionRef: SvelteComponent;
