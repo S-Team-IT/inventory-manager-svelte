@@ -75,8 +75,8 @@
 			</span>
 		</div>
 	</summary>
-	<div class="text-md collapse-content">
 		{#if isIncoming}
+	<div class="text-md collapse-content bg-gray-500">
 			<div>PO: {purchaseRef}</div>
 			<div class="mb-2">Invoice: {invoiceRef}</div>
 		{/if}
