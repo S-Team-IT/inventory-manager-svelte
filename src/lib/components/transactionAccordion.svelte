@@ -1,8 +1,11 @@
 <script lang="ts">
 	import { deleteTransaction } from '$lib/remote/transaction.remote';
 	import type { CompleteTransaction } from '$lib/types/databaseTypes';
+	import type { EnhanceParams } from '$lib/types/types';
 	import { localeCompareSort } from '$lib/utils/arraySort';
 	import { formatRelativeCustom, formatYearMonthDay } from '$lib/utils/dateFns';
+	import type { SvelteComponent } from 'svelte';
+	import { toast } from 'svelte-sonner';
 	import Accordion from './base/accordion.svelte';
 
 	type Props = {
@@ -31,18 +34,17 @@
 	);
 
 	const uniqueForm = $derived(deleteTransaction.for(elementID));
+	let accordionRef: SvelteComponent;
 </script>
 
 <Accordion
+	bind:this={accordionRef}
 	{elementID}
 	{summaryStart}
 	{summaryEnd}
 	{content}
-	deleteForm={uniqueForm}
-	deletePrompt="Are you sure you want to delete this transaction?"
-	deleteSuccess="Transaction has been deleted."
-	deleteFail="Failed to delete transaction."
-	{deleteFormChildren}>
+	{deleteForm}
+	deletePrompt="Are you sure you want to delete this transaction?">
 </Accordion>
 
 {#snippet summaryStart()}
@@ -89,8 +91,21 @@
 	</ul>
 {/snippet}
 
-{#snippet deleteFormChildren()}
-	<input {...uniqueForm.fields.id.as('hidden', id)} />
-	<input {...uniqueForm.fields.isIncoming.as('checkbox', isIncoming)} class="invisible" />
-	<button class="btn btn-primary">Confirm</button>
+{#snippet deleteForm()}
+	<form
+		{...uniqueForm.enhance(async ({ submit }: EnhanceParams) => {
+			if (await submit!()) {
+				accordionRef.closeDeleteConfirmation();
+				const { success, message } = uniqueForm.result!;
+				if (success) {
+					toast.success('Transaction has been deleted');
+				} else {
+					toast.error(message || 'Failed to delete transaction.');
+				}
+			}
+		})}>
+		<input {...uniqueForm.fields.id.as('hidden', id)} />
+		<input {...uniqueForm.fields.isIncoming.as('checkbox', isIncoming)} class="invisible" />
+		<button class="btn btn-primary">Confirm</button>
+	</form>
 {/snippet}
