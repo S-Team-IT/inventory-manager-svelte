@@ -20,9 +20,11 @@ import { getOrCreateSupplier } from './supplier.remote';
 export const createIncomingTransaction = form(
 	z
 		.object({
+			purchaseRef: z.string().trim(),
 			date: z.iso.date(),
 			supplier: zString,
-			deliveryID: z.string().trim(),
+			deliveryRef: z.string().trim(),
+			invoiceRef: z.string().trim(),
 			ids: z.array(master, 'Please add an item.'),
 			quantities: z.array(zNumber.min(1, 'Quantity must be at least 1.'))
 		})
@@ -30,7 +32,7 @@ export const createIncomingTransaction = form(
 			error: 'Date cannot be in the future.',
 			path: ['date']
 		}),
-	async ({ date, supplier, deliveryID, ids, quantities }, issue) => {
+	async ({ purchaseRef, date, supplier, deliveryRef, invoiceRef, ids, quantities }, issue) => {
 		const { locals } = getRequestEvent();
 		if (!locals.user) error(403, 'Forbidden');
 
@@ -42,8 +44,8 @@ export const createIncomingTransaction = form(
 
 				const [transactionResult] = await sql<{ id: string }[]>`
 					INSERT INTO incoming_transactions(
-					logger_id, created_at, delivery_date, supplier_id, delivery_ref)
-					VALUES(${locals.user!.id}, ${new Date()}, ${date}, ${supplierResult.id}, ${deliveryID}) RETURNING id`;
+					logger_id, created_at, delivery_date, supplier_id, delivery_ref, purchase_ref, invoice_ref)
+					VALUES(${locals.user!.id}, ${new Date()}, ${date}, ${supplierResult.id}, ${deliveryRef}, ${purchaseRef}, ${invoiceRef}) RETURNING id`;
 
 				const items = generateDB_StockArray(ids, quantities, transactionResult.id);
 				await updateMultipleLastStocked(ids);
@@ -58,7 +60,7 @@ export const createIncomingTransaction = form(
 					switch (postgresError.constraint_name) {
 						case 'incoming_transactions_supplier_id_delivery_ref_key':
 							invalid(
-								issue.deliveryID(
+								issue.deliveryRef(
 									`This delivery order has already been logged. Verify it's the right supplier & DO.`
 								)
 							);
@@ -111,11 +113,13 @@ export const getIncomingTransactions = query(async () => {
 			inc_t.created_at AS "createdAt",
 			inc_t.delivery_date AS "deliveryDate",
 			s.name AS "supplier",
-			inc_t.delivery_ref AS "deliveryID",
+			inc_t.delivery_ref AS "deliveryRef",
 			i.master_number AS master,
 			inc_i.item_id AS "itemID",
 			i.name AS "itemName",
-			inc_i.quantity
+			inc_i.quantity,
+			inc_t.purchase_ref AS "purchaseRef",
+			inc_t.invoice_ref AS "invoiceRef"
 		FROM incoming_transactions inc_t
 		JOIN incoming_items inc_i
 		ON inc_t.id = inc_i.transaction_id
@@ -154,55 +158,60 @@ export const getOutgoingTransactions = query(async () => {
 	}
 });
 
-export const getAllTransactions = query(async () => {
-	try {
-		//Returns a table with the attributes of both incoming & outgoing
-		const result = await sql`
-	SELECT
-       inc_t.id,
-       u.name              AS "logger",
-       inc_t.created_at    AS "createdAt",
-       inc_t.delivery_date AS "date",
-       true                AS incoming,
-       s.name              AS supplier,
-       null                AS expender,
-       inc_t.delivery_ref  AS "deliveryRef",
-       null                AS remarks,
-       inc_i.item_id       AS "itemID",
-       i.name              AS "itemName",
-       inc_i.quantity
-     FROM incoming_transactions inc_t
-     JOIN incoming_items        inc_i ON inc_t.id = inc_i.transaction_id
-     JOIN suppliers             s     ON inc_t.supplier_id = s.id
-     JOIN users                 u     ON inc_t.logger_id = u.id
-     JOIN items                 i     ON inc_i.item_id = i.id
+//UNUSED
+// export const getAllTransactions = query(async () => {
+// 	try {
+// 		//Returns a table with the attributes of both incoming & outgoing
+// 		const result = await sql`
+// 	SELECT
+//        inc_t.id,
+//        u.name              AS "logger",
+//        inc_t.created_at    AS "createdAt",
+//        inc_t.delivery_date AS "date",
+//        true                AS incoming,
+//        s.name              AS supplier,
+//        null                AS expender,
+//        inc_t.delivery_ref  AS "deliveryRef",
+//        null                AS remarks,
+//        inc_i.item_id       AS "itemID",
+//        i.name              AS "itemName",
+//        inc_i.quantity,
+// 	   inc_t.purchase_ref AS "purchaseRef",
+// 	   inc_t.invoice_ref AS "invoiceRef"
+//      FROM incoming_transactions inc_t
+//      JOIN incoming_items        inc_i ON inc_t.id = inc_i.transaction_id
+//      JOIN suppliers             s     ON inc_t.supplier_id = s.id
+//      JOIN users                 u     ON inc_t.logger_id = u.id
+//      JOIN items                 i     ON inc_i.item_id = i.id
 
-     UNION ALL
+//      UNION ALL
 
-     SELECT
-         out_t.id,
-         u.name,
-         out_t.created_at,
-         out_t.expend_date,
-         false,
-         null,
-         out_t.expender,
-         null,
-         out_t.remarks,
-         out_i.item_id,
-         i.name,
-         out_i.quantity
-     FROM outgoing_transactions out_t
-     JOIN outgoing_items        out_i ON out_t.id = out_i.transaction_id
-     JOIN users                 u     ON out_t.logger_id = u.id
-     JOIN items                 i     ON out_i.item_id = i.id
+//      SELECT
+//          out_t.id,
+//          u.name,
+//          out_t.created_at,
+//          out_t.expend_date,
+//          false,
+//          null,
+//          out_t.expender,
+//          null,
+//          out_t.remarks,
+//          out_i.item_id,
+//          i.name,
+//          out_i.quantity,
+// 		 null,
+// 		 null
+//      FROM outgoing_transactions out_t
+//      JOIN outgoing_items        out_i ON out_t.id = out_i.transaction_id
+//      JOIN users                 u     ON out_t.logger_id = u.id
+//      JOIN items                 i     ON out_i.item_id = i.id
 
-     ORDER BY "createdAt" DESC;`;
-		return result;
-	} catch (e) {
-		handleQueryErrors(e);
-	}
-});
+//      ORDER BY "createdAt" DESC;`;
+// 		return result;
+// 	} catch (e) {
+// 		handleQueryErrors(e);
+// 	}
+// });
 
 // Transforms the data to match table schema for insertion
 function generateDB_StockArray(
@@ -228,14 +237,15 @@ function sortTransactions(transactions: IndividualTransaction[]): CompleteTransa
 	let count: number = -1;
 	let currentID: string = '';
 	const completeList: CompleteTransaction[] = [];
-
 	for (let i = 0; i < transactions.length; i++) {
 		const {
 			id,
 			createdAt,
 			deliveryDate,
 			supplier,
-			deliveryID,
+			deliveryRef,
+			purchaseRef,
+			invoiceRef,
 			expendDate,
 			expender,
 			remarks,
@@ -255,7 +265,9 @@ function sortTransactions(transactions: IndividualTransaction[]): CompleteTransa
 					createdAt,
 					deliveryDate,
 					supplier,
-					deliveryID,
+					deliveryRef,
+					purchaseRef,
+					invoiceRef,
 					items: [item]
 				};
 			} else {

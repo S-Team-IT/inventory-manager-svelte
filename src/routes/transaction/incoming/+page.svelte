@@ -4,7 +4,7 @@
 	import TransactionForm from '$lib/components/transactionForm.svelte';
 	import { createIncomingTransaction } from '$lib/remote/transaction.remote.js';
 
-	const { date, supplier, deliveryID } = createIncomingTransaction.fields;
+	const { date, supplier, deliveryRef, purchaseRef, invoiceRef } = createIncomingTransaction.fields;
 
 	const { data } = $props();
 </script>
@@ -19,6 +19,7 @@
 	errorMsg="Failed to submit DO"
 	successMsg="DO added"
 	transactions={data.transactions}>
+	<Input label="PO" field={purchaseRef} type="text" placeholder="Enter purchase order number" />
 	<Input
 		label="Delivery Date"
 		type="date"
@@ -30,9 +31,6 @@
 		list={data.suppliers}
 		subtitle="New suppliers can be added as needed"
 		placeholder="Enter supplier name" />
-	<Input
-		label="DO Number"
-		field={deliveryID}
-		type="text"
-		placeholder="Enter delivery order number" />
+	<Input label="DO" field={deliveryRef} type="text" placeholder="Enter delivery order number" />
+	<Input label="Invoice" field={invoiceRef} type="text" placeholder="Enter invoice number" />
 </TransactionForm>

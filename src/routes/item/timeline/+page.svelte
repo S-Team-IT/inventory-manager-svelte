@@ -47,7 +47,7 @@
 	<title>Weekly Balance</title>
 </svelte:head>
 
-<div class="table-filter-group">
+<div class="filter-buttons-group">
 	<button onclick={toggleReverse} class="btn btn-primary">
 		Date
 		<span class={isReverse ? 'icon-[mdi--arrow-left]' : 'icon-[mdi--arrow-right]'}></span>

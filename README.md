@@ -96,6 +96,22 @@ The schema file can be found inside `./db`. The schema makes use of postgresql e
 
 It is recommended to view the schema inside a GUI.
 
+### Exporting database
+
+This is specifically for Supabase using a transaction pooler connection.
+
+```
+Schema:
+pg_dump '[USER]:[PASSWORD]@[HOST]:5432/postgres' \
+  --schema=public --no-owner --no-privileges --no-comments \
+  --schema-only -f schema.sql
+
+Data:
+pg_dump '[USER]:[PASSWORD]@[HOST]:5432/postgres' \
+  --schema=public --no-owner --no-privileges \
+  --data-only -f data.sql
+```
+
 ### Table `items`
 
 | Name               | Type          | Constraints      | Remarks                                               |

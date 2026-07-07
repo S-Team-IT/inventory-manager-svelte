@@ -49,6 +49,7 @@
 </script>
 
 <form
+	autocomplete="off"
 	enctype="multipart/form-data"
 	class="w-full max-w-100 {classes}"
 	{...remoteForm.enhance(enhanceCallback)}>

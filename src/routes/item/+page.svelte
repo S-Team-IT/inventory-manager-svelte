@@ -53,7 +53,7 @@
 	<title>Master List</title>
 </svelte:head>
 
-<div class="table-filter-group">
+<div class="filter-buttons-group">
 	<button
 		class="btn btn-primary {sortOption === 'lastStocked' ? '' : 'btn-soft'} "
 		onclick={() => {

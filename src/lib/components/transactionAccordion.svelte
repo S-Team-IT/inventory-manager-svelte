@@ -17,7 +17,9 @@
 		createdAt,
 		deliveryDate,
 		supplier,
-		deliveryID,
+		deliveryRef,
+		purchaseRef,
+		invoiceRef,
 		expendDate,
 		expender,
 		remarks,
@@ -40,14 +42,14 @@
 	const uniqueForm = $derived(deleteTransaction.for(uniqueID));
 </script>
 
-<details class="collapse border border-base-300 bg-base-100" name="my-accordion-det-1">
+<details class="collapse border border-base-300" name="my-accordion-det-1">
 	<summary class="collapse-title font-semibold">
 		<div class="flex items-center justify-between gap-10">
 			{#if isIncoming}
 				<span>
 					{supplier}
 					{formatYearMonthDay(deliveryDate!)}
-					{deliveryID}
+					{deliveryRef}
 				</span>
 			{:else}
 				<span>
@@ -74,7 +76,14 @@
 		</div>
 	</summary>
 	<div class="text-md collapse-content">
-		<ul>
+		<div class="divider"></div>
+		{#if purchaseRef}
+			<div>PO: {purchaseRef}</div>
+		{/if}
+		{#if invoiceRef}
+			<div>Invoice: {invoiceRef}</div>
+		{/if}
+		<ul class="mt-2">
 			{#each sortedItems as item, i (i)}
 				<li class="mb-2 list-none">
 					<pre class="inline">#{item.master.padEnd(5, ' ')}</pre>
