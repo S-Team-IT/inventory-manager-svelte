@@ -76,6 +76,7 @@
 		</div>
 	</summary>
 	<div class="text-md collapse-content bg-gray-500">
+		<div class="divider"></div>
 		{#if purchaseRef}
 			<div>PO: {purchaseRef}</div>
 		{/if}
