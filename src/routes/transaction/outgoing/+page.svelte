@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Input from '$lib/components/base/input.svelte';
-	import TransactionForm from '$lib/components/transactionForm.svelte';
+	import TransactionForm from '$lib/components/transactionForm/transactionForm.svelte';
 	import { createOutgoingTransaction } from '$lib/remote/transaction.remote.js';
 
 	const { data } = $props();
