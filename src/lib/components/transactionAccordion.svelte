@@ -75,12 +75,14 @@
 			</span>
 		</div>
 	</summary>
-		{#if isIncoming}
 	<div class="text-md collapse-content bg-gray-500">
+		{#if purchaseRef}
 			<div>PO: {purchaseRef}</div>
-			<div class="mb-2">Invoice: {invoiceRef}</div>
 		{/if}
-		<ul>
+		{#if invoiceRef}
+			<div>Invoice: {invoiceRef}</div>
+		{/if}
+		<ul class="mt-2">
 			{#each sortedItems as item, i (i)}
 				<li class="mb-2 list-none">
 					<pre class="inline">#{item.master.padEnd(5, ' ')}</pre>
