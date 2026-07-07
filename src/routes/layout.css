@@ -16,4 +16,7 @@
 	.table-filter-group {
 		@apply mt-5 ml-5 space-x-2;
 	}
+	details[open] {
+		@apply bg-[#246c64];
+	}
 }
