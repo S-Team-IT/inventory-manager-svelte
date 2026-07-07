@@ -208,9 +208,9 @@ pg_dump '[USER]:[PASSWORD]@[HOST]:5432/postgres' \
 
 ### Missing Implementation/Improvements
 
-- Account creation is very simple and there is no admin interface. If a new Admin account needs to be added, it has to be done by inserting directly into the database or by manually editing the role of a user. Email confirmation was planned, but never done. Instead, new accounts are created with `12345678`. The password can be changed once the user signs in.
+- Account creation is very simple, and there is no admin interface. If a new Admin account needs to be added, it has to be done by inserting directly into the database or by manually editing the role of a user. Email confirmation was planned, but never done. Instead, new accounts are created with `12345678`. The password can be changed once the user signs in.
 - Password input validation lacks regex.
-- There is no inactivity timeout implemented for sessions and expired sessions aren't deleted.
+- There is no inactivity timeout implemented for sessions, and expired sessions aren't deleted.
 - `itemAccordion` and `transactionAccordion` components share similar code and could be refactored.
 - Minimal Postgres.js syntax is used in queries.
 - `photoPreview` has not been updated after a rewrite of `/item/new`.
@@ -218,10 +218,15 @@ pg_dump '[USER]:[PASSWORD]@[HOST]:5432/postgres' \
 
 ### Troubleshooting
 
-#### An impossible situation occured
+#### An impossible situation occurred
 
 This happens rarely when attempting to import a `$lib/server` module in `./src/routes`
 
 #### PSQL Unhandled error: Prepared statement does not exist
 
-Not fully understood what causes this, appears to happen after querying a lot in a short amount of item(editing through the entire item list). This [commit](https://github.com/S-Team-IT/inventory-manager-svelte/commit/10241feacd5e2a90985c0de9976bf4bbf4121d9b) should fix it, but if not, a server restart will.
+Not sure what causes this, appears to happen after querying a lot in a short amount of time (editing through the entire item list). This [commit](https://github.com/S-Team-IT/inventory-manager-svelte/commit/10241feacd5e2a90985c0de9976bf4bbf4121d9b) should fix it, but if not, a server restart will.
+
+#### Failed to Execute Remote Function
+
+Encountered when adding items with photos that are too large, though it may appear elsewhere. Sucks because it throws no error, so GL debugging.
+
