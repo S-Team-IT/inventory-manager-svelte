@@ -59,7 +59,7 @@ export type Transaction = {
 	createdAt: Date;
 	deliveryDate?: Date;
 	supplier?: string;
-	deliveryID?: string;
+	deliveryRef?: string;
 	expendDate?: Date;
 	expender?: string;
 	remarks?: string;

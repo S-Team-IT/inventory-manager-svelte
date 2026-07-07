@@ -23,7 +23,7 @@ export const createIncomingTransaction = form(
 			purchaseRef: z.string().trim(),
 			date: z.iso.date(),
 			supplier: zString,
-			deliveryID: z.string().trim(),
+			deliveryRef: z.string().trim(),
 			invoiceRef: z.string().trim(),
 			ids: z.array(master, 'Please add an item.'),
 			quantities: z.array(zNumber.min(1, 'Quantity must be at least 1.'))
@@ -32,7 +32,7 @@ export const createIncomingTransaction = form(
 			error: 'Date cannot be in the future.',
 			path: ['date']
 		}),
-	async ({ purchaseRef, date, supplier, deliveryID, invoiceRef, ids, quantities }, issue) => {
+	async ({ purchaseRef, date, supplier, deliveryRef, invoiceRef, ids, quantities }, issue) => {
 		const { locals } = getRequestEvent();
 		if (!locals.user) error(403, 'Forbidden');
 
@@ -45,7 +45,7 @@ export const createIncomingTransaction = form(
 				const [transactionResult] = await sql<{ id: string }[]>`
 					INSERT INTO incoming_transactions(
 					logger_id, created_at, delivery_date, supplier_id, delivery_ref, purchase_ref, invoice_ref)
-					VALUES(${locals.user!.id}, ${new Date()}, ${date}, ${supplierResult.id}, ${deliveryID}, ${purchaseRef}, ${invoiceRef}) RETURNING id`;
+					VALUES(${locals.user!.id}, ${new Date()}, ${date}, ${supplierResult.id}, ${deliveryRef}, ${purchaseRef}, ${invoiceRef}) RETURNING id`;
 
 				const items = generateDB_StockArray(ids, quantities, transactionResult.id);
 				await updateMultipleLastStocked(ids);
@@ -60,7 +60,7 @@ export const createIncomingTransaction = form(
 					switch (postgresError.constraint_name) {
 						case 'incoming_transactions_supplier_id_delivery_ref_key':
 							invalid(
-								issue.deliveryID(
+								issue.deliveryRef(
 									`This delivery order has already been logged. Verify it's the right supplier & DO.`
 								)
 							);
@@ -113,7 +113,7 @@ export const getIncomingTransactions = query(async () => {
 			inc_t.created_at AS "createdAt",
 			inc_t.delivery_date AS "deliveryDate",
 			s.name AS "supplier",
-			inc_t.delivery_ref AS "deliveryID",
+			inc_t.delivery_ref AS "deliveryRef",
 			i.master_number AS master,
 			inc_i.item_id AS "itemID",
 			i.name AS "itemName",
@@ -237,7 +237,7 @@ function sortTransactions(transactions: IndividualTransaction[]): CompleteTransa
 			createdAt,
 			deliveryDate,
 			supplier,
-			deliveryID,
+			deliveryRef,
 			expendDate,
 			expender,
 			remarks,
@@ -257,7 +257,7 @@ function sortTransactions(transactions: IndividualTransaction[]): CompleteTransa
 					createdAt,
 					deliveryDate,
 					supplier,
-					deliveryID,
+					deliveryRef,
 					items: [item]
 				};
 			} else {

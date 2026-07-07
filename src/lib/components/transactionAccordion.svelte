@@ -17,7 +17,7 @@
 		createdAt,
 		deliveryDate,
 		supplier,
-		deliveryID,
+		deliveryRef,
 		expendDate,
 		expender,
 		remarks,
@@ -47,7 +47,7 @@
 				<span>
 					{supplier}
 					{formatYearMonthDay(deliveryDate!)}
-					{deliveryID}
+					{deliveryRef}
 				</span>
 			{:else}
 				<span>
