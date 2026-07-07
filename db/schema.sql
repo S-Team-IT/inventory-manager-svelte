@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict uKUgBeamJNx79IMynKy1nl00HWihgqBCqpB0rxTRtYcPQchT52vxxbpWluFPdzW
+\restrict O1zpVouAr2bPQcKRYbix3ESwXgUQLYkrw1e4YOG4qSa30fP1ohx2JW3Z6reg6r3
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 18.3
@@ -88,7 +88,9 @@ CREATE TABLE public.incoming_transactions (
     created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     delivery_date date DEFAULT CURRENT_DATE NOT NULL,
     supplier_id bigint NOT NULL,
-    delivery_ref public.citext
+    delivery_ref public.citext,
+    purchase_ref public.citext,
+    invoice_ref public.citext
 );
 
 
@@ -594,5 +596,5 @@ ALTER TABLE ONLY public.sessions
 -- PostgreSQL database dump complete
 --
 
-\unrestrict uKUgBeamJNx79IMynKy1nl00HWihgqBCqpB0rxTRtYcPQchT52vxxbpWluFPdzW
+\unrestrict O1zpVouAr2bPQcKRYbix3ESwXgUQLYkrw1e4YOG4qSa30fP1ohx2JW3Z6reg6r3
 
