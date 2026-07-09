@@ -400,7 +400,7 @@ export const editPurchaseRef = form(
 	async ({ id, purchaseRef }, issue) => {
 		try {
 			const result =
-				await sql`UPDATE incoming_items SET purchase_ref = ${purchaseRef} WHERE id = ${id}`;
+				await sql`UPDATE incoming_transactions SET purchase_ref = ${purchaseRef} WHERE id = ${id}`;
 			if (result.count !== 1) invalid(issue.purchaseRef('Failed to update.'));
 			return { success: true };
 		} catch (e) {
@@ -413,7 +413,8 @@ export const editSupplier = form(
 	z.object({ id: zString, supplier: zString }),
 	async ({ id, supplier }, issue) => {
 		try {
-			const result = await sql`UPDATE incoming_items SET supplier = ${supplier} WHERE id = ${id}`;
+			const result =
+				await sql`UPDATE incoming_transactions SET supplier = ${supplier} WHERE id = ${id}`;
 			if (result.count !== 1) invalid(issue.supplier('Failed to update.'));
 			return { success: true };
 		} catch (e) {
@@ -427,7 +428,7 @@ export const editDeliveryRef = form(
 	async ({ id, deliveryRef }, issue) => {
 		try {
 			const result =
-				await sql`UPDATE incoming_items SET delivery_ref = ${deliveryRef} WHERE id = ${id}`;
+				await sql`UPDATE incoming_transactions SET delivery_ref = ${deliveryRef} WHERE id = ${id}`;
 			if (result.count !== 1) invalid(issue.deliveryRef('Failed to update.'));
 			return { success: true };
 		} catch (e) {
@@ -441,7 +442,7 @@ export const editInvoiceRef = form(
 	async ({ id, invoiceRef }, issue) => {
 		try {
 			const result =
-				await sql`UPDATE incoming_items SET invoice_ref = ${invoiceRef} WHERE id = ${id}`;
+				await sql`UPDATE incoming_transactions SET invoice_ref = ${invoiceRef} WHERE id = ${id}`;
 			if (result.count !== 1) invalid(issue.invoiceRef('Failed to update.'));
 			return { success: true };
 		} catch (e) {
