@@ -158,6 +158,29 @@ export const getOutgoingTransactions = query(async () => {
 	}
 });
 
+export const getIncomingTransaction = query(zString, async (id) => {
+	try {
+		const result = await sql<
+			IndividualTransaction[]
+		>`SELECT * FROM incoming_transactions WHERE id = ${id}`;
+		if (result.count !== 1) error(404, 'Transaction not found');
+		return result[0];
+	} catch (e) {
+		return handleQueryErrors(e);
+	}
+});
+export const getOutgoingTransaction = query(zString, async (id) => {
+	try {
+		const result = await sql<
+			IndividualTransaction[]
+		>`SELECT * FROM outgoing_transactions WHERE id = ${id}`;
+		if (result.count !== 1) error(404, 'Transaction not found');
+		return result[0];
+	} catch (e) {
+		return handleQueryErrors(e);
+	}
+});
+
 //UNUSED
 // export const getAllTransactions = query(async () => {
 // 	try {
