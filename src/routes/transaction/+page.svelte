@@ -1,6 +1,7 @@
 <script lang="ts">
 	import TransactionAccordionGroup from '$lib/components/accordions/transactionAccordionGroup.svelte';
 	import type { CompleteTransaction } from '$lib/types/databaseTypes.js';
+	import { toast } from 'svelte-sonner';
 
 	const { data } = $props();
 
@@ -23,6 +24,11 @@
 	function toggleTransactionsReversed() {
 		isTransactionsReversed = !isTransactionsReversed;
 	}
+
+	// This function is here because sometimes it can be hard to know that the list has updated.
+	function handleSelectedTypeChange() {
+		toast.info(`Viewing ${selectedType} transactions`);
+	}
 </script>
 
 <svelte:head>
@@ -34,12 +40,12 @@
 		Date <span class={isTransactionsReversed ? 'icon-[mdi--arrow-up]' : 'icon-[mdi--arrow-down]'}>
 		</span>
 	</button>
-	<select bind:value={selectedType} class="select w-30">
+	<select bind:value={selectedType} class="select w-30" onchange={handleSelectedTypeChange}>
 		<option value="all" selected>All</option>
 		<option value="incoming">Incoming</option>
 		<option value="outgoing">Outgoing</option>
 	</select>
 </div>
-<div class="m-10">
+<div class="m-5">
 	<TransactionAccordionGroup transactions={transactionsToDisplay as CompleteTransaction[]} />
 </div>
