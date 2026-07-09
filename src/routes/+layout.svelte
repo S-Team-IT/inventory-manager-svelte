@@ -33,8 +33,6 @@
 				<li><a href={resolve('/item')}>Item List</a></li>
 				{#if ['Admin', 'QS'].includes(data.user?.role ?? '')}
 					<li><a href={resolve('/item/new')}>Add Item</a></li>
-				{/if}
-				{#if ['Admin', 'QS'].includes(data.user?.role ?? '')}
 					<li><a href={resolve('/item/timeline')}>Weekly Balance</a></li>
 				{/if}
 			</ul>
