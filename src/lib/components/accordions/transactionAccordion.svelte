@@ -67,7 +67,7 @@
 	{:else}
 		<span class="incoming-text text-center text-2xl">INC</span>
 	{/if}
-	<span class="mr-5 ml-5">{formatRelativeCustom(createdAt)}</span>
+	<span class="mr-5 ml-5 w-40 text-right">{formatRelativeCustom(createdAt)}</span>
 {/snippet}
 
 {#snippet content()}
