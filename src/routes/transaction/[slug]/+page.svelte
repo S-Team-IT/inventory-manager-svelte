@@ -26,6 +26,9 @@
 	const { data } = $props();
 
 	$inspect(data.transaction);
+	const { id, purchaseRef, deliveryDate, supplierID, deliveryRef, invoiceRef } = $derived(
+		data.transaction
+	);
 </script>
 
 <div class="flex">
@@ -36,7 +39,7 @@
 			successMsg: 'Successfully updated PO number.',
 			label: 'PO',
 			field: editPurchaseRef.fields.purchaseRef,
-			placeholder: data.transaction.purchaseRef
+			placeholder: purchaseRef
 		})}
 		{@render editForm({
 			remoteForm: editDeliveryRef,
@@ -44,7 +47,7 @@
 			successMsg: 'Successfully updated DO number.',
 			label: 'DO',
 			field: editDeliveryRef.fields.deliveryRef,
-			placeholder: data.transaction.deliveryRef
+			placeholder: deliveryRef
 		})}
 		{@render editForm({
 			remoteForm: editInvoiceRef,
@@ -52,7 +55,7 @@
 			successMsg: 'Successfully updated invoice.',
 			label: 'Invoice',
 			field: editInvoiceRef.fields.invoiceRef,
-			placeholder: data.transaction.invoiceRef
+			placeholder: invoiceRef
 		})}
 	</div>
 </div>
