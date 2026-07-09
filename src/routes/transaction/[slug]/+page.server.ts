@@ -13,7 +13,7 @@ export async function load({ locals, params, url }) {
 			transaction = await getIncomingTransaction(params.slug);
 			break;
 		case 'outgoing':
-			error(202, 'WIP');
+			error(400, 'Not implemented yet');
 			transaction = await getOutgoingTransaction(params.slug);
 			break;
 		default:
