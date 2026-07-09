@@ -1,7 +1,7 @@
 <script lang="ts">
+	import TransactionAccordionGroup from '$lib/components/accordions/transactionAccordionGroup.svelte';
 	import Form from '$lib/components/base/form.svelte';
 	import InputIssues from '$lib/components/base/inputIssues.svelte';
-	import TransactionAccordion from '$lib/components/accordions/transactionAccordionGroup.svelte';
 	import TransactionItemForm from '$lib/components/transactionForm/transactionItemForm.svelte';
 	import TransactionItemTable from '$lib/components/transactionForm/transactionItemTable.svelte';
 	import { createIncomingTransaction } from '$lib/remote/transaction.remote.js';
@@ -32,6 +32,6 @@
 		<button class="btn btn-soft btn-primary">Submit</button>
 	</Form>
 	<div class="ms-10 me-10 mt-5 w-full">
-		<TransactionAccordion {transactions} />
+		<TransactionAccordionGroup {transactions} />
 	</div>
 </div>
