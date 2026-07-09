@@ -63,9 +63,9 @@
 
 {#snippet summaryEnd()}
 	{#if expendDate}
-		<span class="text-center text-2xl text-red-500">OUTGOING</span>
+		<span class="outgoing-text text-center text-2xl">OUT</span>
 	{:else}
-		<span class="text-center text-2xl text-green-500">INCOMING</span>
+		<span class="incoming-text text-center text-2xl">INC</span>
 	{/if}
 	<span class="mr-5 ml-5">{formatRelativeCustom(createdAt)}</span>
 {/snippet}
