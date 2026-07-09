@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import { generate } from 'generate-password';
 
 // The code here is based on the https://lucia-auth.com/ tutorial.
 
@@ -45,4 +46,13 @@ export async function comparePasswordHash(
 	passwordHash: string
 ): Promise<boolean> {
 	return await bcrypt.compare(password, passwordHash);
+}
+
+export function generatePassword() {
+	return generate({
+		length: 10,
+		numbers: true,
+		symbols: true,
+		strict: true
+	});
 }

@@ -2,7 +2,7 @@
 	import InputIssues from '$lib/components/base/inputIssues.svelte';
 	import { createIncomingTransaction } from '$lib/remote/transaction.remote.js';
 	import type { Item } from '$lib/types/databaseTypes.js';
-	import { truncateString } from '$lib/utils/stringTransform.js';
+	import { truncateString } from '$lib/utils/transforms/strings.js';
 	import { tick } from 'svelte';
 
 	const { ids, quantities } = createIncomingTransaction.fields;

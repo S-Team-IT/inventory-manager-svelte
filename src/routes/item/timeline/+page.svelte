@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { localeCompareSort } from '$lib/utils/arraySort.js';
+	import { localeCompareSort } from '$lib/utils/transforms/arrays.js';
 	import { tableToCSV } from '$lib/utils/tableToCSV.js';
 	import { toast } from 'svelte-sonner';
 

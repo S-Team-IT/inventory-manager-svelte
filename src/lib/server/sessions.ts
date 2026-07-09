@@ -1,6 +1,6 @@
 import type { Session, SessionWithToken } from '$lib/types/databaseTypes';
 import { handleQueryErrors } from '$lib/utils/errorHandling';
-import { constantTimeEqual, generateSecureRandomString, hashSecret } from '$lib/utils/hash';
+import { constantTimeEqual, generateSecureRandomString, hashSecret } from '$lib/utils/passwords';
 import { sql } from './postgres';
 
 const sessionExpiresInSeconds = 60 * 60 * 24 * 7; // A week

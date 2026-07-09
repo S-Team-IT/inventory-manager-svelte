@@ -1,5 +1,5 @@
 import { format, formatRelative, isBefore } from 'date-fns';
-import { capitalizeFirstLetter } from './stringTransform';
+import { capitalizeFirstLetter } from './strings';
 
 export function formatRelativeCustom(date: Date): string {
 	// Converts into relative time i.e. Yesterday at 12:55.

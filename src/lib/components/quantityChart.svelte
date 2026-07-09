@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { formatMonthDay } from '$lib/utils/dateFns';
+	import { formatMonthDay } from '$lib/utils/transforms/dates';
 	import Chart, { type ChartItem } from 'chart.js/auto';
 	import { onMount } from 'svelte';
 

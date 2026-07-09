@@ -4,7 +4,7 @@ import { createSession, deleteSession } from '$lib/server/sessions';
 import type { User } from '$lib/types/databaseTypes';
 import { email, password, zString } from '$lib/types/schemaTypes';
 import { handleQueryErrors } from '$lib/utils/errorHandling';
-import { comparePasswordHash } from '$lib/utils/hash';
+import { comparePasswordHash } from '$lib/utils/passwords';
 import { invalid, redirect } from '@sveltejs/kit';
 import z from 'zod';
 

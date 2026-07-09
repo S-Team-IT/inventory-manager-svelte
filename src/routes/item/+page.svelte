@@ -2,7 +2,7 @@
 	import { resolve } from '$app/paths';
 	import QuantityChart from '$lib/components/quantityChart.svelte';
 	import type { DetailedItem, Item } from '$lib/types/databaseTypes.js';
-	import { genericSort, numberSort } from '$lib/utils/arraySort.js';
+	import { genericSort, numberSort } from '$lib/utils/transforms/arrays.js';
 	import ImageModal from '../../lib/components/imageModal.svelte';
 
 	const { data } = $props();
