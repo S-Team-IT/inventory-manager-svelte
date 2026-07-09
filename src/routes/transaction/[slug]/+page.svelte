@@ -7,7 +7,7 @@
 		editPurchaseRef
 	} from '$lib/remote/transaction.remote.js';
 	import type { Generic } from '$lib/types/databaseTypes.js';
-	import { id } from 'zod/locales';
+	import { formatYearMonthDay } from '$lib/utils/dateFns.js';
 
 	type SnippetArgs = {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -24,8 +24,6 @@
 	};
 
 	const { data } = $props();
-
-	$inspect(data.transaction);
 	const { id, purchaseRef, deliveryDate, supplierID, deliveryRef, invoiceRef } = $derived(
 		data.transaction
 	);
@@ -57,6 +55,13 @@
 			field: editInvoiceRef.fields.invoiceRef,
 			placeholder: invoiceRef
 		})}
+	</div>
+	<div class="ms-5 mt-1">
+		<div>Purchase: {purchaseRef || 'EMPTY'}</div>
+		<div>Date: {formatYearMonthDay(deliveryDate!) || 'EMPTY'}</div>
+		<div>Supplier: {supplierID || 'EMPTY'}</div>
+		<div>Delivery: {deliveryRef || 'EMPTY'}</div>
+		<div>Invoice: {invoiceRef || 'EMPTY'}</div>
 	</div>
 </div>
 
