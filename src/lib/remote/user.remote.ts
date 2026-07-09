@@ -4,7 +4,7 @@ import { sql } from '$lib/server/postgres';
 import type { User } from '$lib/types/databaseTypes';
 import { email, password, zString } from '$lib/types/schemaTypes';
 import { handleQueryErrors } from '$lib/utils/errorHandling';
-import { generatePassword, hashPassword, comparePasswordHash } from '$lib/utils/passwords';
+import { comparePasswordHash, generatePassword, hashPassword } from '$lib/utils/passwords';
 import { capitalizeFirstLetter } from '$lib/utils/transforms/strings';
 import { error, invalid } from '@sveltejs/kit';
 import z from 'zod';

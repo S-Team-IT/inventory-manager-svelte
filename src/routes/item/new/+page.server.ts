@@ -8,6 +8,5 @@ export async function load({ locals }) {
 	return {
 		items: await getItems(),
 		categories: await getCategories()
-		// suppliers: await getSuppliers()
 	};
 }
