@@ -16,7 +16,7 @@ export const uploadImage = command(
 			const url = await getPublicUrl(uploadData.path);
 			return url;
 		} catch (e) {
-			handleQueryErrors(e);
+			return handleQueryErrors(e);
 		}
 	}
 );

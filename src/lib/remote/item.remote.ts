@@ -21,7 +21,7 @@ export const getItems = query(async () => {
 			last_stocked AS "lastStocked"
 			FROM items`;
 	} catch (e) {
-		handleQueryErrors(e);
+		return handleQueryErrors(e);
 	}
 });
 
@@ -43,7 +43,7 @@ export const getItemsFullInfo = query(async () => {
 			JOIN categories c ON i.category_id = c.id
 			LEFT OUTER JOIN net_quantity q ON i.id = q.item_id`;
 	} catch (e) {
-		handleQueryErrors(e);
+		return handleQueryErrors(e);
 	}
 });
 
@@ -68,7 +68,7 @@ export const getItemFullInfo = query(zString, async (id) => {
 		if (result.count !== 1) error(404, 'Item not found.');
 		return result[0];
 	} catch (e) {
-		handleQueryErrors(e);
+		return handleQueryErrors(e);
 	}
 });
 
@@ -169,7 +169,7 @@ export const deleteItem = form(z.object({ master }), async ({ master }) => {
 		if (result.count !== 0) return { success: false };
 		return { success: true };
 	} catch (e) {
-		handleQueryErrors(e);
+		return handleQueryErrors(e);
 	}
 });
 
@@ -179,8 +179,7 @@ export const editMaster = form(z.object({ id: zString, master }), async ({ id, m
 		if (result.count !== 1) invalid(issue.master('Failed to update.'));
 		return { success: true };
 	} catch (e) {
-		// Check if deletedItems is present
-		handleQueryErrors(e);
+		return handleQueryErrors(e);
 	}
 });
 
@@ -192,7 +191,7 @@ export const editName = form(
 			if (result.count !== 1) invalid(issue.name('Failed to update.'));
 			return { success: true };
 		} catch (e) {
-			handleQueryErrors(e);
+			return handleQueryErrors(e);
 		}
 	}
 );
@@ -203,7 +202,6 @@ export const editCategory = form(
 		try {
 			const updatedItem = await sql.begin(async (sql) => {
 				const categoryResult = await getOrCreateCategory(category);
-				// if (!categoryResult || !supplierResult)
 				if (!categoryResult) throw new Error('editCategory: Category result is unde');
 
 				return await sql`UPDATE items SET category_id = ${categoryResult.id} WHERE id = ${id}`;
@@ -212,7 +210,7 @@ export const editCategory = form(
 			if (updatedItem.count !== 1) invalid(issue.category('Failed to update'));
 			return { success: true };
 		} catch (e) {
-			handleQueryErrors(e);
+			return handleQueryErrors(e);
 		}
 	}
 );
@@ -233,7 +231,7 @@ export const editCategory = form(
 // 			if (updatedItem.count !== 1) invalid(issue.supplier('Failed to update'));
 // 			return { success: true };
 // 		} catch (e) {
-// 			handleQueryErrors(e);
+// 			return handleQueryErrors(e);
 // 		}
 // 	}
 // );
@@ -249,7 +247,7 @@ export const editThumbnail = form(
 			if (result.count !== 1) invalid(issue.thumbnail('Failed to update'));
 			return { success: true };
 		} catch (e) {
-			handleQueryErrors(e);
+			return handleQueryErrors(e);
 		}
 	}
 );
@@ -265,7 +263,7 @@ export const editGallery = form(
 			if (result.count !== 1) invalid(issue.gallery('Failed to update'));
 			return { success: true };
 		} catch (e) {
-			handleQueryErrors(e);
+			return handleQueryErrors(e);
 		}
 	}
 );
@@ -278,7 +276,7 @@ export const editMinimumQuantity = form(
 			if (result.count !== 1) invalid(issue.quantity('Failed to update'));
 			return { success: true };
 		} catch (e) {
-			handleQueryErrors(e);
+			return handleQueryErrors(e);
 		}
 	}
 );
@@ -291,7 +289,7 @@ export const editInitialQuantity = form(
 			if (result.count !== 1) invalid(issue.quantity('Failed to update'));
 			return { success: true };
 		} catch (e) {
-			handleQueryErrors(e);
+			return handleQueryErrors(e);
 		}
 	}
 );
@@ -307,7 +305,7 @@ export const getItemNameByMaster = query(zString, async (master) => {
 		if (result.count !== 1) return undefined;
 		return result[0];
 	} catch (e) {
-		handleQueryErrors(e);
+		return handleQueryErrors(e);
 	}
 });
 
@@ -321,6 +319,6 @@ export const updateMultipleLastStocked = command(z.array(zString), async (ids) =
 		console.log(result);
 		return result;
 	} catch (e) {
-		handleQueryErrors(e);
+		return handleQueryErrors(e);
 	}
 });

@@ -18,7 +18,7 @@ export const getUser = query(zString, async (id) => {
 		if (!user) error(404, 'User not found.');
 		return user;
 	} catch (e) {
-		handleQueryErrors(e);
+		return handleQueryErrors(e);
 	}
 });
 
@@ -74,7 +74,7 @@ export const editPassword = form(
 			if (result.count != 1) return { success: false, message: '404 Not found' };
 			return { success: true };
 		} catch (e) {
-			handleQueryErrors(e);
+			return handleQueryErrors(e);
 		}
 	}
 );
@@ -95,6 +95,6 @@ export const resetPassword = form(z.object({ email }), async ({ email }) => {
 
 		return { success: true };
 	} catch (e) {
-		handleQueryErrors(e);
+		return handleQueryErrors(e);
 	}
 });

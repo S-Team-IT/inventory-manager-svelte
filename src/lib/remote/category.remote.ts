@@ -8,7 +8,7 @@ export const getCategories = query(async () => {
 	try {
 		return await sql<Category[]>`SELECT * FROM categories`;
 	} catch (e) {
-		handleQueryErrors(e);
+		return handleQueryErrors(e);
 	}
 });
 
@@ -26,6 +26,6 @@ export const getOrCreateCategory = command(zString, async (name) => {
 			LIMIT 1;`;
 		return result;
 	} catch (e) {
-		handleQueryErrors(e);
+		return handleQueryErrors(e);
 	}
 });

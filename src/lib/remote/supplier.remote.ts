@@ -8,7 +8,7 @@ export const getSuppliers = query(async () => {
 	try {
 		return await sql<Supplier[]>`SELECT * FROM suppliers`;
 	} catch (e) {
-		handleQueryErrors(e);
+		return handleQueryErrors(e);
 	}
 });
 
@@ -26,6 +26,6 @@ export const getOrCreateSupplier = command(zString, async (name) => {
 			LIMIT 1;`;
 		return result;
 	} catch (e) {
-		handleQueryErrors(e);
+		return handleQueryErrors(e);
 	}
 });

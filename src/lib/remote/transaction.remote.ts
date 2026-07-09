@@ -130,7 +130,7 @@ export const getIncomingTransactions = query(async () => {
 		ORDER BY inc_t.created_at DESC, i.id ASC`;
 		return sortTransactions(result);
 	} catch (e) {
-		handleQueryErrors(e);
+		return handleQueryErrors(e);
 	}
 });
 
@@ -154,7 +154,7 @@ export const getOutgoingTransactions = query(async () => {
 		ORDER BY out_t.created_at DESC, i.id ASC`;
 		return sortTransactions(result);
 	} catch (e) {
-		handleQueryErrors(e);
+		return handleQueryErrors(e);
 	}
 });
 
@@ -209,7 +209,7 @@ export const getOutgoingTransactions = query(async () => {
 //      ORDER BY "createdAt" DESC;`;
 // 		return result;
 // 	} catch (e) {
-// 		handleQueryErrors(e);
+// 		return handleQueryErrors(e);
 // 	}
 // });
 
@@ -303,7 +303,7 @@ export const deleteTransaction = form(
 			}
 			return { success: true };
 		} catch (e) {
-			handleQueryErrors(e);
+			return handleQueryErrors(e);
 		}
 	}
 );
@@ -318,7 +318,7 @@ export const getQuantityTrend = query(async () => {
 		FROM quantity_trend`;
 		return sortWeeklyNetQuantity(result);
 	} catch (e) {
-		handleQueryErrors(e);
+		return handleQueryErrors(e);
 	}
 });
 
@@ -349,7 +349,7 @@ export const getQuantityTrendTimeline = query(async () => {
 		>`SELECT id, master_number AS "master", name, week_starting AS week, cumulative_net_quantity AS quantity FROM quantity_trend_timeline`;
 		return sortQuantityTrendTimeline(result);
 	} catch (e) {
-		handleQueryErrors(e);
+		return handleQueryErrors(e);
 	}
 });
 

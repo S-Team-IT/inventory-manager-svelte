@@ -28,7 +28,7 @@ export async function createSession(userID: string): Promise<SessionWithToken> {
 		await sql`INSERT INTO sessions (id, secret_hash, created_at, user_id) 
 		VALUES(${id}, ${secretHash}, ${Math.floor(sessionWithToken.createdAt.getTime() / 1000)}, ${userID})`;
 	} catch (e) {
-		handleQueryErrors(e);
+		return handleQueryErrors(e);
 	}
 
 	return sessionWithToken;

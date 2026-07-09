@@ -24,7 +24,7 @@ export const signIn = form(z.object({ email, password }), async ({ email, passwo
 		// at the endpoint's onMount().
 		redirect(303, '/?loggedIn=true');
 	} catch (e) {
-		handleQueryErrors(e);
+		return handleQueryErrors(e);
 	}
 });
 
@@ -33,7 +33,7 @@ export const signOut = command(zString, async (id) => {
 		deleteTokenCookie();
 		deleteSession(id);
 	} catch (e) {
-		handleQueryErrors(e);
+		return handleQueryErrors(e);
 	}
 });
 
