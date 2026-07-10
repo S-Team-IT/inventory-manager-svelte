@@ -459,3 +459,32 @@ export const editInvoiceRef = form(
 		}
 	}
 );
+
+// export const editExpendDate = form(z.object({ id: zString, date: z.date() }), async () => {});
+export const editUser = form(
+	z.object({ id: zString, user: z.string().trim() }),
+	async ({ id, user }, issue) => {
+		try {
+			const result =
+				await sql`UPDATE outgoing_transactions SET expender = ${user} WHERE id = ${id}`;
+			if (result.count !== 1) invalid(issue.user('Failed to update.'));
+			return { success: true };
+		} catch (e) {
+			return handleQueryErrors(e);
+		}
+	}
+);
+
+export const editRemarks = form(
+	z.object({ id: zString, remarks: z.string().trim() }),
+	async ({ id, remarks }, issue) => {
+		try {
+			const result =
+				await sql`UPDATE outgoing_transactions SET remarks = ${remarks} WHERE id = ${id}`;
+			if (result.count !== 1) invalid(issue.remarks('Failed to update.'));
+			return { success: true };
+		} catch (e) {
+			return handleQueryErrors(e);
+		}
+	}
+);
