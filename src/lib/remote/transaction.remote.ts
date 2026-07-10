@@ -450,3 +450,31 @@ export const editRemarks = form(
 		}
 	}
 );
+
+export const editQuantityInc = form(
+	z.object({ transactionID: zString, itemID: zString, quantity: zNumber }),
+	async ({ transactionID, itemID, quantity }, issue) => {
+		try {
+			const result =
+				await sql`UPDATE incoming_items SET quantity = ${quantity} WHERE transaction_id = ${transactionID} AND item_id = ${itemID}`;
+			if (result.count !== 1) invalid(issue.quantity('Failed to update quantity.'));
+			return { success: true };
+		} catch (e) {
+			return handleQueryErrors(e);
+		}
+	}
+);
+
+export const editQuantityOut = form(
+	z.object({ transactionID: zString, itemID: zString, quantity: zNumber }),
+	async ({ transactionID, itemID, quantity }, issue) => {
+		try {
+			const result =
+				await sql`UPDATE outgoing_items SET quantity = ${quantity} WHERE transaction_id = ${transactionID} AND item_id = ${itemID}`;
+			if (result.count !== 1) invalid(issue.quantity('Failed to update quantity.'));
+			return { success: true };
+		} catch (e) {
+			return handleQueryErrors(e);
+		}
+	}
+);
