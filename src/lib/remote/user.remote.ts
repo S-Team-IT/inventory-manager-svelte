@@ -98,3 +98,19 @@ export const resetPassword = form(z.object({ email }), async ({ email }) => {
 		return handleQueryErrors(e);
 	}
 });
+
+// export const getUsers = query(async () => {
+// 	try {
+// 		const results = await sql`SELECT * FROM users`;
+// 		return results;
+// 	} catch (e) {
+// 		return handleQueryErrors(e);
+// 	}
+// });
+
+// export const deleteUser = form(z.object({ id: zString }), async ({ id }) => {
+// 	try {
+// 		const results = await sql`DELETE FROM users WHERE id = ${id}`
+// 		if (results.count !== 1) {success}
+// 	}
+// });
