@@ -186,6 +186,7 @@
 						<form
 							{...quantityForm.enhance(async ({ form, submit }) => {
 								if (await submit()) {
+									if (!form.result) return;
 									const { success } = form.result;
 									if (success) toast.success('Successfully updated quantity');
 									else toast.error('Failed to update quantity');
