@@ -8,15 +8,13 @@ export async function load({ locals, params, url }) {
 
 	const transactionType = url.searchParams.get('type');
 	let transaction: CompleteTransaction;
-	switch (transactionType) {
-		case 'incoming':
-			transaction = await getIncomingTransaction(params.slug);
-			break;
-		case 'outgoing':
-			transaction = await getOutgoingTransaction(params.slug);
-			break;
-		default:
-			error(400, 'Bad request');
+
+	if (transactionType === 'incoming' && locals.user.role === 'Procurement') {
+		transaction = await getIncomingTransaction(params.slug);
+	} else if (transactionType === 'outgoing' && locals.user.role === 'Project') {
+		transaction = await getOutgoingTransaction(params.slug);
+	} else {
+		error(400, 'Bad request');
 	}
 
 	return { transaction, isIncoming: transactionType === 'incoming' };
