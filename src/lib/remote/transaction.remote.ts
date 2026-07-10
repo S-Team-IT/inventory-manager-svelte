@@ -159,7 +159,7 @@ export const getOutgoingTransactions = query(async () => {
 	}
 });
 
-export const getIncomingTransaction = query(zString, async (id) => {
+export const getIncomingTransactionSimple = query(zString, async (id) => {
 	try {
 		const result = await sql<Transaction[]>`
 		SELECT id,
@@ -178,7 +178,7 @@ export const getIncomingTransaction = query(zString, async (id) => {
 		return handleQueryErrors(e);
 	}
 });
-export const getOutgoingTransaction = query(zString, async (id) => {
+export const getOutgoingTransactionSimple = query(zString, async (id) => {
 	try {
 		const result = await sql<Transaction[]>`
 		SELECT 

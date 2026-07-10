@@ -1,4 +1,7 @@
-import { getIncomingTransaction, getOutgoingTransaction } from '$lib/remote/transaction.remote.js';
+import {
+	getIncomingTransactionSimple,
+	getOutgoingTransactionSimple
+} from '$lib/remote/transaction.remote.js';
 import type { Transaction } from '$lib/types/databaseTypes';
 import { error } from '@sveltejs/kit';
 
@@ -10,10 +13,10 @@ export async function load({ locals, params, url }) {
 	let transaction: Transaction;
 	switch (transactionType) {
 		case 'incoming':
-			transaction = await getIncomingTransaction(params.slug);
+			transaction = await getIncomingTransactionSimple(params.slug);
 			break;
 		case 'outgoing':
-			transaction = await getOutgoingTransaction(params.slug);
+			transaction = await getOutgoingTransactionSimple(params.slug);
 			break;
 		default:
 			error(400, 'Bad request');
