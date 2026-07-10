@@ -163,13 +163,13 @@ export const getIncomingTransaction = query(zString, async (id) => {
 	try {
 		const result = await sql<Transaction[]>`
 		SELECT id,
-		 logger_id AS "loggerID", 
-		 created_at AS "createdAs", 
-		 delivery_date AS "deliveryDate", 
-		 supplier_id AS "supplierID", 
-		 delivery_ref AS "deliveryRef",
-		 purchase_ref AS "purchaseRef",
-		 invoice_ref AS "invoiceRef"
+			logger_id AS "loggerID", 
+			created_at AS "createdAs", 
+			delivery_date AS "deliveryDate", 
+			supplier_id AS "supplierID", 
+			delivery_ref AS "deliveryRef",
+			purchase_ref AS "purchaseRef",
+			invoice_ref AS "invoiceRef"
 		FROM incoming_transactions 
 		WHERE id = ${id}`;
 		if (result.count !== 1) error(404, 'Transaction not found');
