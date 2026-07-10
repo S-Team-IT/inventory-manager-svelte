@@ -1,9 +1,9 @@
 <script lang="ts">
+	import ItemAccordion from '$lib/components/accordions/itemAccordion.svelte';
 	import Combobox from '$lib/components/base/combobox.svelte';
 	import Form from '$lib/components/base/form.svelte';
 	import Input from '$lib/components/base/input.svelte';
 	import InputFile from '$lib/components/base/inputFile.svelte';
-	import ItemAccordion from '$lib/components/accordions/itemAccordion.svelte';
 	import {
 		editCategory,
 		editGallery,
@@ -77,15 +77,6 @@
 					placeholder: category,
 					list: data.categories
 				})}
-				<!-- {@render editComboboxForm({
-					remoteForm: editSupplier,
-					errorMsg: 'Failed to update supplier.',
-					successMsg: 'Successfully updated supplier.',
-					label: 'Supplier',
-					field: editSupplier.fields.supplier,
-					placeholder: supplier,
-					list: data.suppliers
-				})} -->
 				{@render editForm({
 					remoteForm: editMinimumQuantity,
 					errorMsg: 'Failed to update minimum quantity.',

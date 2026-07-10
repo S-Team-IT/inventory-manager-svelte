@@ -1,19 +1,23 @@
 <script lang="ts">
+	import Combobox from '$lib/components/base/combobox.svelte';
 	import Form from '$lib/components/base/form.svelte';
 	import Input from '$lib/components/base/input.svelte';
 	import {
+		addTransactionItem,
+		deleteTransactionItem,
 		editDeliveryRef,
 		editInvoiceRef,
 		editPurchaseRef,
-		editQuantityInc,
-		editQuantityOut,
+		editQuantity,
 		editRemarks,
+		editSupplier,
 		editUser
 	} from '$lib/remote/transaction.remote.js';
 	import type { Generic } from '$lib/types/databaseTypes.js';
+	import { localeCompareSort } from '$lib/utils/arraySort.js';
 	import { formatYearMonthDay } from '$lib/utils/dateFns.js';
 	import { truncateString } from '$lib/utils/stringTransform';
-	import {} from 'os';
+	import { toast } from 'svelte-sonner';
 
 	type SnippetArgs = {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -39,19 +43,23 @@
 		expendDate,
 		expender,
 		remarks,
-		items
+		items,
+		supplier
 	} = $derived(data.transaction);
 
-	$inspect(data.transaction);
+	let sortedItems = $derived.by(() =>
+		items.toSorted((a, b) => localeCompareSort(a.master, b.master))
+	);
 </script>
 
 <svelte:head>
 	<title>Edit transaction</title>
 </svelte:head>
 
-{#if data.isIncoming}
-	<div class="mt-2 flex">
-		<div class="ms-5 max-w-75">
+<h1 class="ms-5 mt-2 text-2xl font-bold">Edit Transaction</h1>
+<div class="ms-5 mt-2 flex">
+	{#if data.isIncoming}
+		<div class=" max-w-75">
 			{@render editForm({
 				remoteForm: editPurchaseRef,
 				errorMsg: 'Failed to update PO number.',
@@ -59,6 +67,15 @@
 				label: 'PO',
 				field: editPurchaseRef.fields.purchaseRef,
 				placeholder: purchaseRef
+			})}
+			{@render editComboboxForm({
+				remoteForm: editSupplier,
+				errorMsg: 'Failed to update supplier.',
+				successMsg: 'Successfully updated supplier.',
+				label: 'Supplier',
+				field: editSupplier.fields.supplier,
+				placeholder: supplier,
+				list: data.suppliers
 			})}
 			{@render editForm({
 				remoteForm: editDeliveryRef,
@@ -80,54 +97,12 @@
 		<div class="ms-5 mt-1">
 			<div>Purchase: {purchaseRef}</div>
 			<div>Date: {formatYearMonthDay(deliveryDate!)}</div>
-			<!-- <div>Supplier: {supplierID}</div> -->
+			<div>Supplier: {supplier}</div>
 			<div>Delivery: {deliveryRef}</div>
 			<div>Invoice: {invoiceRef}</div>
 		</div>
-	</div>
-
-	<table class="table">
-		<thead>
-			<tr>
-				<th></th>
-				<th scope="col">Master</th>
-				<th scope="col">Name</th>
-				<th scope="col">QTY</th>
-			</tr>
-		</thead>
-		<tbody>
-			{#each items as { id: itemID, master: itemMaster, name: itemName, quantity: itemQuantity }, i (i)}
-				{@const uniqueForm = editQuantityInc.for(`${i}_inc`)}
-				<tr>
-					<th>
-						<!-- <button aria-label="delete" type="button">
-							<span class="icon-[tabler--trash]"></span>
-						</button> -->
-					</th>
-					<th class="w-15">{itemMaster}</th>
-					<th>{truncateString(itemName, 50)}</th>
-					<th>
-						<Form
-							remoteForm={uniqueForm}
-							errorMsg="Failed to update quantity"
-							successMsg="Successfully updated quantity">
-							<input {...uniqueForm.fields.transactionID.as('hidden', id)} />
-							<input {...uniqueForm.fields.itemID.as('hidden', itemID)} />
-							<Input
-								field={uniqueForm.fields.quantity}
-								type="number"
-								placeholder={String(itemQuantity)}
-								label=""
-								rightButton="Edit" />
-						</Form>
-					</th>
-				</tr>
-			{/each}
-		</tbody>
-	</table>
-{:else}
-	<div class="mt-2 flex">
-		<div class="ms-5 max-w-75">
+	{:else}
+		<div class="max-w-75">
 			{@render editForm({
 				remoteForm: editUser,
 				errorMsg: 'Failed to update user.',
@@ -150,47 +125,91 @@
 			<div>User: {expender}</div>
 			<div>Remarks: {remarks}</div>
 		</div>
-	</div>
-	<table class="table">
+	{/if}
+</div>
+
+<div class="ms-5 mt-2 flex">
+	<Form
+		remoteForm={addTransactionItem}
+		errorMsg="Failed to add item"
+		successMsg="Added item to transaction"
+		legend="Add item to transaction">
+		<input
+			{...addTransactionItem.fields.isIncoming.as('checkbox', data.isIncoming)}
+			class="invisible" />
+		<input {...addTransactionItem.fields.transactionID.as('hidden', id)} />
+		<Input field={addTransactionItem.fields.master} type="text" label="Master"></Input>
+		<Input field={addTransactionItem.fields.quantity} type="number" label="Quantity"></Input>
+		<button class="btn btn-secondary">Add</button>
+	</Form>
+</div>
+
+<div class="flex justify-center">
+	<table class="table mt-2">
 		<thead>
 			<tr>
 				<th></th>
 				<th scope="col">Master</th>
 				<th scope="col">Name</th>
-				<th scope="col">QTY</th>
+				<th scope="col">Quantity</th>
 			</tr>
 		</thead>
 		<tbody>
-			{#each items as { id: itemID, master: itemMaster, name: itemName, quantity: itemQuantity }, i (i)}
-				{@const uniqueForm = editQuantityOut.for(`${i}_inc`)}
+			{#each sortedItems as { id: itemID, master: itemMaster, name: itemName, quantity: itemQuantity }, i (i)}
+				{@const quantityForm = editQuantity.for(`item_quantity_${i}`)}
+				{@const deleteForm = deleteTransactionItem.for(`transaction_item_${i}`)}
 				<tr>
 					<th>
-						<!-- <button aria-label="delete" type="button">
-							<span class="icon-[tabler--trash]"></span>
-						</button> -->
+						<form
+							{...deleteForm.enhance(async ({ form, submit }) => {
+								if (await submit()) {
+									if (!form.result) return;
+									const { success } = form.result;
+									if (success) {
+										toast.success('Deleted item');
+										form.reset();
+									} else {
+										toast.error('Failed to delete item');
+									}
+								}
+							})}>
+							<input {...deleteForm.fields.transactionID.as('hidden', id)} />
+							<input {...deleteForm.fields.itemID.as('hidden', itemID)} />
+							<button aria-label="delete" type="submit">
+								<span class="icon-[tabler--trash] text-red-500"></span>
+							</button>
+						</form>
 					</th>
 					<th class="w-15">{itemMaster}</th>
-					<th>{truncateString(itemName, 50)}</th>
+					<th>{truncateString(itemName, 100)}</th>
 					<th>
-						<Form
-							remoteForm={uniqueForm}
-							errorMsg="Failed to update quantity"
-							successMsg="Successfully updated quantity">
-							<input {...uniqueForm.fields.transactionID.as('hidden', id)} />
-							<input {...uniqueForm.fields.itemID.as('hidden', itemID)} />
+						<form
+							{...quantityForm.enhance(async ({ form, submit }) => {
+								if (await submit()) {
+									if (!form.result) return;
+									const { success } = form.result;
+									if (success) toast.success('Successfully updated quantity');
+									else toast.error('Failed to update quantity');
+								}
+							})}>
+							<input {...quantityForm.fields.transactionID.as('hidden', id)} />
+							<input {...quantityForm.fields.itemID.as('hidden', itemID)} />
+							<input
+								{...quantityForm.fields.isIncoming.as('checkbox', data.isIncoming)}
+								class="invisible" />
 							<Input
-								field={uniqueForm.fields.quantity}
+								field={quantityForm.fields.quantity}
 								type="number"
 								placeholder={String(itemQuantity)}
 								label=""
 								rightButton="Edit" />
-						</Form>
+						</form>
 					</th>
 				</tr>
 			{/each}
 		</tbody>
 	</table>
-{/if}
+</div>
 
 {#snippet editForm({
 	remoteForm,
@@ -204,5 +223,20 @@
 	<Form {remoteForm} {errorMsg} {successMsg}>
 		<input {...remoteForm.fields.id.as('hidden', id)} />
 		<Input {field} {type} {placeholder} {label} rightButton="Edit" />
+	</Form>
+{/snippet}
+
+{#snippet editComboboxForm({
+	remoteForm,
+	errorMsg,
+	successMsg,
+	label,
+	field,
+	placeholder,
+	list
+}: SnippetArgs)}
+	<Form {remoteForm} {errorMsg} {successMsg}>
+		<input {...remoteForm.fields.id.as('hidden', id)} />
+		<Combobox {label} {field} {list} rightButton="Edit" {placeholder} />
 	</Form>
 {/snippet}

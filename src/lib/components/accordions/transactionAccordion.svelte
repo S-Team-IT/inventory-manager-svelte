@@ -48,20 +48,16 @@
 
 {#snippet summaryStart()}
 	{#if isIncoming}
-		<a href={resolve('/transaction/[slug]?type=incoming', { slug: id })} class="underline">
-			<span>
-				{supplier}
-				{formatYearMonthDay(deliveryDate!)}
-				{deliveryRef}
-			</span>
+		<a href={resolve('/transaction/[slug]?type=incoming', { slug: id })}>
+			<span class="underline">{formatYearMonthDay(deliveryDate!)}</span>
+			{supplier}
+			{deliveryRef}
 		</a>
 	{:else}
-		<a href={resolve('/transaction/[slug]?type=outgoing', { slug: id })} class="underline">
-			<span>
-				{expender}
-				{formatYearMonthDay(expendDate!)}
-				{remarks}
-			</span>
+		<a href={resolve('/transaction/[slug]?type=outgoing', { slug: id })}>
+			<span class="underline">{formatYearMonthDay(expendDate!)}</span>
+			{expender}
+			{remarks}
 		</a>
 	{/if}
 {/snippet}

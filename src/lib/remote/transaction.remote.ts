@@ -140,6 +140,7 @@ export const getIncomingTransaction = query(zString, async (id) => {
 		SELECT inc_t.id,
 			inc_t.created_at AS "createdAt",
 			inc_t.delivery_date AS "deliveryDate",
+			s.id AS "supplierID",
 			s.name AS "supplier",
 			inc_t.delivery_ref AS "deliveryRef",
 			i.master_number AS master,
@@ -384,8 +385,15 @@ export const editSupplier = form(
 	z.object({ id: zString, supplier: zString }),
 	async ({ id, supplier }, issue) => {
 		try {
-			const result =
-				await sql`UPDATE incoming_transactions SET supplier = ${supplier} WHERE id = ${id}`;
+			const result = await sql.begin(async (sql) => {
+				const supplierResult = await getOrCreateSupplier(supplier);
+
+				if (!supplierResult) throw new Error('Edit supplier: Supplier result is undefined');
+				const transactionResult =
+					await sql`UPDATE incoming_transactions SET supplier_id = ${supplierResult.id} WHERE id = ${id}`;
+				return transactionResult;
+			});
+
 			if (result.count !== 1) invalid(issue.supplier('Failed to update.'));
 			return { success: true };
 		} catch (e) {
@@ -451,12 +459,19 @@ export const editRemarks = form(
 	}
 );
 
-export const editQuantityInc = form(
-	z.object({ transactionID: zString, itemID: zString, quantity: zNumber }),
-	async ({ transactionID, itemID, quantity }, issue) => {
+export const editQuantity = form(
+	z.object({ transactionID: zString, itemID: zString, quantity: zNumber, isIncoming: zBoolean }),
+	async ({ transactionID, itemID, quantity, isIncoming }, issue) => {
 		try {
-			const result =
-				await sql`UPDATE incoming_items SET quantity = ${quantity} WHERE transaction_id = ${transactionID} AND item_id = ${itemID}`;
+			let result;
+			if (isIncoming) {
+				result =
+					await sql`UPDATE incoming_items SET quantity = ${quantity} WHERE transaction_id = ${transactionID} AND item_id = ${itemID}`;
+			} else {
+				result =
+					await sql`UPDATE outgoing_items SET quantity = ${quantity} WHERE transaction_id = ${transactionID} AND item_id = ${itemID}`;
+			}
+
 			if (result.count !== 1) invalid(issue.quantity('Failed to update quantity.'));
 			return { success: true };
 		} catch (e) {
@@ -465,16 +480,50 @@ export const editQuantityInc = form(
 	}
 );
 
-export const editQuantityOut = form(
-	z.object({ transactionID: zString, itemID: zString, quantity: zNumber }),
-	async ({ transactionID, itemID, quantity }, issue) => {
+export const deleteTransactionItem = form(
+	z.object({ transactionID: zString, itemID: zString, isIncoming: zBoolean }),
+	async ({ transactionID, itemID, isIncoming }) => {
 		try {
-			const result =
-				await sql`UPDATE outgoing_items SET quantity = ${quantity} WHERE transaction_id = ${transactionID} AND item_id = ${itemID}`;
-			if (result.count !== 1) invalid(issue.quantity('Failed to update quantity.'));
+			console.log('DELETIN');
+			let result;
+			if (isIncoming) {
+				result =
+					await sql`DELETE FROM incoming_items WHERE transaction_id = ${transactionID} AND item_id = ${itemID}`;
+			} else {
+				result =
+					await sql`DELETE FROM outgoing_items WHERE transaction_id = ${transactionID} AND item_id = ${itemID}`;
+			}
+			if (result.count !== 1) return { success: false };
 			return { success: true };
 		} catch (e) {
 			return handleQueryErrors(e);
+		}
+	}
+);
+
+export const addTransactionItem = form(
+	z.object({ transactionID: zString, master: zString, quantity: zNumber, isIncoming: zBoolean }),
+	async ({ transactionID, master, quantity, isIncoming }, issue) => {
+		try {
+			let result;
+			const [item] = await sql`SELECT id FROM items WHERE master_number =${master}`;
+			if (!item) invalid(issue.master('Master number not found in master list'));
+			if (isIncoming) {
+				result =
+					await sql`INSERT INTO incoming_items (transaction_id, item_id, quantity) VALUES(${transactionID}, ${item.id}, ${quantity})`;
+			} else {
+				result =
+					await sql`INSERT INTO outgoing_items (transaction_id, item_id, quantity) VALUES(${transactionID}, ${item.id}, ${quantity})`;
+			}
+			if (result.count !== 1) invalid(issue.master('Failed to add new item'));
+			return { success: true };
+		} catch (e) {
+			handleQueryErrors(e, (e) => {
+				if (e.code === '23505') {
+					if (e.constraint_name === 'outgoing_items_pkey')
+						throw invalid(issue.master('Already in transaction.'));
+				}
+			});
 		}
 	}
 );

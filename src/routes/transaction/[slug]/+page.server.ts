@@ -1,3 +1,4 @@
+import { getSuppliers } from '$lib/remote/supplier.remote.js';
 import { getIncomingTransaction, getOutgoingTransaction } from '$lib/remote/transaction.remote.js';
 import type { CompleteTransaction } from '$lib/types/databaseTypes';
 import { error } from '@sveltejs/kit';
@@ -28,8 +29,14 @@ export async function load({ locals, params, url }) {
 	) {
 		transaction = await getOutgoingTransaction(params.slug);
 	} else {
-		error(403, 'Forbidden or bad request');
+		error(403, 'Forbidden');
 	}
 
-	return { transaction, isIncoming: transactionType === 'incoming' };
+	if (!transaction) error(404, 'Transaction not found');
+
+	return {
+		transaction,
+		isIncoming: transactionType === 'incoming',
+		suppliers: await getSuppliers()
+	};
 }

@@ -44,10 +44,10 @@
 				class="dropdown-content menu z-1 w-52 rounded-box bg-blue-500 p-2 shadow-sm">
 				<li><a class="" href={resolve('/transaction')}>Transaction List</a></li>
 				{#if ['Admin', 'Procurement'].includes(data.user?.role ?? '')}
-					<li><a href={resolve('/transaction/incoming')}>Add Delivery Order</a></li>
+					<li><a href={resolve('/transaction/incoming')}>Add Incoming</a></li>
 				{/if}
 				{#if ['Admin', 'Project'].includes(data.user?.role ?? '')}
-					<li><a href={resolve('/transaction/outgoing')}>Expenditure</a></li>
+					<li><a href={resolve('/transaction/outgoing')}>Add Outgoing</a></li>
 				{/if}
 			</ul>
 		</div>

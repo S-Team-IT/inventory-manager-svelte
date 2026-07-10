@@ -16,19 +16,10 @@
 	.filter-buttons-group {
 		@apply mt-5 ml-5 space-x-2;
 	}
-	details[open] {
-		@apply bg-[#2a9d8f] text-white;
-	}
 	details .outgoing-text {
 		@apply text-red-500;
 	}
 	details .incoming-text {
 		@apply text-green-500;
-	}
-	details[open] .outgoing-text {
-		@apply text-red-800;
-	}
-	details[open] .incoming-text {
-		@apply text-green-200;
 	}
 }

@@ -58,6 +58,7 @@ export type Transaction = {
 	id: string;
 	createdAt: Date;
 	deliveryDate?: Date;
+	supplierID?: string;
 	supplier?: string;
 	deliveryRef?: string;
 	expendDate?: Date;

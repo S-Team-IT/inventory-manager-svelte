@@ -318,7 +318,6 @@ export const updateMultipleLastStocked = command(z.array(zString), async (ids) =
 		SET last_stocked = ${Date.now()}
 		WHERE i.id = ANY(${ids}::int[])
 		`;
-		console.log(result);
 		return result;
 	} catch (e) {
 		return handleQueryErrors(e);

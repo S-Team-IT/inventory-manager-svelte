@@ -14,7 +14,7 @@
 
 <TransactionForm
 	remoteForm={createOutgoingTransaction}
-	legend="Enter Expenditure"
+	legend="Enter Outgoing"
 	errorMsg="Failed to submit"
 	successMsg="Successfully added"
 	transactions={data.transactions}
