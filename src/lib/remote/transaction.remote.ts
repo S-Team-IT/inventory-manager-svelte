@@ -180,7 +180,16 @@ export const getIncomingTransaction = query(zString, async (id) => {
 });
 export const getOutgoingTransaction = query(zString, async (id) => {
 	try {
-		const result = await sql<Transaction[]>`SELECT * FROM outgoing_transactions WHERE id = ${id}`;
+		const result = await sql<Transaction[]>`
+		SELECT 
+			id,
+			logger_id AS "loggerID", 
+		 	created_at AS "createdAs", 
+		 	expend_date AS "expendDate", 
+		 	expender,
+		 	remarks
+		FROM outgoing_transactions 
+		WHERE id = ${id}`;
 		if (result.count !== 1) error(404, 'Transaction not found');
 		return result[0];
 	} catch (e) {
