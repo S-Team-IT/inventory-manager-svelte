@@ -2,7 +2,7 @@
 	import InputIssues from './inputIssues.svelte';
 
 	const {
-		label,
+		label = '',
 		type,
 		field,
 		placeholder = '',
@@ -14,7 +14,9 @@
 
 <div class="mb-4">
 	<label class="input w-full pr-0">
-		<span class="label">{label}:</span>
+		{#if label}
+			<span class="label">{label}: </span>
+		{/if}
 		<input {...field.as(type, value)} {placeholder} />
 		{#if rightButton !== ''}
 			<button class="btn rounded-s-none btn-primary">{rightButton}</button>
