@@ -182,10 +182,14 @@
 					<th class="w-15">{itemMaster}</th>
 					<th>{truncateString(itemName, 50)}</th>
 					<th>
-						<Form
-							remoteForm={quantityForm}
-							errorMsg="Failed to update quantity"
-							successMsg="Successfully updated quantity">
+						<form
+							{...quantityForm.enhance(async ({ form, submit }) => {
+								if (await submit()) {
+									const { success } = form.result;
+									if (success) toast.success('Successfully updated quantity');
+									else toast.error('Failed to update quantity');
+								}
+							})}>
 							<input {...quantityForm.fields.transactionID.as('hidden', id)} />
 							<input {...quantityForm.fields.itemID.as('hidden', itemID)} />
 							<input
@@ -197,7 +201,7 @@
 								placeholder={String(itemQuantity)}
 								label=""
 								rightButton="Edit" />
-						</Form>
+						</form>
 					</th>
 				</tr>
 			{/each}
