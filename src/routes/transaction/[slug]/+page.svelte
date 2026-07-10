@@ -163,6 +163,7 @@
 						<form
 							{...deleteForm.enhance(async ({ form, submit }) => {
 								if (await submit()) {
+									if (!form.result) return;
 									const { success } = form.result;
 									if (success) {
 										toast.success('Deleted item');
