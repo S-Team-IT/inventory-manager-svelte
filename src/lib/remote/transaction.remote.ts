@@ -6,7 +6,6 @@ import type {
 	IndividualTransaction,
 	Item,
 	QuantityTimeline,
-	Transaction,
 	WeekCumulativeQuantity,
 	WeeklyNetQuantity
 } from '$lib/types/databaseTypes';
@@ -135,6 +134,36 @@ export const getIncomingTransactions = query(async () => {
 	}
 });
 
+export const getIncomingTransaction = query(zString, async (id) => {
+	try {
+		const result = await sql<IndividualTransaction[]>`
+		SELECT inc_t.id,
+			inc_t.created_at AS "createdAt",
+			inc_t.delivery_date AS "deliveryDate",
+			s.name AS "supplier",
+			inc_t.delivery_ref AS "deliveryRef",
+			i.master_number AS master,
+			inc_i.item_id AS "itemID",
+			i.name AS "itemName",
+			inc_i.quantity,
+			inc_t.purchase_ref AS "purchaseRef",
+			inc_t.invoice_ref AS "invoiceRef"
+		FROM incoming_transactions inc_t
+		JOIN incoming_items inc_i
+		ON inc_t.id = inc_i.transaction_id
+		JOIN items i
+		ON inc_i.item_id = i.id
+		JOIN suppliers s
+		ON inc_t.supplier_id = s.id
+		WHERE inc_t.id = ${id}
+		ORDER BY inc_t.created_at DESC, i.id ASC`;
+		const array = sortTransactions(result);
+		return array[0];
+	} catch (e) {
+		return handleQueryErrors(e);
+	}
+});
+
 export const getOutgoingTransactions = query(async () => {
 	try {
 		const result = await sql<IndividualTransaction[]>`
@@ -159,89 +188,31 @@ export const getOutgoingTransactions = query(async () => {
 	}
 });
 
-export const getIncomingTransaction = query(zString, async (id) => {
-	try {
-		const result = await sql<Transaction[]>`
-		SELECT id,
-		 logger_id AS "loggerID", 
-		 created_at AS "createdAs", 
-		 delivery_date AS "deliveryDate", 
-		 supplier_id AS "supplierID", 
-		 delivery_ref AS "deliveryRef",
-		 purchase_ref AS "purchaseRef",
-		 invoice_ref AS "invoiceRef"
-		FROM incoming_transactions 
-		WHERE id = ${id}`;
-		if (result.count !== 1) error(404, 'Transaction not found');
-		return result[0];
-	} catch (e) {
-		return handleQueryErrors(e);
-	}
-});
 export const getOutgoingTransaction = query(zString, async (id) => {
 	try {
-		const result = await sql<Transaction[]>`SELECT * FROM outgoing_transactions WHERE id = ${id}`;
-		if (result.count !== 1) error(404, 'Transaction not found');
-		return result[0];
+		const result = await sql<IndividualTransaction[]>`
+		SELECT out_t.id,
+			out_t.created_at AS "createdAt",
+			out_t.expend_date AS "expendDate",
+			out_t.expender,
+			out_t.remarks,
+			i.master_number AS "master",
+			i.id AS "itemID",
+			i.name AS "itemName",
+			out_i.quantity
+		FROM outgoing_transactions out_t
+		JOIN outgoing_items out_i
+		ON out_t.id = out_i.transaction_id
+		JOIN items i
+		ON out_i.item_id = i.id
+		WHERE out_t.id = ${id}
+		ORDER BY out_t.created_at DESC, i.id ASC`;
+		const array = sortTransactions(result);
+		return array[0];
 	} catch (e) {
 		return handleQueryErrors(e);
 	}
 });
-
-//UNUSED
-// export const getAllTransactions = query(async () => {
-// 	try {
-// 		//Returns a table with the attributes of both incoming & outgoing
-// 		const result = await sql`
-// 	SELECT
-//        inc_t.id,
-//        u.name              AS "logger",
-//        inc_t.created_at    AS "createdAt",
-//        inc_t.delivery_date AS "date",
-//        true                AS incoming,
-//        s.name              AS supplier,
-//        null                AS expender,
-//        inc_t.delivery_ref  AS "deliveryRef",
-//        null                AS remarks,
-//        inc_i.item_id       AS "itemID",
-//        i.name              AS "itemName",
-//        inc_i.quantity,
-// 	   inc_t.purchase_ref AS "purchaseRef",
-// 	   inc_t.invoice_ref AS "invoiceRef"
-//      FROM incoming_transactions inc_t
-//      JOIN incoming_items        inc_i ON inc_t.id = inc_i.transaction_id
-//      JOIN suppliers             s     ON inc_t.supplier_id = s.id
-//      JOIN users                 u     ON inc_t.logger_id = u.id
-//      JOIN items                 i     ON inc_i.item_id = i.id
-
-//      UNION ALL
-
-//      SELECT
-//          out_t.id,
-//          u.name,
-//          out_t.created_at,
-//          out_t.expend_date,
-//          false,
-//          null,
-//          out_t.expender,
-//          null,
-//          out_t.remarks,
-//          out_i.item_id,
-//          i.name,
-//          out_i.quantity,
-// 		 null,
-// 		 null
-//      FROM outgoing_transactions out_t
-//      JOIN outgoing_items        out_i ON out_t.id = out_i.transaction_id
-//      JOIN users                 u     ON out_t.logger_id = u.id
-//      JOIN items                 i     ON out_i.item_id = i.id
-
-//      ORDER BY "createdAt" DESC;`;
-// 		return result;
-// 	} catch (e) {
-// 		return handleQueryErrors(e);
-// 	}
-// });
 
 // Transforms the data to match table schema for insertion
 function generateDB_StockArray(
@@ -444,6 +415,63 @@ export const editInvoiceRef = form(
 			const result =
 				await sql`UPDATE incoming_transactions SET invoice_ref = ${invoiceRef} WHERE id = ${id}`;
 			if (result.count !== 1) invalid(issue.invoiceRef('Failed to update.'));
+			return { success: true };
+		} catch (e) {
+			return handleQueryErrors(e);
+		}
+	}
+);
+
+// export const editExpendDate = form(z.object({ id: zString, date: z.date() }), async () => {});
+export const editUser = form(
+	z.object({ id: zString, user: z.string().trim() }),
+	async ({ id, user }, issue) => {
+		try {
+			const result =
+				await sql`UPDATE outgoing_transactions SET expender = ${user} WHERE id = ${id}`;
+			if (result.count !== 1) invalid(issue.user('Failed to update.'));
+			return { success: true };
+		} catch (e) {
+			return handleQueryErrors(e);
+		}
+	}
+);
+
+export const editRemarks = form(
+	z.object({ id: zString, remarks: z.string().trim() }),
+	async ({ id, remarks }, issue) => {
+		try {
+			const result =
+				await sql`UPDATE outgoing_transactions SET remarks = ${remarks} WHERE id = ${id}`;
+			if (result.count !== 1) invalid(issue.remarks('Failed to update.'));
+			return { success: true };
+		} catch (e) {
+			return handleQueryErrors(e);
+		}
+	}
+);
+
+export const editQuantityInc = form(
+	z.object({ transactionID: zString, itemID: zString, quantity: zNumber }),
+	async ({ transactionID, itemID, quantity }, issue) => {
+		try {
+			const result =
+				await sql`UPDATE incoming_items SET quantity = ${quantity} WHERE transaction_id = ${transactionID} AND item_id = ${itemID}`;
+			if (result.count !== 1) invalid(issue.quantity('Failed to update quantity.'));
+			return { success: true };
+		} catch (e) {
+			return handleQueryErrors(e);
+		}
+	}
+);
+
+export const editQuantityOut = form(
+	z.object({ transactionID: zString, itemID: zString, quantity: zNumber }),
+	async ({ transactionID, itemID, quantity }, issue) => {
+		try {
+			const result =
+				await sql`UPDATE outgoing_items SET quantity = ${quantity} WHERE transaction_id = ${transactionID} AND item_id = ${itemID}`;
+			if (result.count !== 1) invalid(issue.quantity('Failed to update quantity.'));
 			return { success: true };
 		} catch (e) {
 			return handleQueryErrors(e);

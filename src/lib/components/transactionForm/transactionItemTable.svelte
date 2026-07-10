@@ -26,8 +26,8 @@
 	<tbody>
 		{#each items as { id, master, name, quantity }, i (i)}
 			<tr>
-				<th
-					><button
+				<th>
+					<button
 						aria-label="delete"
 						type="button"
 						onclick={async () => {
@@ -37,8 +37,8 @@
 					></th>
 				<th class="w-15">{master}</th>
 				<th>{truncateString(name, 20)}</th>
-				<th
-					><input
+				<th>
+					<input
 						class="w-25 border ps-1"
 						type="number"
 						id={`input${i}`}

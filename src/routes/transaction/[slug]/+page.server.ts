@@ -1,5 +1,5 @@
 import { getIncomingTransaction, getOutgoingTransaction } from '$lib/remote/transaction.remote.js';
-import type { Transaction } from '$lib/types/databaseTypes';
+import type { CompleteTransaction } from '$lib/types/databaseTypes';
 import { error } from '@sveltejs/kit';
 
 export async function load({ locals, params, url }) {
@@ -7,18 +7,17 @@ export async function load({ locals, params, url }) {
 		error(403, 'Forbidden');
 
 	const transactionType = url.searchParams.get('type');
-	let transaction: Transaction;
+	let transaction: CompleteTransaction;
 	switch (transactionType) {
 		case 'incoming':
 			transaction = await getIncomingTransaction(params.slug);
 			break;
 		case 'outgoing':
-			error(400, 'Not implemented yet');
 			transaction = await getOutgoingTransaction(params.slug);
 			break;
 		default:
 			error(400, 'Bad request');
 	}
 
-	return { transaction };
+	return { transaction, isIncoming: transactionType === 'incoming' };
 }
