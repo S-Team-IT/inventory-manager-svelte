@@ -5,8 +5,7 @@
 		editDeliveryRef,
 		editInvoiceRef,
 		editPurchaseRef,
-		editQuantityInc,
-		editQuantityOut,
+		editQuantity,
 		editRemarks,
 		editUser
 	} from '$lib/remote/transaction.remote.js';
@@ -85,46 +84,6 @@
 			<div>Invoice: {invoiceRef}</div>
 		</div>
 	</div>
-
-	<table class="table">
-		<thead>
-			<tr>
-				<th></th>
-				<th scope="col">Master</th>
-				<th scope="col">Name</th>
-				<th scope="col">QTY</th>
-			</tr>
-		</thead>
-		<tbody>
-			{#each items as { id: itemID, master: itemMaster, name: itemName, quantity: itemQuantity }, i (i)}
-				{@const uniqueForm = editQuantityInc.for(`${i}_inc`)}
-				<tr>
-					<th>
-						<!-- <button aria-label="delete" type="button">
-							<span class="icon-[tabler--trash]"></span>
-						</button> -->
-					</th>
-					<th class="w-15">{itemMaster}</th>
-					<th>{truncateString(itemName, 50)}</th>
-					<th>
-						<Form
-							remoteForm={uniqueForm}
-							errorMsg="Failed to update quantity"
-							successMsg="Successfully updated quantity">
-							<input {...uniqueForm.fields.transactionID.as('hidden', id)} />
-							<input {...uniqueForm.fields.itemID.as('hidden', itemID)} />
-							<Input
-								field={uniqueForm.fields.quantity}
-								type="number"
-								placeholder={String(itemQuantity)}
-								label=""
-								rightButton="Edit" />
-						</Form>
-					</th>
-				</tr>
-			{/each}
-		</tbody>
-	</table>
 {:else}
 	<div class="mt-2 flex">
 		<div class="ms-5 max-w-75">
@@ -151,46 +110,50 @@
 			<div>Remarks: {remarks}</div>
 		</div>
 	</div>
-	<table class="table">
-		<thead>
+{/if}
+
+<table class="table">
+	<thead>
+		<tr>
+			<th></th>
+			<th scope="col">Master</th>
+			<th scope="col">Name</th>
+			<th scope="col">QTY</th>
+		</tr>
+	</thead>
+	<tbody>
+		{#each items as { id: itemID, master: itemMaster, name: itemName, quantity: itemQuantity }, i (i)}
+			{@const uniqueForm = editQuantity.for(`item_quantity_${i}`)}
 			<tr>
-				<th></th>
-				<th scope="col">Master</th>
-				<th scope="col">Name</th>
-				<th scope="col">QTY</th>
-			</tr>
-		</thead>
-		<tbody>
-			{#each items as { id: itemID, master: itemMaster, name: itemName, quantity: itemQuantity }, i (i)}
-				{@const uniqueForm = editQuantityOut.for(`${i}_inc`)}
-				<tr>
-					<th>
-						<!-- <button aria-label="delete" type="button">
+				<th>
+					<!-- <button aria-label="delete" type="button">
 							<span class="icon-[tabler--trash]"></span>
 						</button> -->
-					</th>
-					<th class="w-15">{itemMaster}</th>
-					<th>{truncateString(itemName, 50)}</th>
-					<th>
-						<Form
-							remoteForm={uniqueForm}
-							errorMsg="Failed to update quantity"
-							successMsg="Successfully updated quantity">
-							<input {...uniqueForm.fields.transactionID.as('hidden', id)} />
-							<input {...uniqueForm.fields.itemID.as('hidden', itemID)} />
-							<Input
-								field={uniqueForm.fields.quantity}
-								type="number"
-								placeholder={String(itemQuantity)}
-								label=""
-								rightButton="Edit" />
-						</Form>
-					</th>
-				</tr>
-			{/each}
-		</tbody>
-	</table>
-{/if}
+				</th>
+				<th class="w-15">{itemMaster}</th>
+				<th>{truncateString(itemName, 50)}</th>
+				<th>
+					<Form
+						remoteForm={uniqueForm}
+						errorMsg="Failed to update quantity"
+						successMsg="Successfully updated quantity">
+						<input {...uniqueForm.fields.transactionID.as('hidden', id)} />
+						<input {...uniqueForm.fields.itemID.as('hidden', itemID)} />
+						<input
+							{...uniqueForm.fields.isIncoming.as('checkbox', data.isIncoming)}
+							class="invisible" />
+						<Input
+							field={uniqueForm.fields.quantity}
+							type="number"
+							placeholder={String(itemQuantity)}
+							label=""
+							rightButton="Edit" />
+					</Form>
+				</th>
+			</tr>
+		{/each}
+	</tbody>
+</table>
 
 {#snippet editForm({
 	remoteForm,
